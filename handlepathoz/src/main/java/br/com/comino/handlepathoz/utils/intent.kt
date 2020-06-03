@@ -24,7 +24,7 @@ fun Intent?.getListUri(): List<Uri> {
     return this?.let { intent ->
         intent.clipData?.let { data ->
             data.forEachUri {
-                listUri += listUri
+                listUri += it
             }
             listUri.toList()
         } ?: intent.data?.let {
