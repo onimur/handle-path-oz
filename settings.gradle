@@ -1,0 +1,3 @@
+rootProject.name='Handle Path Oz'
+include ':app'
+include ':handlepathoz'
