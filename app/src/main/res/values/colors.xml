@@ -1,4 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ /*
+  ~  * Created by Murillo Comino on 03/06/20 18:49
+  ~  * Github: github.com/MurilloComino
+  ~  * StackOverFlow: pt.stackoverflow.com/users/128573
+  ~  * Email: murillo_comino@hotmail.com
+  ~  *
+  ~  * Copyright (c) 2020.
+  ~  * Last modified 03/06/20 18:49
+  ~  */
+  -->
+
 <resources>
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>

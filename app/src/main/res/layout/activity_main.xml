@@ -1,4 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ /*
+  ~  * Created by Murillo Comino on 03/06/20 18:49
+  ~  * Github: github.com/MurilloComino
+  ~  * StackOverFlow: pt.stackoverflow.com/users/128573
+  ~  * Email: murillo_comino@hotmail.com
+  ~  *
+  ~  * Copyright (c) 2020.
+  ~  * Last modified 03/06/20 18:49
+  ~  */
+  -->
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
