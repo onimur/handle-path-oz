@@ -1,12 +1,22 @@
+/*
+ *
+ *  * Created by Murillo Comino on 04/06/20 14:17
+ *  * Github: github.com/MurilloComino
+ *  * StackOverFlow: pt.stackoverflow.com/users/128573
+ *  * Email: murillo_comino@hotmail.com
+ *  *
+ *  * Copyright (c) 2020.
+ *  * Last modified 04/06/20 14:15
+ *
+ */
+
 package br.com.comino.handlepathoz
 
-import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
-
+import androidx.test.platform.app.InstrumentationRegistry
+import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
-
-import org.junit.Assert.*
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -19,6 +29,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("br.com.comino.handlepathoz.test", appContext.packageName)
+        assertEquals("br.com.comino.example.handlepathoz.test", appContext.packageName)
     }
 }
