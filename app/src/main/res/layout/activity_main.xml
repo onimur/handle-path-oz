@@ -1,13 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ /*
-  ~  * Created by Murillo Comino on 04/06/20 13:31
+  ~  * Created by Murillo Comino on 04/06/20 14:23
   ~  * Github: github.com/MurilloComino
   ~  * StackOverFlow: pt.stackoverflow.com/users/128573
   ~  * Email: murillo_comino@hotmail.com
   ~  *
   ~  * Copyright (c) 2020.
-  ~  * Last modified 03/06/20 22:36
+  ~  * Last modified 04/06/20 14:23
   ~  */
   -->
 
@@ -16,15 +15,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="20dp"
     tools:context=".kotlin.MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/btn_open"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
+        android:text="Open"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
