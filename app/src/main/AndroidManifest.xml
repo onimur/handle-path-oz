@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ /*
-  ~  * Created by Murillo Comino on 04/06/20 14:17
+  ~  * Created by Murillo Comino on 04/06/20 18:28
   ~  * Github: github.com/MurilloComino
   ~  * StackOverFlow: pt.stackoverflow.com/users/128573
   ~  * Email: murillo_comino@hotmail.com
   ~  *
   ~  * Copyright (c) 2020.
-  ~  * Last modified 04/06/20 13:41
+  ~  * Last modified 04/06/20 18:21
   ~  */
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="br.com.comino.example.handlepathoz">
-
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
