@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ /*
-  ~  * Created by Murillo Comino on 03/06/20 18:49
+  ~  * Created by Murillo Comino on 04/06/20 13:31
   ~  * Github: github.com/MurilloComino
   ~  * StackOverFlow: pt.stackoverflow.com/users/128573
   ~  * Email: murillo_comino@hotmail.com
   ~  *
   ~  * Copyright (c) 2020.
-  ~  * Last modified 03/06/20 18:49
+  ~  * Last modified 04/06/20 13:05
   ~  */
   -->
 
@@ -21,13 +21,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".ChoiceActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".java.MainActivity">
+
+        </activity>
+        <activity android:name=".kotlin.MainActivity">
+
+        </activity>
+
     </application>
 
 </manifest>

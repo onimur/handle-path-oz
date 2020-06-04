@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ /*
-  ~  * Created by Murillo Comino on 03/06/20 18:49
+  ~  * Created by Murillo Comino on 04/06/20 13:31
   ~  * Github: github.com/MurilloComino
   ~  * StackOverFlow: pt.stackoverflow.com/users/128573
   ~  * Email: murillo_comino@hotmail.com
   ~  *
   ~  * Copyright (c) 2020.
-  ~  * Last modified 03/06/20 18:49
+  ~  * Last modified 03/06/20 22:36
   ~  */
   -->
 
@@ -16,7 +16,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".kotlin.MainActivity">
 
     <TextView
         android:layout_width="wrap_content"
