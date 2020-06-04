@@ -1,2 +1,13 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="br.com.comino.handlepathoz" />
+<!--
+  ~ /*
+  ~  * Created by Murillo Comino on 04/06/20 14:17
+  ~  * Github: github.com/MurilloComino
+  ~  * StackOverFlow: pt.stackoverflow.com/users/128573
+  ~  * Email: murillo_comino@hotmail.com
+  ~  *
+  ~  * Copyright (c) 2020.
+  ~  * Last modified 04/06/20 14:15
+  ~  */
+  -->
+
+<manifest package="br.com.comino.handlepathoz" />

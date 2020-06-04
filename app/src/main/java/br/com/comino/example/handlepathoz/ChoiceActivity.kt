@@ -1,16 +1,16 @@
 /*
  *
- *  * Created by Murillo Comino on 04/06/20 13:31
+ *  * Created by Murillo Comino on 04/06/20 14:17
  *  * Github: github.com/MurilloComino
  *  * StackOverFlow: pt.stackoverflow.com/users/128573
  *  * Email: murillo_comino@hotmail.com
  *  *
  *  * Copyright (c) 2020.
- *  * Last modified 04/06/20 13:30
+ *  * Last modified 04/06/20 13:45
  *
  */
 
-package br.com.comino.handlepathoz
+package br.com.comino.example.handlepathoz
 
 import android.content.Intent
 import br.com.comino.choicekotlinjava.BaseChoiceActivity
@@ -23,12 +23,12 @@ class ChoiceActivity : BaseChoiceActivity() {
             Choice(
                 "Java",
                 "Run the Example App with HandlePathOz library written in Java.",
-                Intent(this, br.com.comino.handlepathoz.java.MainActivity::class.java)
+                Intent(this, br.com.comino.example.handlepathoz.java.MainActivity::class.java)
             ),
             Choice(
                 "Kotlin",
                 "Run the Example App with HandlePathOz library written in Kotlin.",
-                Intent(this, br.com.comino.handlepathoz.kotlin.MainActivity::class.java)
+                Intent(this, br.com.comino.example.handlepathoz.kotlin.MainActivity::class.java)
             )
         )
 }

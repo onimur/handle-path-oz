@@ -1,12 +1,12 @@
 /*
  *
- *  * Created by Murillo Comino on 04/06/20 13:31
+ *  * Created by Murillo Comino on 04/06/20 14:17
  *  * Github: github.com/MurilloComino
  *  * StackOverFlow: pt.stackoverflow.com/users/128573
  *  * Email: murillo_comino@hotmail.com
  *  *
  *  * Copyright (c) 2020.
- *  * Last modified 04/06/20 13:18
+ *  * Last modified 04/06/20 13:33
  *
  */
 
@@ -19,7 +19,7 @@ android {
     buildToolsVersion "29.0.3"
 
     defaultConfig {
-        applicationId "br.com.comino.handlepathoz"
+        applicationId 'br.com.comino.example.handlepathoz'
         minSdkVersion 16
         targetSdkVersion 29
         versionCode 1
