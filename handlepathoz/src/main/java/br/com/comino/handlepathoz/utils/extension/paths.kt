@@ -1,12 +1,12 @@
 /*
  *
- *  * Created by Murillo Comino on 04/06/20 18:32
+ *  * Created by Murillo Comino on 06/06/20 14:03
  *  * Github: github.com/MurilloComino
  *  * StackOverFlow: pt.stackoverflow.com/users/128573
  *  * Email: murillo_comino@hotmail.com
  *  *
  *  * Copyright (c) 2020.
- *  * Last modified 04/06/20 18:31
+ *  * Last modified 06/06/20 14:00
  *
  */
 
@@ -30,29 +30,28 @@ import java.util.*
  *
  */
 internal inline fun ClipData.forEachUri(action: (Uri) -> Unit) {
-    for (element in 0 until this.itemCount)
-        action(this.getItemAt(element).uri)
+    for (element in 0 until itemCount)
+        action(getItemAt(element).uri)
 }
 
 /**
  * Retrieve a Uri list
- * Or if the passed intent does not contain any Uri, then an empty list is returned.
+ * Or if the passed [Intent] does not contain any [Uri], then an empty [List] is returned.
  *
- * @return - List of Uri or emptyList
+ * @return - [List] of Uri or emptyList
  */
 fun Intent?.getListUri(): List<Uri> {
-    val listUri = mutableListOf<Uri>()
-    return this?.let { intent ->
-        intent.clipData?.let { data ->
-            data.forEachUri {
-                listUri += it
+    return mutableListOf<Uri>().also { list ->
+        this?.let { intent ->
+            intent.clipData?.let { data ->
+                data.forEachUri {
+                    list.add(it)
+                }
+            } ?: intent.data?.let {
+                list.add(it)
             }
-            listUri.toList()
-        } ?: intent.data?.let {
-            listUri += it
-            listUri.toList()
         }
-    } ?: emptyList()
+    }
 }
 
 /**

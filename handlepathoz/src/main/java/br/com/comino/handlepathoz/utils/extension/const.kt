@@ -1,12 +1,12 @@
 /*
  *
- *  * Created by Murillo Comino on 04/06/20 18:32
+ *  * Created by Murillo Comino on 06/06/20 14:03
  *  * Github: github.com/MurilloComino
  *  * StackOverFlow: pt.stackoverflow.com/users/128573
  *  * Email: murillo_comino@hotmail.com
  *  *
  *  * Copyright (c) 2020.
- *  * Last modified 04/06/20 18:31
+ *  * Last modified 06/06/20 12:28
  *
  */
 
@@ -30,4 +30,7 @@ internal object PathUri {
 
     //Cloud DropBox
     const val PATH_DROPBOX = "com.dropbox.android"
+
+    //Folder
+    const val FOLDER_DOWNLOAD = "Download"
 }
