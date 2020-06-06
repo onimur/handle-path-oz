@@ -1,12 +1,12 @@
 /*
  *
- *  * Created by Murillo Comino on 06/06/20 14:03
+ *  * Created by Murillo Comino on 06/06/20 18:28
  *  * Github: github.com/MurilloComino
  *  * StackOverFlow: pt.stackoverflow.com/users/128573
  *  * Email: murillo_comino@hotmail.com
  *  *
  *  * Copyright (c) 2020.
- *  * Last modified 06/06/20 14:00
+ *  * Last modified 06/06/20 17:30
  *
  */
 
@@ -58,15 +58,19 @@ fun Intent?.getListUri(): List<Uri> {
  * Checks Uri authority
  *
  */
-internal fun Uri.isExternalStorageDocument() = PATH_EXTERNAL_STORAGE == authority
+internal val Uri.isExternalStorageDocument get() = PATH_EXTERNAL_STORAGE == authority
 
-internal fun Uri.isDownloadsDocument() = PATH_DOWNLOAD == authority
+internal val Uri.isDownloadsDocument get() = PATH_DOWNLOAD == authority
 
-internal fun Uri.isMediaDocument() = PATH_MEDIA == authority
+internal val Uri.isMediaDocument get() = PATH_MEDIA == authority
 
-internal fun Uri.isGooglePhotosUri() = PATH_GOOGLE_PHOTOS == authority
+internal val Uri.isGooglePhotosUri get() = PATH_GOOGLE_PHOTOS == authority
 
-internal fun Uri.isRawDownloadsDocument() = toString().contains(PATH_RAW_DOWNLOAD)
+internal val Uri.isRawDownloadsDocument get() = toString().contains(PATH_RAW_DOWNLOAD)
+
+internal val Uri.isMediaStore get() = "content".equals(scheme, ignoreCase = true)
+
+internal val Uri.isFile get() = "file".equals(scheme, ignoreCase = true)
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
