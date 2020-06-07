@@ -1,12 +1,12 @@
 /*
  *
- *  * Created by Murillo Comino on 04/06/20 18:28
+ *  * Created by Murillo Comino on 06/06/20 22:23
  *  * Github: github.com/MurilloComino
  *  * StackOverFlow: pt.stackoverflow.com/users/128573
  *  * Email: murillo_comino@hotmail.com
  *  *
  *  * Copyright (c) 2020.
- *  * Last modified 04/06/20 18:27
+ *  * Last modified 06/06/20 21:59
  *
  */
 
@@ -25,8 +25,10 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import br.com.comino.example.handlepathoz.R
-import br.com.comino.handlepathoz.utils.getListUri
+import br.com.comino.handlepathoz.utils.extension.getListUri
 
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
@@ -36,6 +38,11 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     }
 
     private lateinit var buttonOpen: Button
+    private lateinit var rvOriginal: RecyclerView
+    private lateinit var rvReal: RecyclerView
+    private lateinit var originalAdapter: ListUriAdapter
+    private lateinit var realAdapter: ListUriAdapter
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,10 +53,28 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     private fun init() {
         buttonOpen = findViewById(R.id.btn_open)
+        originalAdapter = ListUriAdapter(ArrayList())
+        realAdapter = ListUriAdapter(ArrayList())
     }
 
     private fun startAction() {
         buttonOpen.setOnClickListener { openFile() }
+
+        rvOriginal = findViewById<RecyclerView>(R.id.lv_original).apply {
+            // use this setting to improve performance if you know that changes
+            // in content do not change the layout size of the RecyclerView
+            setHasFixedSize(true)
+            // use a linear layout manager
+            layoutManager = LinearLayoutManager(context) as RecyclerView.LayoutManager
+            // specify an viewAdapter (see also next example)
+            adapter = originalAdapter
+        }
+
+        rvReal = findViewById<RecyclerView>(R.id.lv_real).apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(context)
+            adapter = realAdapter
+        }
     }
 
     private fun openFile() {
@@ -66,6 +91,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
                 action = Intent.ACTION_GET_CONTENT
                 action = Intent.ACTION_OPEN_DOCUMENT
                 addCategory(Intent.CATEGORY_OPENABLE)
+                putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
                 putExtra("return-data", true)
                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             }
@@ -107,6 +133,8 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             if (resultCode == Activity.RESULT_OK) {
                 //This extension retrieves the path of all selected files without treatment.
                 val listUri = data.getListUri()
+                //Update the adapter
+                originalAdapter.updateListChanged(listUri)
 
             }
         }
