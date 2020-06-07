@@ -1,12 +1,12 @@
 /*
  *
- *  * Created by Murillo Comino on 07/06/20 11:13
+ *  * Created by Murillo Comino on 07/06/20 18:46
  *  * Github: github.com/MurilloComino
  *  * StackOverFlow: pt.stackoverflow.com/users/128573
  *  * Email: murillo_comino@hotmail.com
  *  *
  *  * Copyright (c) 2020.
- *  * Last modified 07/06/20 11:12
+ *  * Last modified 07/06/20 18:41
  *
  */
 
@@ -20,31 +20,57 @@ import android.os.Build
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
+import android.provider.OpenableColumns
+import android.webkit.MimeTypeMap
 import androidx.loader.content.CursorLoader
 import br.com.comino.handlepathoz.utils.extension.*
 import br.com.comino.handlepathoz.utils.extension.PathUri.COLUMN_DATA
 import br.com.comino.handlepathoz.utils.extension.PathUri.COLUMN_DISPLAY_NAME
 import br.com.comino.handlepathoz.utils.extension.PathUri.FOLDER_DOWNLOAD
-import java.io.File
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.async
+import kotlinx.coroutines.withContext
+import java.io.*
 
-internal object PathUtils {
+internal class PathUtils(private val context: Context) {
+    private val isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
 
-    private lateinit var context: Context
-    private lateinit var uri: Uri
+    suspend fun getPath(listUri: List<Uri>) = withContext(IO) {
+        val realPath = mutableListOf<Pair<String, String>>()
 
-    /**
-     * Method responsible for retrieving the file path, for previous API of KitKat and later.
-     *
-     * @return path of file
-     */
-    fun getRealPathFromUri(context: Context, uri: Uri): String {
-        this.context = context
-        this.uri = uri
+        async {
+            if (isKitKat) {
+                listUri.forEach { uri ->
+                    val returnedPath = getPathAboveKitKat(uri)
+                    //Get the file extension
+                    val mime = MimeTypeMap.getSingleton()
+                    val subStringExtension =
+                        returnedPath.substring(returnedPath.lastIndexOf(".") + 1)
+                    val extensionFromMime =
+                        mime.getExtensionFromMimeType(context.contentResolver.getType(uri))
 
-        val isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
-        return if (isKitKat) getPathAboveKitKat()
-        else getPathBelowKitKat()
-    }
+                    when {
+                        //Cloud
+                        uri.isCloudFile -> realPath.add(Pair("cloud", downloadFile(uri)))
+                        returnedPath.isBlank() -> {
+                        } //TODO() need try catch
+                        //Todo: Add checks for unknown file extensions
+                        uri.isUnknownProvider(returnedPath, context) -> {
+                            realPath.add(Pair("unknownProvider", downloadFile(uri)))
+                        }
+                        //LocalFile
+                        else -> realPath.add(Pair("localProvider", getPathAboveKitKat(uri)))
+
+                    }
+                }
+            } else {
+                // Api < KitKat
+                listUri.forEach { realPath.add(Pair("", getPathBelowKitKat(it))) }
+            }
+            return@async realPath
+        }
+    }.await()
+
 
     /**
      * Get a file path from a Uri. This will get the the path for Storage Access
@@ -54,21 +80,21 @@ internal object PathUtils {
      */
     @SuppressLint("NewApi")
     @Suppress("DEPRECATION")
-    private fun getPathAboveKitKat(): String {
+    private fun getPathAboveKitKat(uri: Uri): String {
         //Document Provider
         return when {
             DocumentsContract.isDocumentUri(context, uri) -> {
                 when {
-                    uri.isExternalStorageDocument -> externalStorageDocument()
-                    uri.isRawDownloadsDocument -> rawDownloadsDocument()
-                    uri.isDownloadsDocument -> downloadsDocument()
-                    uri.isMediaDocument -> mediaDocument()
+                    uri.isExternalStorageDocument -> externalStorageDocument(uri)
+                    uri.isRawDownloadsDocument -> rawDownloadsDocument(uri)
+                    uri.isDownloadsDocument -> downloadsDocument(uri)
+                    uri.isMediaDocument -> mediaDocument(uri)
                     else -> TODO("Throw Exception Document Provider")
                 }
             }
             // MediaStore (and general)
             uri.isMediaStore -> {
-                if (uri.isGooglePhotosUri) googlePhotosUri()
+                if (uri.isGooglePhotosUri) googlePhotosUri(uri)
                     ?: TODO("Throw Exception to GooglePhotos")
                 else {
                     TODO("Throw Exception MediaStore")
@@ -81,7 +107,7 @@ internal object PathUtils {
         }
     }
 
-    private fun getPathBelowKitKat(): String {
+    private fun getPathBelowKitKat(uri: Uri): String {
         val projection = arrayOf<String?>(COLUMN_DATA)
         try {
             val loader = CursorLoader(context, uri, projection, null, null, null)
@@ -98,11 +124,95 @@ internal object PathUtils {
     }
 
     /**
+     *  Method that downloads the file to an internal folder at the root of the project.
+     *  For cases where the file has an unknown provider, cloud files and for users using
+     *  third-party file explorer api.
+     *
+     * @param uri of the file
+     * @return new path string
+     */
+    private fun downloadFile(uri: Uri): String {
+        lateinit var pathPlusName: String
+        lateinit var inputStream: InputStream
+
+        var size = -1
+        val folder: File? = context.getExternalFilesDir("Temp")
+        try {
+            inputStream = context.contentResolver.openInputStream(uri)!!
+        } catch (e: FileNotFoundException) {
+            logE(e.message)
+        }
+
+        try {
+            getCursor(uri)?.use { cursor ->
+                if (cursor.moveToFirst()) {
+                    uri.scheme?.let {
+                        when (it) {
+                            "content" -> size =
+                                cursor.getLong(cursor.getColumnIndex(OpenableColumns.SIZE)).toInt()
+                            "file" -> size = File(uri.path.orEmpty()).length().toInt()
+                        }
+                    }
+                }
+            }
+            pathPlusName = "${folder.toString()}/${getFileName(uri)}"
+            val file = File(pathPlusName)
+            val bis = BufferedInputStream(inputStream)
+            val fos = FileOutputStream(file)
+            val data = ByteArray(1024)
+            var total: Long = 0
+            var count: Int
+            while (bis.read(data).also { count = it } != -1) {
+                total += count.toLong()
+                if (size != -1) {
+                    try {
+                        //publishProgress((total * 100 / size).toInt())
+                    } catch (e: Exception) {
+                        logE("File size is less than 1")
+                        //publishProgress(0)
+                    }
+                }
+                fos.write(data, 0, count)
+
+            }
+            fos.flush()
+            fos.close()
+        } catch (e: IOException) {
+            logE(e.message.toString())
+        }
+        return pathPlusName
+    }
+
+
+    private fun getFileName(uri: Uri): String? {
+        var result: String? = null
+
+        uri.scheme?.let {
+            if (it == "content") {
+                getCursor(uri)?.use { cursor ->
+                    if (cursor.moveToFirst()) {
+                        result =
+                            cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
+                    }
+                }
+            }
+        }
+        if (result == null) {
+            result = uri.path
+            val cut = result?.lastIndexOf('/') ?: -1
+            if (cut != -1) {
+                result = result?.substring(cut.plus(1))
+            }
+        }
+        return result
+    }
+
+    /**
      * Method for googlePhotos
      *
      */
-    private fun googlePhotosUri(): String? {
-        val path = getPathFromColumn(context, uri, COLUMN_DATA)
+    private fun googlePhotosUri(uri: Uri): String? {
+        val path = getPathFromColumn(uri, COLUMN_DATA)
         // Return the remote address
         return if (path.isNotBlank()) {
             uri.lastPathSegment ?: path
@@ -117,7 +227,7 @@ internal object PathUtils {
      */
     @SuppressLint("NewApi")
     @Suppress("DEPRECATION")
-    private fun externalStorageDocument(): String {
+    private fun externalStorageDocument(uri: Uri): String {
         val docId = DocumentsContract.getDocumentId(uri)
         val split: Array<String?> = docId.split(":").toTypedArray()
         val type = split[0]
@@ -138,8 +248,8 @@ internal object PathUtils {
      */
     @Suppress("DEPRECATION")
     @SuppressLint("NewApi")
-    private fun rawDownloadsDocument(): String {
-        val fileName = getPathFromColumn(context, uri, COLUMN_DISPLAY_NAME)
+    private fun rawDownloadsDocument(uri: Uri): String {
+        val fileName = getPathFromColumn(uri, COLUMN_DISPLAY_NAME)
         val subFolderName = getSubFolders(uri.toString())
         return if (fileName.isNotBlank()) {
             "${Environment.getExternalStorageDirectory()}/$FOLDER_DOWNLOAD/$subFolderName$fileName"
@@ -149,7 +259,7 @@ internal object PathUtils {
                 Uri.parse("content://downloads/public_downloads"),
                 id.toLong()
             )
-            getPathFromColumn(context, contentUri, COLUMN_DATA)
+            getPathFromColumn(contentUri, COLUMN_DATA)
         }
     }
 
@@ -159,8 +269,8 @@ internal object PathUtils {
      */
     @SuppressLint("NewApi")
     @Suppress("DEPRECATION")
-    private fun downloadsDocument(): String {
-        val fileName = getPathFromColumn(context, uri, COLUMN_DISPLAY_NAME)
+    private fun downloadsDocument(uri: Uri): String {
+        val fileName = getPathFromColumn(uri, COLUMN_DISPLAY_NAME)
         val subFolderName = getSubFolders(uri.toString())
         if (fileName.isNotBlank()) {
             return "${Environment.getExternalStorageDirectory()}/$FOLDER_DOWNLOAD/$subFolderName$fileName"
@@ -179,7 +289,7 @@ internal object PathUtils {
             Uri.parse("content://downloads/public_downloads"),
             id.toLong()
         )
-        return getPathFromColumn(context, contentUri, COLUMN_DATA)
+        return getPathFromColumn(contentUri, COLUMN_DATA)
     }
 
     /**
@@ -187,7 +297,7 @@ internal object PathUtils {
      *
      */
     @SuppressLint("NewApi")
-    private fun mediaDocument(): String {
+    private fun mediaDocument(uri: Uri): String {
         val docId = DocumentsContract.getDocumentId(uri)
         val split: Array<String?> = docId.split(":").toTypedArray()
         val contentUri: Uri =
@@ -201,7 +311,6 @@ internal object PathUtils {
         val selection = "_id=?"
         val selectionArgs = arrayOf(split[1])
         return getPathFromColumn(
-            context,
             contentUri,
             COLUMN_DATA,
             selection,
@@ -213,7 +322,6 @@ internal object PathUtils {
      * Get the value of the column for this Uri. This is useful for
      * MediaStore Uris, and other file-based ContentProviders.
      *
-     * @param context
      * @param uri to Query
      * @param column
      * @param selection Optional Filter used in the query
@@ -221,7 +329,6 @@ internal object PathUtils {
      * @return Value of the column, which is typically a file path or null.
      */
     private fun getPathFromColumn(
-        context: Context,
         uri: Uri,
         column: String,
         selection: String? = null,
@@ -229,8 +336,7 @@ internal object PathUtils {
     ): String {
         val projection = arrayOf<String?>(column)
         try {
-            context.contentResolver
-                .query(uri, projection, selection, selectionArgs, null)
+            getCursor(uri, projection, selection, selectionArgs)
                 ?.use {
                     if (it.moveToFirst()) {
                         val index = it.getColumnIndexOrThrow(column)
@@ -242,6 +348,19 @@ internal object PathUtils {
         }
         return ""
     }
+
+    /**
+     * Helper for get cursor
+     *
+     */
+    private fun getCursor(
+        uri: Uri,
+        projection: Array<String?>? = null,
+        selection: String? = null,
+        selectionArgs: Array<String?>? = null
+    ) =
+        context.contentResolver
+            .query(uri, projection, selection, selectionArgs, null)
 
     /**
      * Returns subfolder from the main folder to the file location or empty string

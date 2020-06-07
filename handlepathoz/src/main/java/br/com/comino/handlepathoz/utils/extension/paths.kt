@@ -1,20 +1,23 @@
 /*
  *
- *  * Created by Murillo Comino on 06/06/20 18:28
+ *  * Created by Murillo Comino on 07/06/20 18:46
  *  * Github: github.com/MurilloComino
  *  * StackOverFlow: pt.stackoverflow.com/users/128573
  *  * Email: murillo_comino@hotmail.com
  *  *
  *  * Copyright (c) 2020.
- *  * Last modified 06/06/20 17:30
+ *  * Last modified 07/06/20 18:41
  *
  */
 
 package br.com.comino.handlepathoz.utils.extension
 
 import android.content.ClipData
+import android.content.ContentResolver
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.webkit.MimeTypeMap
 import br.com.comino.handlepathoz.utils.extension.PathUri.PATH_DOWNLOAD
 import br.com.comino.handlepathoz.utils.extension.PathUri.PATH_DROPBOX
 import br.com.comino.handlepathoz.utils.extension.PathUri.PATH_EXTERNAL_STORAGE
@@ -77,12 +80,24 @@ internal val Uri.isFile get() = "file".equals(scheme, ignoreCase = true)
  * Check different providers
  *
  */
-internal fun Uri.isDropBox() =
-    toString().toLowerCase(Locale.ROOT).contains("content://${PATH_DROPBOX}")
+private val Uri.isDropBox
+    get() = toString().toLowerCase(Locale.ROOT).contains("content://${PATH_DROPBOX}")
 
-internal fun Uri.isGoogleDrive() =
-    toString().toLowerCase(Locale.ROOT).contains(PATH_GOOGLE_APPS)
+private val Uri.isGoogleDrive
+    get() = toString().toLowerCase(Locale.ROOT).contains(PATH_GOOGLE_APPS)
 
-internal fun Uri.isOneDrive() =
-    toString().toLowerCase(Locale.ROOT).contains(PATH_ONEDRIVE)
+private val Uri.isOneDrive
+    get() = toString().toLowerCase(Locale.ROOT).contains(PATH_ONEDRIVE)
+
+internal val Uri.isCloudFile
+    get() = (isOneDrive or isGoogleDrive or isDropBox)
+
+internal fun Uri.isUnknownProvider(returnedPath: String, context: Context): Boolean {
+    val mime = MimeTypeMap.getSingleton()
+    val subStringExtension =
+        returnedPath.substring(returnedPath.lastIndexOf(".") + 1)
+    val extensionFromMime =
+        mime.getExtensionFromMimeType(context.contentResolver.getType(this))
+    return scheme.let { subStringExtension != extensionFromMime && it == ContentResolver.SCHEME_CONTENT }
+}
 
