@@ -1,22 +1,23 @@
 /*
  *
- *  * Created by Murillo Comino on 06/06/20 14:00
+ *  * Created by Murillo Comino on 07/06/20 11:13
  *  * Github: github.com/MurilloComino
  *  * StackOverFlow: pt.stackoverflow.com/users/128573
  *  * Email: murillo_comino@hotmail.com
  *  *
  *  * Copyright (c) 2020.
- *  * Last modified 06/06/20 14:00
+ *  * Last modified 07/06/20 10:39
  *
  */
 
 package br.com.comino.handlepathoz.utils
 
+import br.com.comino.handlepathoz.utils.PathUtils.getSubFolders
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.core.Is.`is`
 import org.junit.Test
 
-class UtilsKtTest {
+class PathUtilsKtTest {
     private lateinit var folder: String
     private lateinit var path: String
 

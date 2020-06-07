@@ -1,12 +1,12 @@
 /*
  *
- *  * Created by Murillo Comino on 06/06/20 18:28
+ *  * Created by Murillo Comino on 07/06/20 11:13
  *  * Github: github.com/MurilloComino
  *  * StackOverFlow: pt.stackoverflow.com/users/128573
  *  * Email: murillo_comino@hotmail.com
  *  *
  *  * Copyright (c) 2020.
- *  * Last modified 06/06/20 18:28
+ *  * Last modified 07/06/20 11:12
  *
  */
 
@@ -27,14 +27,20 @@ import br.com.comino.handlepathoz.utils.extension.PathUri.COLUMN_DISPLAY_NAME
 import br.com.comino.handlepathoz.utils.extension.PathUri.FOLDER_DOWNLOAD
 import java.io.File
 
-internal class Utils(private val context: Context, private val uri: Uri) {
+internal object PathUtils {
+
+    private lateinit var context: Context
+    private lateinit var uri: Uri
 
     /**
      * Method responsible for retrieving the file path, for previous API of KitKat and later.
      *
      * @return path of file
      */
-    fun getRealPathFromUri(): String {
+    fun getRealPathFromUri(context: Context, uri: Uri): String {
+        this.context = context
+        this.uri = uri
+
         val isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
         return if (isKitKat) getPathAboveKitKat()
         else getPathBelowKitKat()
@@ -130,6 +136,7 @@ internal class Utils(private val context: Context, private val uri: Uri) {
      * Method for rawDownloadDocument
      *
      */
+    @Suppress("DEPRECATION")
     @SuppressLint("NewApi")
     private fun rawDownloadsDocument(): String {
         val fileName = getPathFromColumn(context, uri, COLUMN_DISPLAY_NAME)
@@ -246,7 +253,7 @@ internal class Utils(private val context: Context, private val uri: Uri) {
      * @param uriString Path file
      * @param folderRoot It is usually "Download"
      */
-    private fun getSubFolders(uriString: String, folderRoot: String = FOLDER_DOWNLOAD) =
+    fun getSubFolders(uriString: String, folderRoot: String = FOLDER_DOWNLOAD) =
         uriString
             .replace("%2F", "/")
             .replace("%20", " ")
