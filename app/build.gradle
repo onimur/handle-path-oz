@@ -1,12 +1,12 @@
 /*
  *
- *  * Created by Murillo Comino on 04/06/20 14:17
+ *  * Created by Murillo Comino on 08/06/20 13:18
  *  * Github: github.com/MurilloComino
  *  * StackOverFlow: pt.stackoverflow.com/users/128573
  *  * Email: murillo_comino@hotmail.com
  *  *
  *  * Copyright (c) 2020.
- *  * Last modified 04/06/20 13:33
+ *  * Last modified 08/06/20 12:58
  *
  */
 
@@ -54,6 +54,8 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    //Coroutine
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.7'
 
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'

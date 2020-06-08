@@ -1,3 +1,15 @@
+/*
+ *
+ *  * Created by Murillo Comino on 08/06/20 13:18
+ *  * Github: github.com/MurilloComino
+ *  * StackOverFlow: pt.stackoverflow.com/users/128573
+ *  * Email: murillo_comino@hotmail.com
+ *  *
+ *  * Copyright (c) 2020.
+ *  * Last modified 08/06/20 12:46
+ *
+ */
+
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
@@ -8,7 +20,7 @@ buildscript {
         
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.6.3'
+        classpath 'com.android.tools.build:gradle:4.0.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
         // NOTE: Do not place your application dependencies here; they belong
