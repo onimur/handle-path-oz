@@ -1,12 +1,12 @@
 /*
  *
- *  * Created by Murillo Comino on 07/06/20 18:46
+ *  * Created by Murillo Comino on 08/06/20 13:18
  *  * Github: github.com/MurilloComino
  *  * StackOverFlow: pt.stackoverflow.com/users/128573
  *  * Email: murillo_comino@hotmail.com
  *  *
  *  * Copyright (c) 2020.
- *  * Last modified 07/06/20 18:41
+ *  * Last modified 08/06/20 13:17
  *
  */
 
@@ -42,13 +42,6 @@ internal class PathUtils(private val context: Context) {
             if (isKitKat) {
                 listUri.forEach { uri ->
                     val returnedPath = getPathAboveKitKat(uri)
-                    //Get the file extension
-                    val mime = MimeTypeMap.getSingleton()
-                    val subStringExtension =
-                        returnedPath.substring(returnedPath.lastIndexOf(".") + 1)
-                    val extensionFromMime =
-                        mime.getExtensionFromMimeType(context.contentResolver.getType(uri))
-
                     when {
                         //Cloud
                         uri.isCloudFile -> realPath.add(Pair("cloud", downloadFile(uri)))
