@@ -1,12 +1,12 @@
 /*
  *
- *  * Created by Murillo Comino on 08/06/20 13:18
+ *  * Created by Murillo Comino on 09/06/20 22:01
  *  * Github: github.com/MurilloComino
  *  * StackOverFlow: pt.stackoverflow.com/users/128573
  *  * Email: murillo_comino@hotmail.com
  *  *
  *  * Copyright (c) 2020.
- *  * Last modified 08/06/20 13:17
+ *  * Last modified 09/06/20 21:41
  *
  */
 
@@ -21,48 +21,48 @@ import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.provider.OpenableColumns
-import android.webkit.MimeTypeMap
 import androidx.loader.content.CursorLoader
 import br.com.comino.handlepathoz.utils.extension.*
 import br.com.comino.handlepathoz.utils.extension.PathUri.COLUMN_DATA
 import br.com.comino.handlepathoz.utils.extension.PathUri.COLUMN_DISPLAY_NAME
 import br.com.comino.handlepathoz.utils.extension.PathUri.FOLDER_DOWNLOAD
-import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.async
-import kotlinx.coroutines.withContext
 import java.io.*
 
 internal class PathUtils(private val context: Context) {
     private val isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
 
-    suspend fun getPath(listUri: List<Uri>) = withContext(IO) {
-        val realPath = mutableListOf<Pair<String, String>>()
-
-        async {
-            if (isKitKat) {
-                listUri.forEach { uri ->
-                    val returnedPath = getPathAboveKitKat(uri)
-                    when {
-                        //Cloud
-                        uri.isCloudFile -> realPath.add(Pair("cloud", downloadFile(uri)))
-                        returnedPath.isBlank() -> {
-                        } //TODO() need try catch
-                        //Todo: Add checks for unknown file extensions
-                        uri.isUnknownProvider(returnedPath, context) -> {
-                            realPath.add(Pair("unknownProvider", downloadFile(uri)))
-                        }
-                        //LocalFile
-                        else -> realPath.add(Pair("localProvider", getPathAboveKitKat(uri)))
-
+    /**
+     * Handle the files in background and return them.
+     *
+     * @param listUri
+     */
+    suspend fun getPath(listUri: List<Uri>) =
+        if (isKitKat) {
+            withContextAll(listUri) { uri ->
+                val returnedPath = getPathAboveKitKat(uri)
+                when {
+                    //Cloud
+                    uri.isCloudFile -> {
+                        Pair("cloud", downloadFile(uri)).alsoLogD()
+                    }
+                    returnedPath.isBlank() -> {
+                        Pair("", "").alsoLogD()
+                    }
+                    //TODO() need try catch
+                    //Todo: Add checks for unknown file extensions
+                    uri.isUnknownProvider(returnedPath, context) -> {
+                        Pair("unknownProvider", downloadFile(uri)).alsoLogD()
+                    }
+                    //LocalFile
+                    else -> {
+                        Pair("localProvider", getPathAboveKitKat(uri)).alsoLogD()
                     }
                 }
-            } else {
-                // Api < KitKat
-                listUri.forEach { realPath.add(Pair("", getPathBelowKitKat(it))) }
             }
-            return@async realPath
+        } else {
+            withContextAll(listUri) { uri ->
+                return@withContextAll Pair("", getPathBelowKitKat(uri)).alsoLogD() }
         }
-    }.await()
 
 
     /**
@@ -82,7 +82,7 @@ internal class PathUtils(private val context: Context) {
                     uri.isRawDownloadsDocument -> rawDownloadsDocument(uri)
                     uri.isDownloadsDocument -> downloadsDocument(uri)
                     uri.isMediaDocument -> mediaDocument(uri)
-                    else -> TODO("Throw Exception Document Provider")
+                    else -> ""
                 }
             }
             // MediaStore (and general)
@@ -127,55 +127,31 @@ internal class PathUtils(private val context: Context) {
     private fun downloadFile(uri: Uri): String {
         lateinit var pathPlusName: String
         lateinit var inputStream: InputStream
-
-        var size = -1
         val folder: File? = context.getExternalFilesDir("Temp")
         try {
             inputStream = context.contentResolver.openInputStream(uri)!!
         } catch (e: FileNotFoundException) {
-            logE(e.message)
+            logE("${e.javaClass} - ${e.message}")
         }
-
         try {
-            getCursor(uri)?.use { cursor ->
-                if (cursor.moveToFirst()) {
-                    uri.scheme?.let {
-                        when (it) {
-                            "content" -> size =
-                                cursor.getLong(cursor.getColumnIndex(OpenableColumns.SIZE)).toInt()
-                            "file" -> size = File(uri.path.orEmpty()).length().toInt()
-                        }
-                    }
-                }
-            }
             pathPlusName = "${folder.toString()}/${getFileName(uri)}"
             val file = File(pathPlusName)
-            val bis = BufferedInputStream(inputStream)
-            val fos = FileOutputStream(file)
-            val data = ByteArray(1024)
-            var total: Long = 0
-            var count: Int
-            while (bis.read(data).also { count = it } != -1) {
-                total += count.toLong()
-                if (size != -1) {
-                    try {
-                        //publishProgress((total * 100 / size).toInt())
-                    } catch (e: Exception) {
-                        logE("File size is less than 1")
-                        //publishProgress(0)
-                    }
-                }
-                fos.write(data, 0, count)
-
-            }
-            fos.flush()
-            fos.close()
+            val outputStream = FileOutputStream(file)
+            copyFile(inputStream, outputStream)
         } catch (e: IOException) {
-            logE(e.message.toString())
+            logE("${e.javaClass} - ${e.message}")
         }
         return pathPlusName
     }
 
+    private fun copyFile(input: InputStream, output: OutputStream) {
+        val buffer = ByteArray(1024)
+        var read: Int = input.read(buffer)
+        while (read != -1) {
+            output.write(buffer, 0, read)
+            read = input.read(buffer)
+        }
+    }
 
     private fun getFileName(uri: Uri): String? {
         var result: String? = null
@@ -354,6 +330,7 @@ internal class PathUtils(private val context: Context) {
     ) =
         context.contentResolver
             .query(uri, projection, selection, selectionArgs, null)
+
 
     /**
      * Returns subfolder from the main folder to the file location or empty string
