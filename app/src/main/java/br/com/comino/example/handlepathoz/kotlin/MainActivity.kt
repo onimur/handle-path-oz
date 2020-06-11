@@ -1,12 +1,12 @@
 /*
  *
- *  * Created by Murillo Comino on 06/06/20 22:23
+ *  * Created by Murillo Comino on 11/06/20 20:00
  *  * Github: github.com/MurilloComino
  *  * StackOverFlow: pt.stackoverflow.com/users/128573
  *  * Email: murillo_comino@hotmail.com
  *  *
  *  * Copyright (c) 2020.
- *  * Last modified 06/06/20 21:59
+ *  * Last modified 11/06/20 19:51
  *
  */
 
@@ -17,20 +17,24 @@ import android.app.Activity
 import android.content.Intent
 import android.content.Intent.ACTION_PICK
 import android.content.pm.PackageManager.PERMISSION_GRANTED
+import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI
 import android.provider.MediaStore.Video.Media.INTERNAL_CONTENT_URI
 import android.widget.Button
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import br.com.comino.example.handlepathoz.R
+import br.com.comino.handlepathoz.HandlePathOz
+import br.com.comino.handlepathoz.HandlePathOzListener
 import br.com.comino.handlepathoz.utils.extension.getListUri
 
-class MainActivity : AppCompatActivity(R.layout.activity_main) {
+class MainActivity : AppCompatActivity(R.layout.activity_main), HandlePathOzListener {
 
     companion object {
         const val REQUEST_PERMISSION = 123
@@ -42,41 +46,101 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     private lateinit var rvReal: RecyclerView
     private lateinit var originalAdapter: ListUriAdapter
     private lateinit var realAdapter: ListUriAdapter
-
+    private lateinit var progressLoading: ProgressDialog
+    private lateinit var progressCancelling: ProgressDialog
+    private lateinit var handlePathOz: HandlePathOz
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //
         init()
         startAction()
+        //
     }
 
     private fun init() {
+        initButton()
+        initRecyclerView()
+        initAdapter()
+        initProgressBar()
+        initHandlePathOz()
+
+    }
+
+    private fun startAction() {
+        startButton()
+        startRecyclerView()
+        startProgressBar()
+    }
+
+    //////////////////////////////////////     INIT    /////////////////////////////////////////////
+    private fun initButton() {
         buttonOpen = findViewById(R.id.btn_open)
+    }
+
+    private fun initRecyclerView() {
+        rvOriginal = findViewById(R.id.lv_original)
+        rvReal = findViewById(R.id.lv_real)
+    }
+
+    private fun initAdapter() {
         originalAdapter = ListUriAdapter(ArrayList())
         realAdapter = ListUriAdapter(ArrayList())
     }
 
-    private fun startAction() {
-        buttonOpen.setOnClickListener { openFile() }
+    private fun initProgressBar() {
+        progressLoading = ProgressDialog(this, getString(R.string.validating)).apply {
+            setCancelable(true)
+            create()
+        }
 
-        rvOriginal = findViewById<RecyclerView>(R.id.lv_original).apply {
+        progressCancelling = ProgressDialog(this, getString(R.string.cancelling)).apply {
+            setCancelable(false)
+            create()
+        }
+    }
+
+    private fun initHandlePathOz() {
+        //initialize library
+        handlePathOz = HandlePathOz(this, this)
+    }
+
+    //////////////////////////////////////     START    ////////////////////////////////////////////
+    private fun startButton() {
+        buttonOpen.setOnClickListener { openFile() }
+    }
+
+    private fun startRecyclerView() {
+        rvOriginal.apply {
             // use this setting to improve performance if you know that changes
             // in content do not change the layout size of the RecyclerView
             setHasFixedSize(true)
             // use a linear layout manager
-            layoutManager = LinearLayoutManager(context) as RecyclerView.LayoutManager
+            layoutManager = LinearLayoutManager(context)
             // specify an viewAdapter (see also next example)
             adapter = originalAdapter
         }
 
-        rvReal = findViewById<RecyclerView>(R.id.lv_real).apply {
+        rvReal.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
             adapter = realAdapter
         }
     }
 
+    private fun startProgressBar() {
+        progressLoading.setOnCancelListener {
+            //Call progress to cancel task
+            if (!progressCancelling.isShowing) {
+                progressCancelling.show()
+            }
+            //cancelTask
+            handlePathOz.cancelTask()
+
+        }
+    }
+
+    //////////////////////////////////////     OTHER METHODS   /////////////////////////////////////
     private fun openFile() {
         if (checkSelfPermission()) {
             val intent =
@@ -113,6 +177,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         return true
     }
 
+    /////////////////////////////     OVERRIDE METHODS    //////////////////////////////////////////
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String?>,
@@ -122,7 +187,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             if (grantResults[0] == PERMISSION_GRANTED) {
                 openFile()
             } else {
-                //TODO("show Message to the user")
+                TODO("show Message to the user")
             }
         }
     }
@@ -136,7 +201,49 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
                 //Update the adapter
                 originalAdapter.updateListChanged(listUri)
 
+                //set list of the Uri to handle
+                handlePathOz.getRealPath(listUri)
+                //show Progress Loading
+                if (!progressLoading.isShowing) {
+                    progressLoading.show()
+                }
             }
+        }
+    }
+
+    override fun onBackPressed() {
+        with(handlePathOz) {
+            //Cancel the task if it is working.
+            cancelTask()
+            //Deletes temporary files
+            deleteTemporaryFile()
+        }
+        super.onBackPressed()
+    }
+
+    override fun onDestroy() {
+        with(handlePathOz) {
+            cancelTask()
+            deleteTemporaryFile()
+        }
+        super.onDestroy()
+    }
+
+
+    /////////////////////////////     LISTENER HANDLE PATH OZ    ///////////////////////////////////
+    override fun onRequestHandlePathOz(listPath: List<Pair<Int, String>>, tr: Throwable?) {
+        //Hide Progress
+        if (progressLoading.isShowing or progressCancelling.isShowing) {
+            progressLoading.dismiss()
+            progressCancelling.dismiss()
+        }
+        //Update the adapter
+        realAdapter.updateListChanged(listPath.map { uri -> Uri.parse(uri.second) })
+
+
+        //Handle Exception (Optional)
+        tr?.let {
+            Toast.makeText(this, "${it.message}", Toast.LENGTH_SHORT).show()
         }
     }
 }
