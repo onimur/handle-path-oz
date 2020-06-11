@@ -1,12 +1,12 @@
 /*
  *
- *  * Created by Murillo Comino on 09/06/20 22:01
+ *  * Created by Murillo Comino on 11/06/20 16:25
  *  * Github: github.com/MurilloComino
  *  * StackOverFlow: pt.stackoverflow.com/users/128573
  *  * Email: murillo_comino@hotmail.com
  *  *
  *  * Copyright (c) 2020.
- *  * Last modified 09/06/20 21:41
+ *  * Last modified 11/06/20 16:17
  *
  */
 
@@ -26,43 +26,43 @@ import br.com.comino.handlepathoz.utils.extension.*
 import br.com.comino.handlepathoz.utils.extension.PathUri.COLUMN_DATA
 import br.com.comino.handlepathoz.utils.extension.PathUri.COLUMN_DISPLAY_NAME
 import br.com.comino.handlepathoz.utils.extension.PathUri.FOLDER_DOWNLOAD
+import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers.IO
 import java.io.*
 
 internal class PathUtils(private val context: Context) {
     private val isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
 
     /**
-     * Handle the files in background and return them.
+     * Handle the uri in background and return them.
      *
-     * @param listUri
+     * @param uri
      */
-    suspend fun getPath(listUri: List<Uri>) =
+    suspend fun getPath(uri: Uri) = withContext(IO) {
         if (isKitKat) {
-            withContextAll(listUri) { uri ->
-                val returnedPath = getPathAboveKitKat(uri)
-                when {
-                    //Cloud
-                    uri.isCloudFile -> {
-                        Pair("cloud", downloadFile(uri)).alsoLogD()
-                    }
-                    returnedPath.isBlank() -> {
-                        Pair("", "").alsoLogD()
-                    }
-                    //TODO() need try catch
-                    //Todo: Add checks for unknown file extensions
-                    uri.isUnknownProvider(returnedPath, context) -> {
-                        Pair("unknownProvider", downloadFile(uri)).alsoLogD()
-                    }
-                    //LocalFile
-                    else -> {
-                        Pair("localProvider", getPathAboveKitKat(uri)).alsoLogD()
-                    }
+            val returnedPath = getPathAboveKitKat(uri)
+            when {
+                //Cloud
+                uri.isCloudFile -> {
+                    Pair("cloud", downloadFile(uri, this)).alsoLogD()
+                }
+                returnedPath.isBlank() -> {
+                    Pair("", "").alsoLogD()
+                }
+                //TODO() need try catch
+                //Todo: Add checks for unknown file extensions
+                uri.isUnknownProvider(returnedPath, context) -> {
+                    Pair("unknownProvider", downloadFile(uri, this)).alsoLogD()
+                }
+                //LocalFile
+                else -> {
+                    Pair("localProvider", getPathAboveKitKat(uri)).alsoLogD()
                 }
             }
         } else {
-            withContextAll(listUri) { uri ->
-                return@withContextAll Pair("", getPathBelowKitKat(uri)).alsoLogD() }
+            Pair("", getPathBelowKitKat(uri)).alsoLogD()
         }
+    }
 
 
     /**
@@ -124,7 +124,10 @@ internal class PathUtils(private val context: Context) {
      * @param uri of the file
      * @return new path string
      */
-    private fun downloadFile(uri: Uri): String {
+    private fun downloadFile(
+        uri: Uri,
+        coroutineScope: CoroutineScope
+    ): String {
         lateinit var pathPlusName: String
         lateinit var inputStream: InputStream
         val folder: File? = context.getExternalFilesDir("Temp")
@@ -137,19 +140,35 @@ internal class PathUtils(private val context: Context) {
             pathPlusName = "${folder.toString()}/${getFileName(uri)}"
             val file = File(pathPlusName)
             val outputStream = FileOutputStream(file)
-            copyFile(inputStream, outputStream)
+            copyFile(inputStream, outputStream, file, coroutineScope)
         } catch (e: IOException) {
             logE("${e.javaClass} - ${e.message}")
         }
         return pathPlusName
     }
 
-    private fun copyFile(input: InputStream, output: OutputStream) {
-        val buffer = ByteArray(1024)
-        var read: Int = input.read(buffer)
-        while (read != -1) {
-            output.write(buffer, 0, read)
-            read = input.read(buffer)
+    private fun copyFile(
+        input: InputStream,
+        output: OutputStream,
+        file: File,
+        coroutineScope: CoroutineScope
+    ) {
+        runBlocking {
+            val buffer = ByteArray(1024)
+            var read: Int = input.read(buffer)
+            delay(10)
+            while (read != -1) {
+                if (coroutineScope.isActive) {
+                    output.write(buffer, 0, read)
+                    read = input.read(buffer)
+                } else {
+                    delay(2)
+                    val path = file.name
+                    val deleted = file.deleteRecursively()
+                    logE("Task was canceled and the $path file was deleted: $deleted")
+                    throw CancellationException()
+                }
+            }
         }
     }
 
