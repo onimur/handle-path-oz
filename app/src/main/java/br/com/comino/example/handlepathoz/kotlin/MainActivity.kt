@@ -1,12 +1,12 @@
 /*
  *
- *  * Created by Murillo Comino on 11/06/20 20:00
+ *  * Created by Murillo Comino on 12/06/20 10:17
  *  * Github: github.com/MurilloComino
  *  * StackOverFlow: pt.stackoverflow.com/users/128573
  *  * Email: murillo_comino@hotmail.com
  *  *
  *  * Copyright (c) 2020.
- *  * Last modified 11/06/20 19:51
+ *  * Last modified 12/06/20 10:13
  *
  */
 
@@ -239,7 +239,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), HandlePathOzList
         }
         //Update the adapter
         realAdapter.updateListChanged(listPath.map { uri -> Uri.parse(uri.second) })
-
 
         //Handle Exception (Optional)
         tr?.let {
