@@ -1,12 +1,12 @@
 /*
  *
- *  * Created by Murillo Comino on 11/06/20 20:19
+ *  * Created by Murillo Comino on 12/06/20 16:50
  *  * Github: github.com/MurilloComino
  *  * StackOverFlow: pt.stackoverflow.com/users/128573
  *  * Email: murillo_comino@hotmail.com
  *  *
  *  * Copyright (c) 2020.
- *  * Last modified 11/06/20 19:59
+ *  * Last modified 12/06/20 16:49
  *
  */
 
@@ -94,6 +94,12 @@ internal fun downloadFile(
     lateinit var inputStream: InputStream
     val folder: File? = context.getExternalFilesDir("Temp")
     try {
+        /**
+         * TODO
+         *have any bug in this line. When the job is canceled on this line,
+         *it takes a long time to perform the cancellation, why?
+         *I will try with @see [kotlin.io.use]
+         */
         inputStream = context.contentResolver.openInputStream(uri)!!
     } catch (e: FileNotFoundException) {
     }
