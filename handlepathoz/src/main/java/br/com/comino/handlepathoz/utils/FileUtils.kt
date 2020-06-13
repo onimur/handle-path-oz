@@ -1,12 +1,12 @@
 /*
  *
- *  * Created by Murillo Comino on 13/06/20 17:14
+ *  * Created by Murillo Comino on 13/06/20 17:42
  *  * Github: github.com/MurilloComino
  *  * StackOverFlow: pt.stackoverflow.com/users/128573
  *  * Email: murillo_comino@hotmail.com
  *  *
  *  * Copyright (c) 2020.
- *  * Last modified 13/06/20 17:03
+ *  * Last modified 13/06/20 17:17
  *
  */
 
@@ -15,6 +15,7 @@ package br.com.comino.handlepathoz.utils
 import android.content.Context
 import android.net.Uri
 import android.provider.OpenableColumns
+import br.com.comino.handlepathoz.utils.Constants.PathUri.FOLDER_DOWNLOAD
 import br.com.comino.handlepathoz.utils.ContentUriUtils.getCursor
 import br.com.comino.handlepathoz.utils.extension.logD
 import br.com.comino.handlepathoz.utils.extension.logE
@@ -102,7 +103,7 @@ internal object FileUtils {
      * @param uriString Path file
      * @param folderRoot It is usually "Download"
      */
-    fun getSubFolders(uriString: String, folderRoot: String = PathUri.FOLDER_DOWNLOAD) =
+    fun getSubFolders(uriString: String, folderRoot: String = FOLDER_DOWNLOAD) =
         uriString
             .replace("%2F", "/")
             .replace("%20", " ")

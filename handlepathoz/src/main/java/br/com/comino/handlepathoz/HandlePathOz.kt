@@ -1,12 +1,12 @@
 /*
  *
- *  * Created by Murillo Comino on 13/06/20 17:14
+ *  * Created by Murillo Comino on 13/06/20 17:42
  *  * Github: github.com/MurilloComino
  *  * StackOverFlow: pt.stackoverflow.com/users/128573
  *  * Email: murillo_comino@hotmail.com
  *  *
  *  * Copyright (c) 2020.
- *  * Last modified 13/06/20 17:12
+ *  * Last modified 13/06/20 17:17
  *
  */
 
@@ -15,13 +15,13 @@ package br.com.comino.handlepathoz
 import android.content.Context
 import android.net.Uri
 import android.os.Build
+import br.com.comino.handlepathoz.utils.Constants.HandlePathOzConts.BELOW_KITKAT_FILE
+import br.com.comino.handlepathoz.utils.Constants.HandlePathOzConts.CLOUD_FILE
+import br.com.comino.handlepathoz.utils.Constants.HandlePathOzConts.LOCAL_PROVIDER
+import br.com.comino.handlepathoz.utils.Constants.HandlePathOzConts.UNKNOWN_FILE_CHOOSER
+import br.com.comino.handlepathoz.utils.Constants.HandlePathOzConts.UNKNOWN_PROVIDER
 import br.com.comino.handlepathoz.utils.FileUtils.deleteTemporaryFile
 import br.com.comino.handlepathoz.utils.FileUtils.downloadFile
-import br.com.comino.handlepathoz.utils.HandlePathOzConts.BELOW_KITKAT_FILE
-import br.com.comino.handlepathoz.utils.HandlePathOzConts.CLOUD_FILE
-import br.com.comino.handlepathoz.utils.HandlePathOzConts.LOCAL_PROVIDER
-import br.com.comino.handlepathoz.utils.HandlePathOzConts.UNKNOWN_FILE_CHOOSER
-import br.com.comino.handlepathoz.utils.HandlePathOzConts.UNKNOWN_PROVIDER
 import br.com.comino.handlepathoz.utils.PathUtils.getPathAboveKitKat
 import br.com.comino.handlepathoz.utils.PathUtils.getPathBelowKitKat
 import br.com.comino.handlepathoz.utils.extension.*

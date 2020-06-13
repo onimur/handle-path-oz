@@ -1,12 +1,12 @@
 /*
  *
- *  * Created by Murillo Comino on 13/06/20 17:14
+ *  * Created by Murillo Comino on 13/06/20 17:42
  *  * Github: github.com/MurilloComino
  *  * StackOverFlow: pt.stackoverflow.com/users/128573
  *  * Email: murillo_comino@hotmail.com
  *  *
  *  * Copyright (c) 2020.
- *  * Last modified 13/06/20 17:03
+ *  * Last modified 13/06/20 17:17
  *
  */
 
@@ -18,14 +18,14 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.webkit.MimeTypeMap
-import br.com.comino.handlepathoz.utils.PathUri.PATH_DOWNLOAD
-import br.com.comino.handlepathoz.utils.PathUri.PATH_DROPBOX
-import br.com.comino.handlepathoz.utils.PathUri.PATH_EXTERNAL_STORAGE
-import br.com.comino.handlepathoz.utils.PathUri.PATH_GOOGLE_APPS
-import br.com.comino.handlepathoz.utils.PathUri.PATH_GOOGLE_PHOTOS
-import br.com.comino.handlepathoz.utils.PathUri.PATH_MEDIA
-import br.com.comino.handlepathoz.utils.PathUri.PATH_ONEDRIVE
-import br.com.comino.handlepathoz.utils.PathUri.PATH_RAW_DOWNLOAD
+import br.com.comino.handlepathoz.utils.Constants.PathUri.PATH_DOWNLOAD
+import br.com.comino.handlepathoz.utils.Constants.PathUri.PATH_DROPBOX
+import br.com.comino.handlepathoz.utils.Constants.PathUri.PATH_EXTERNAL_STORAGE
+import br.com.comino.handlepathoz.utils.Constants.PathUri.PATH_GOOGLE_APPS
+import br.com.comino.handlepathoz.utils.Constants.PathUri.PATH_GOOGLE_PHOTOS
+import br.com.comino.handlepathoz.utils.Constants.PathUri.PATH_MEDIA
+import br.com.comino.handlepathoz.utils.Constants.PathUri.PATH_ONEDRIVE
+import br.com.comino.handlepathoz.utils.Constants.PathUri.PATH_RAW_DOWNLOAD
 import java.util.*
 
 /**
