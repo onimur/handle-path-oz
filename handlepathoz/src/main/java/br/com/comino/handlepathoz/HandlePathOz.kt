@@ -1,12 +1,12 @@
 /*
  *
- *  * Created by Murillo Comino on 11/06/20 19:56
+ *  * Created by Murillo Comino on 13/06/20 16:54
  *  * Github: github.com/MurilloComino
  *  * StackOverFlow: pt.stackoverflow.com/users/128573
  *  * Email: murillo_comino@hotmail.com
  *  *
  *  * Copyright (c) 2020.
- *  * Last modified 11/06/20 19:51
+ *  * Last modified 13/06/20 16:54
  *
  */
 
@@ -15,15 +15,15 @@ package br.com.comino.handlepathoz
 import android.content.Context
 import android.net.Uri
 import android.os.Build
-import br.com.comino.handlepathoz.utils.downloadFile
+import br.com.comino.handlepathoz.utils.FileUtils.downloadFile
+import br.com.comino.handlepathoz.utils.PathUtils.getPathAboveKitKat
+import br.com.comino.handlepathoz.utils.PathUtils.getPathBelowKitKat
 import br.com.comino.handlepathoz.utils.extension.*
 import br.com.comino.handlepathoz.utils.extension.HandlePathOzConts.BELOW_KITKAT_FILE
 import br.com.comino.handlepathoz.utils.extension.HandlePathOzConts.CLOUD_FILE
 import br.com.comino.handlepathoz.utils.extension.HandlePathOzConts.LOCAL_PROVIDER
 import br.com.comino.handlepathoz.utils.extension.HandlePathOzConts.UNKNOWN_FILE_CHOOSER
 import br.com.comino.handlepathoz.utils.extension.HandlePathOzConts.UNKNOWN_PROVIDER
-import br.com.comino.handlepathoz.utils.getPathAboveKitKat
-import br.com.comino.handlepathoz.utils.getPathBelowKitKat
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
@@ -120,24 +120,6 @@ class HandlePathOz(
         if (job.isActive) {
             job.cancelChildren()
             logD("\nJob isActive: ${job.isActive}\nJob isCancelled: ${job.isCancelled}\nJob isCompleted: ${job.isCompleted}")
-        }
-    }
-
-    /**
-     * Delete the files in the "Temp" folder at the root of the project.
-     *
-     */
-    fun deleteTemporaryFile() {
-        context.getExternalFilesDir("Temp")?.let { folder ->
-            folder.listFiles()?.let { files ->
-                files.forEach {
-                    if (it.deleteRecursively()) {
-                        logD("$it delete file was called")
-                    } else {
-                        logE("$it there is no file")
-                    }
-                }
-            }
         }
     }
 }
