@@ -1,12 +1,12 @@
 /*
  *
- *  * Created by Murillo Comino on 13/06/20 17:42
+ *  * Created by Murillo Comino on 13/06/20 18:25
  *  * Github: github.com/MurilloComino
  *  * StackOverFlow: pt.stackoverflow.com/users/128573
  *  * Email: murillo_comino@hotmail.com
  *  *
  *  * Copyright (c) 2020.
- *  * Last modified 13/06/20 17:17
+ *  * Last modified 13/06/20 18:25
  *
  */
 
@@ -29,7 +29,6 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancelChildren
 import kotlin.system.measureTimeMillis
 
 class HandlePathOz(
@@ -38,7 +37,7 @@ class HandlePathOz(
 ) {
     private var job: Job = Job()
     private val coroutineScope: CoroutineScope = CoroutineScope(Main + job)
-
+    private val isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
 
     /**
      *
@@ -74,12 +73,8 @@ class HandlePathOz(
                             "\nJob wasCompleted: $wasCompleted"
                 )
             }
-
         }
-
     }
-
-    private val isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
 
     /**
      * Handle the uri in background and return them.
@@ -117,7 +112,7 @@ class HandlePathOz(
      */
     fun cancelTask() {
         if (job.isActive) {
-            job.cancelChildren()
+            job.cancel()
             logD("\nJob isActive: ${job.isActive}\nJob isCancelled: ${job.isCancelled}\nJob isCompleted: ${job.isCompleted}")
         }
     }

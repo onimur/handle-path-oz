@@ -1,12 +1,12 @@
 /*
  *
- *  * Created by Murillo Comino on 13/06/20 17:14
+ *  * Created by Murillo Comino on 13/06/20 18:25
  *  * Github: github.com/MurilloComino
  *  * StackOverFlow: pt.stackoverflow.com/users/128573
  *  * Email: murillo_comino@hotmail.com
  *  *
  *  * Copyright (c) 2020.
- *  * Last modified 13/06/20 17:12
+ *  * Last modified 13/06/20 17:47
  *
  */
 
@@ -20,9 +20,11 @@ import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
 import androidx.loader.content.CursorLoader
+import br.com.comino.handlepathoz.utils.Constants.PathUri.COLUMN_DATA
+import br.com.comino.handlepathoz.utils.Constants.PathUri.COLUMN_DISPLAY_NAME
+import br.com.comino.handlepathoz.utils.Constants.PathUri.FOLDER_DOWNLOAD
 import br.com.comino.handlepathoz.utils.ContentUriUtils.getPathFromColumn
 import br.com.comino.handlepathoz.utils.FileUtils.getSubFolders
-import br.com.comino.handlepathoz.utils.PathUri.FOLDER_DOWNLOAD
 import br.com.comino.handlepathoz.utils.extension.*
 import java.io.File
 
@@ -63,12 +65,12 @@ object PathUtils {
     }
 
     internal fun getPathBelowKitKat(context: Context, uri: Uri): String {
-        val projection = arrayOf<String?>(PathUri.COLUMN_DATA)
+        val projection = arrayOf<String?>(COLUMN_DATA)
         try {
             val loader = CursorLoader(context, uri, projection, null, null, null)
             loader.loadInBackground()?.use {
                 if (it.moveToFirst()) {
-                    val index = it.getColumnIndexOrThrow(PathUri.COLUMN_DATA)
+                    val index = it.getColumnIndexOrThrow(COLUMN_DATA)
                     return it.getString(index)
                 }
             }
@@ -83,7 +85,7 @@ object PathUtils {
      *
      */
     private fun googlePhotosUri(context: Context, uri: Uri): String? {
-        val path = getPathFromColumn(context, uri, PathUri.COLUMN_DATA)
+        val path = getPathFromColumn(context, uri, COLUMN_DATA)
         // Return the remote address
         return if (path.isNotBlank()) {
             uri.lastPathSegment ?: path
@@ -120,7 +122,7 @@ object PathUtils {
     @Suppress("DEPRECATION")
     @SuppressLint("NewApi")
     private fun rawDownloadsDocument(context: Context, uri: Uri): String {
-        val fileName = getPathFromColumn(context, uri, PathUri.COLUMN_DISPLAY_NAME)
+        val fileName = getPathFromColumn(context, uri, COLUMN_DISPLAY_NAME)
         val subFolderName = getSubFolders(uri.toString())
         return if (fileName.isNotBlank()) {
             "${Environment.getExternalStorageDirectory()}/$FOLDER_DOWNLOAD/$subFolderName$fileName"
@@ -130,7 +132,7 @@ object PathUtils {
                 Uri.parse("content://downloads/public_downloads"),
                 id.toLong()
             )
-            getPathFromColumn(context, contentUri, PathUri.COLUMN_DATA)
+            getPathFromColumn(context, contentUri, COLUMN_DATA)
         }
     }
 
@@ -141,7 +143,7 @@ object PathUtils {
     @SuppressLint("NewApi")
     @Suppress("DEPRECATION")
     private fun downloadsDocument(context: Context, uri: Uri): String {
-        val fileName = getPathFromColumn(context, uri, PathUri.COLUMN_DISPLAY_NAME)
+        val fileName = getPathFromColumn(context, uri, COLUMN_DISPLAY_NAME)
         val subFolderName = getSubFolders(uri.toString())
         if (fileName.isNotBlank()) {
             return "${Environment.getExternalStorageDirectory()}/$FOLDER_DOWNLOAD/$subFolderName$fileName"
@@ -160,7 +162,7 @@ object PathUtils {
             Uri.parse("content://downloads/public_downloads"),
             id.toLong()
         )
-        return getPathFromColumn(context, contentUri, PathUri.COLUMN_DATA)
+        return getPathFromColumn(context, contentUri, COLUMN_DATA)
     }
 
     /**
@@ -184,7 +186,7 @@ object PathUtils {
         return getPathFromColumn(
             context,
             contentUri,
-            PathUri.COLUMN_DATA,
+            COLUMN_DATA,
             selection,
             selectionArgs
         )
