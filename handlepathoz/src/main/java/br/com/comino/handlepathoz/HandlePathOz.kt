@@ -1,12 +1,12 @@
 /*
  *
- *  * Created by Murillo Comino on 13/06/20 16:54
+ *  * Created by Murillo Comino on 13/06/20 17:14
  *  * Github: github.com/MurilloComino
  *  * StackOverFlow: pt.stackoverflow.com/users/128573
  *  * Email: murillo_comino@hotmail.com
  *  *
  *  * Copyright (c) 2020.
- *  * Last modified 13/06/20 16:54
+ *  * Last modified 13/06/20 17:12
  *
  */
 
@@ -15,18 +15,21 @@ package br.com.comino.handlepathoz
 import android.content.Context
 import android.net.Uri
 import android.os.Build
+import br.com.comino.handlepathoz.utils.FileUtils.deleteTemporaryFile
 import br.com.comino.handlepathoz.utils.FileUtils.downloadFile
+import br.com.comino.handlepathoz.utils.HandlePathOzConts.BELOW_KITKAT_FILE
+import br.com.comino.handlepathoz.utils.HandlePathOzConts.CLOUD_FILE
+import br.com.comino.handlepathoz.utils.HandlePathOzConts.LOCAL_PROVIDER
+import br.com.comino.handlepathoz.utils.HandlePathOzConts.UNKNOWN_FILE_CHOOSER
+import br.com.comino.handlepathoz.utils.HandlePathOzConts.UNKNOWN_PROVIDER
 import br.com.comino.handlepathoz.utils.PathUtils.getPathAboveKitKat
 import br.com.comino.handlepathoz.utils.PathUtils.getPathBelowKitKat
 import br.com.comino.handlepathoz.utils.extension.*
-import br.com.comino.handlepathoz.utils.extension.HandlePathOzConts.BELOW_KITKAT_FILE
-import br.com.comino.handlepathoz.utils.extension.HandlePathOzConts.CLOUD_FILE
-import br.com.comino.handlepathoz.utils.extension.HandlePathOzConts.LOCAL_PROVIDER
-import br.com.comino.handlepathoz.utils.extension.HandlePathOzConts.UNKNOWN_FILE_CHOOSER
-import br.com.comino.handlepathoz.utils.extension.HandlePathOzConts.UNKNOWN_PROVIDER
-import kotlinx.coroutines.*
-import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancelChildren
 import kotlin.system.measureTimeMillis
 
 class HandlePathOz(
@@ -46,36 +49,34 @@ class HandlePathOz(
     fun getRealPath(listUri: List<Uri>) {
         val list = mutableListOf<Pair<Int, String>>()
         var error: Throwable? = null
-
-        coroutineScope.launch {
-            try {
-                logD("Launch Job")
-                val time = measureTimeMillis {
-                    listUri.forEach {
-                        list.add(getPath(it))
-                    }
+        try {
+            logD("Launch Job")
+            val time = measureTimeMillis {
+                listUri.forEach {
+                    list.add(getPath(it))
                 }
-                logD("Total task time: $time ms")
-            } catch (e: CancellationException) {
-                error = e
-                logE("$e - ${e.message}")
-            } catch (tr: Throwable) {
-                error = tr
-                logE("$tr - ${tr.message}")
-            } finally {
-                listener.onRequestHandlePathOz(list, error)
-                with(job) {
-                    logD(
-                        "\nJob isNew: $isNew" +
-                                "\nJob isCompleting: $isCompleting" +
-                                "\nJob isCancelling: $isCancelling" +
-                                "\nJob wasCancelled: $wasCancelled" +
-                                "\nJob wasCompleted: $wasCompleted"
-                    )
-                }
-
             }
+            logD("Total task time: $time ms")
+        } catch (e: CancellationException) {
+            error = e
+            logE("$e - ${e.message}")
+        } catch (tr: Throwable) {
+            error = tr
+            logE("$tr - ${tr.message}")
+        } finally {
+            listener.onRequestHandlePathOz(list, error)
+            with(job) {
+                logD(
+                    "\nJob isNew: $isNew" +
+                            "\nJob isCompleting: $isCompleting" +
+                            "\nJob isCancelling: $isCancelling" +
+                            "\nJob wasCancelled: $wasCancelled" +
+                            "\nJob wasCompleted: $wasCompleted"
+                )
+            }
+
         }
+
     }
 
     private val isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
@@ -85,13 +86,13 @@ class HandlePathOz(
      *
      * @param uri
      */
-    private suspend fun getPath(uri: Uri) = withContext(IO) {
+    private fun getPath(uri: Uri) =
         if (isKitKat) {
             val returnedPath = getPathAboveKitKat(context, uri)
             when {
                 //Cloud
                 uri.isCloudFile -> {
-                    Pair(CLOUD_FILE, downloadFile(context, uri, this)).alsoLogD()
+                    Pair(CLOUD_FILE, downloadFile(context, uri)).alsoLogD()
                 }
                 returnedPath.isBlank() -> {
                     Pair(UNKNOWN_FILE_CHOOSER, "").alsoLogD()
@@ -99,7 +100,7 @@ class HandlePathOz(
                 //TODO() need try catch
                 //Todo: Add checks for unknown file extensions
                 uri.isUnknownProvider(returnedPath, context) -> {
-                    Pair(UNKNOWN_PROVIDER, downloadFile(context, uri, this)).alsoLogD()
+                    Pair(UNKNOWN_PROVIDER, downloadFile(context, uri)).alsoLogD()
                 }
                 //LocalFile
                 else -> {
@@ -109,8 +110,6 @@ class HandlePathOz(
         } else {
             Pair(BELOW_KITKAT_FILE, getPathBelowKitKat(context, uri)).alsoLogD()
         }
-    }
-
 
     /**
      * Cancel the task, if it is active
@@ -121,5 +120,9 @@ class HandlePathOz(
             job.cancelChildren()
             logD("\nJob isActive: ${job.isActive}\nJob isCancelled: ${job.isCancelled}\nJob isCompleted: ${job.isCompleted}")
         }
+    }
+
+    fun deleteTemporaryFile() {
+        deleteTemporaryFile(context)
     }
 }

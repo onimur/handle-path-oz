@@ -1,16 +1,16 @@
 /*
  *
- *  * Created by Murillo Comino on 11/06/20 19:56
+ *  * Created by Murillo Comino on 13/06/20 17:14
  *  * Github: github.com/MurilloComino
  *  * StackOverFlow: pt.stackoverflow.com/users/128573
  *  * Email: murillo_comino@hotmail.com
  *  *
  *  * Copyright (c) 2020.
- *  * Last modified 11/06/20 16:46
+ *  * Last modified 13/06/20 17:03
  *
  */
 
-package br.com.comino.handlepathoz.utils.extension
+package br.com.comino.handlepathoz.utils
 
 import android.provider.MediaStore
 
@@ -38,6 +38,7 @@ internal object PathUri {
 
     //Columns
     const val COLUMN_DISPLAY_NAME = MediaStore.Files.FileColumns.DISPLAY_NAME
+
     //Deprecated
     //val COLUMN_DATA = MediaStore.MediaColumns.DATA
     const val COLUMN_DATA = "_data"
@@ -45,8 +46,8 @@ internal object PathUri {
 
 object HandlePathOzConts {
     const val BELOW_KITKAT_FILE = -1
-    const val CLOUD_FILE= 1
-    const val UNKNOWN_PROVIDER= 2
-    const val LOCAL_PROVIDER= 3
+    const val CLOUD_FILE = 1
+    const val UNKNOWN_PROVIDER = 2
+    const val LOCAL_PROVIDER = 3
     const val UNKNOWN_FILE_CHOOSER = 4
 }

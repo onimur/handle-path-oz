@@ -1,12 +1,12 @@
 /*
  *
- *  * Created by Murillo Comino on 13/06/20 16:54
+ *  * Created by Murillo Comino on 13/06/20 17:14
  *  * Github: github.com/MurilloComino
  *  * StackOverFlow: pt.stackoverflow.com/users/128573
  *  * Email: murillo_comino@hotmail.com
  *  *
  *  * Copyright (c) 2020.
- *  * Last modified 13/06/20 16:54
+ *  * Last modified 13/06/20 17:03
  *
  */
 
@@ -16,10 +16,8 @@ import android.content.Context
 import android.net.Uri
 import android.provider.OpenableColumns
 import br.com.comino.handlepathoz.utils.ContentUriUtils.getCursor
-import br.com.comino.handlepathoz.utils.extension.PathUri
 import br.com.comino.handlepathoz.utils.extension.logD
 import br.com.comino.handlepathoz.utils.extension.logE
-import kotlinx.coroutines.*
 import java.io.*
 
 internal object FileUtils {
@@ -32,10 +30,9 @@ internal object FileUtils {
      * @param uri of the file
      * @return new path string
      */
-     fun downloadFile(
+    fun downloadFile(
         context: Context,
-        uri: Uri,
-        coroutineScope: CoroutineScope
+        uri: Uri
     ): String {
         lateinit var pathPlusName: String
         lateinit var inputStream: InputStream
@@ -54,34 +51,21 @@ internal object FileUtils {
             pathPlusName = "${folder.toString()}/${getFileName(context, uri)}"
             val file = File(pathPlusName)
             val outputStream = FileOutputStream(file)
-            copyFile(inputStream, outputStream, file, coroutineScope)
+            copyFile(inputStream, outputStream)
         } catch (e: IOException) {
         }
         return pathPlusName
     }
 
-     fun copyFile(
+    fun copyFile(
         input: InputStream,
-        output: OutputStream,
-        file: File,
-        coroutineScope: CoroutineScope
+        output: OutputStream
     ) {
-        runBlocking {
-            val buffer = ByteArray(1024)
-            var read: Int = input.read(buffer)
-            delay(10)
-            while (read != -1) {
-                if (coroutineScope.isActive) {
-                    output.write(buffer, 0, read)
-                    read = input.read(buffer)
-                } else {
-                    delay(2)
-                    val path = file.name
-                    val deleted = file.deleteRecursively()
-                    logE("Task was canceled and the $path file was deleted: $deleted")
-                    throw CancellationException()
-                }
-            }
+        val buffer = ByteArray(1024)
+        var read: Int = input.read(buffer)
+        while (read != -1) {
+            output.write(buffer, 0, read)
+            read = input.read(buffer)
         }
     }
 
@@ -138,7 +122,7 @@ internal object FileUtils {
      * Delete the files in the "Temp" folder at the root of the project.
      *
      */
-    fun deleteTemporaryFile(context:Context) {
+    fun deleteTemporaryFile(context: Context) {
         context.getExternalFilesDir("Temp")?.let { folder ->
             folder.listFiles()?.let { files ->
                 files.forEach {

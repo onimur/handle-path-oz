@@ -1,14 +1,14 @@
 /*
  *
- *  * Created by Murillo Comino on 13/06/20 16:54
+ *  * Created by Murillo Comino on 13/06/20 17:14
  *  * Github: github.com/MurilloComino
  *  * StackOverFlow: pt.stackoverflow.com/users/128573
  *  * Email: murillo_comino@hotmail.com
  *  *
  *  * Copyright (c) 2020.
- *  * Last modified 13/06/20 16:53
+ *  * Last modified 13/06/20 17:12
  *
- */*/
+ */
 
 package br.com.comino.handlepathoz.utils
 
@@ -19,16 +19,14 @@ import android.net.Uri
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
-import android.provider.OpenableColumns
 import androidx.loader.content.CursorLoader
 import br.com.comino.handlepathoz.utils.ContentUriUtils.getPathFromColumn
 import br.com.comino.handlepathoz.utils.FileUtils.getSubFolders
+import br.com.comino.handlepathoz.utils.PathUri.FOLDER_DOWNLOAD
 import br.com.comino.handlepathoz.utils.extension.*
-import br.com.comino.handlepathoz.utils.extension.PathUri.FOLDER_DOWNLOAD
-import kotlinx.coroutines.*
-import java.io.*
+import java.io.File
 
-object PathUtils{
+object PathUtils {
     /**
      * Get a file path from a Uri. This will get the the path for Storage Access
      * Framework Documents, as well as the _data field for the MediaStore and
