@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ /*
-  ~  * Created by Murillo Comino on 06/06/20 22:23
+  ~  * Created by Murillo Comino on 13/06/20 23:29
   ~  * Github: github.com/MurilloComino
   ~  * StackOverFlow: pt.stackoverflow.com/users/128573
   ~  * Email: murillo_comino@hotmail.com
   ~  *
   ~  * Copyright (c) 2020.
-  ~  * Last modified 06/06/20 22:10
+  ~  * Last modified 13/06/20 23:28
   ~  */
   -->
 
 <resources>
-    <color name="colorPrimary">#6200EE</color>
-    <color name="colorPrimaryDark">#3700B3</color>
-    <color name="colorAccent">#03DAC5</color>
-    <color name="colorBlue">#6485B3</color>
+    <color name="colorPrimary">#0C52A1</color>
+    <color name="colorPrimaryDark">#1A2230</color>
+    <color name="colorAccent">#FF6D00</color>
+    <color name="colorButton">#00796B</color>
 
-    <color name="colorGrayTransparent">#0E000000</color>
+    <color name="colorWhite">#FFF3F3</color>
+    <color name="colorLight">#F4EBEE</color>
 </resources>

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   ~ /*
-  ~  * Created by Murillo Comino on 11/06/20 20:00
+  ~  * Created by Murillo Comino on 13/06/20 23:29
   ~  * Github: github.com/MurilloComino
   ~  * StackOverFlow: pt.stackoverflow.com/users/128573
   ~  * Email: murillo_comino@hotmail.com
   ~  *
   ~  * Copyright (c) 2020.
-  ~  * Last modified 10/06/20 18:05
+  ~  * Last modified 13/06/20 22:43
   ~  */
   -->
 
@@ -25,6 +25,7 @@
         android:layout_gravity="center" />
 
     <TextView
+        android:text="@string/validating"
         android:id="@+id/tv_progress_dialog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

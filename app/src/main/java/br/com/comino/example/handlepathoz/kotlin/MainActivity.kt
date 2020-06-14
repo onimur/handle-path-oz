@@ -1,12 +1,12 @@
 /*
  *
- *  * Created by Murillo Comino on 12/06/20 10:17
+ *  * Created by Murillo Comino on 13/06/20 23:29
  *  * Github: github.com/MurilloComino
  *  * StackOverFlow: pt.stackoverflow.com/users/128573
  *  * Email: murillo_comino@hotmail.com
  *  *
  *  * Copyright (c) 2020.
- *  * Last modified 12/06/20 10:13
+ *  * Last modified 13/06/20 21:06
  *
  */
 
@@ -216,7 +216,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), HandlePathOzList
             //Cancel the task if it is working.
             cancelTask()
             //Deletes temporary files
-            deleteTemporaryFile()
+            deleteTemporaryFiles()
         }
         super.onBackPressed()
     }
@@ -224,7 +224,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), HandlePathOzList
     override fun onDestroy() {
         with(handlePathOz) {
             cancelTask()
-            deleteTemporaryFile()
+            deleteTemporaryFiles()
         }
         super.onDestroy()
     }

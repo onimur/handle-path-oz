@@ -1,12 +1,12 @@
 /*
  *
- *  * Created by Murillo Comino on 12/06/20 10:16
+ *  * Created by Murillo Comino on 13/06/20 23:29
  *  * Github: github.com/MurilloComino
  *  * StackOverFlow: pt.stackoverflow.com/users/128573
  *  * Email: murillo_comino@hotmail.com
  *  *
  *  * Copyright (c) 2020.
- *  * Last modified 12/06/20 10:09
+ *  * Last modified 13/06/20 21:06
  *
  */
 
@@ -209,7 +209,7 @@ public class MainActivity extends AppCompatActivity implements HandlePathOzListe
         //Cancel the task if it is working.
         handlePathOz.cancelTask();
         //Deletes temporary
-        handlePathOz.deleteTemporaryFile();
+        handlePathOz.deleteTemporaryFiles();
 
         super.onBackPressed();
     }
@@ -217,7 +217,7 @@ public class MainActivity extends AppCompatActivity implements HandlePathOzListe
     @Override
     public void onDestroy() {
         handlePathOz.cancelTask();
-        handlePathOz.deleteTemporaryFile();
+        handlePathOz.deleteTemporaryFiles();
         super.onDestroy();
     }
 

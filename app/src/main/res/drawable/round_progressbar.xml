@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ /*
-  ~  * Created by Murillo Comino on 11/06/20 20:00
+  ~  * Created by Murillo Comino on 13/06/20 23:29
   ~  * Github: github.com/MurilloComino
   ~  * StackOverFlow: pt.stackoverflow.com/users/128573
   ~  * Email: murillo_comino@hotmail.com
   ~  *
   ~  * Copyright (c) 2020.
-  ~  * Last modified 08/06/20 16:36
+  ~  * Last modified 13/06/20 23:14
   ~  */
   -->
 
 <shape android:shape="rectangle" xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="@color/colorGrayTransparent" />
+    <solid android:color="@color/colorWhite" />
     <corners android:radius="12dp"/>
 
 </shape>
