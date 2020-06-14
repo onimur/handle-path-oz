@@ -1,12 +1,12 @@
 /*
  *
- *  * Created by Murillo Comino on 13/06/20 17:42
+ *  * Created by Murillo Comino on 13/06/20 22:10
  *  * Github: github.com/MurilloComino
  *  * StackOverFlow: pt.stackoverflow.com/users/128573
  *  * Email: murillo_comino@hotmail.com
  *  *
  *  * Copyright (c) 2020.
- *  * Last modified 13/06/20 17:17
+ *  * Last modified 13/06/20 21:59
  *
  */
 
@@ -19,7 +19,13 @@ import br.com.comino.handlepathoz.utils.Constants.PathUri.FOLDER_DOWNLOAD
 import br.com.comino.handlepathoz.utils.ContentUriUtils.getCursor
 import br.com.comino.handlepathoz.utils.extension.logD
 import br.com.comino.handlepathoz.utils.extension.logE
-import java.io.*
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.isActive
+import java.io.File
+import java.io.FileOutputStream
+import java.io.InputStream
+import java.io.OutputStream
 
 internal object FileUtils {
 
@@ -33,44 +39,54 @@ internal object FileUtils {
      */
     fun downloadFile(
         context: Context,
-        uri: Uri
+        uri: Uri,
+        coroutineScope: CoroutineScope
     ): String {
-        lateinit var pathPlusName: String
-        lateinit var inputStream: InputStream
+
+
         val folder: File? = context.getExternalFilesDir("Temp")
-        try {
-            /**
-             * TODO
-             *have any bug in this line. When the job is canceled on this line,
-             *it takes a long time to perform the cancellation, why?
-             *I will try with @see [kotlin.io.use]
-             */
-            inputStream = context.contentResolver.openInputStream(uri)!!
-        } catch (e: FileNotFoundException) {
-        }
-        try {
-            pathPlusName = "${folder.toString()}/${getFileName(context, uri)}"
+        val pathPlusName = "${folder.toString()}/${getFileName(context, uri)}"
+        if (coroutineScope.isActive) {
             val file = File(pathPlusName)
             val outputStream = FileOutputStream(file)
-            copyFile(inputStream, outputStream)
-        } catch (e: IOException) {
+
+            context.contentResolver.openInputStream(uri)?.use {
+                copyFile(it, outputStream, file, coroutineScope)
+            }
+            logD("File and Path copied - $pathPlusName")
+        } else {
+            logE("Task canceled before completing the download of the last file.")
+            throw CancellationException()
         }
+
         return pathPlusName
     }
 
-    fun copyFile(
+    private fun copyFile(
         input: InputStream,
-        output: OutputStream
+        output: OutputStream,
+        file: File,
+        coroutineScope: CoroutineScope
     ) {
         val buffer = ByteArray(1024)
         var read: Int = input.read(buffer)
+        logD("Copying ${file.absoluteFile}")
         while (read != -1) {
-            output.write(buffer, 0, read)
-            read = input.read(buffer)
+            if (coroutineScope.isActive) {
+                output.write(buffer, 0, read)
+                read = input.read(buffer)
+            } else {
+                input.close()
+                output.close()
+                file.deleteRecursively()
+                logE("Task canceled and file ${file.absoluteFile} deleted")
+                throw CancellationException()
+            }
+
         }
     }
 
-    fun getFileName(context: Context, uri: Uri): String? {
+    private fun getFileName(context: Context, uri: Uri): String? {
         var result: String? = null
 
         uri.scheme?.let {
@@ -123,14 +139,14 @@ internal object FileUtils {
      * Delete the files in the "Temp" folder at the root of the project.
      *
      */
-    fun deleteTemporaryFile(context: Context) {
+    fun deleteTemporaryFiles(context: Context) {
         context.getExternalFilesDir("Temp")?.let { folder ->
             folder.listFiles()?.let { files ->
                 files.forEach {
                     if (it.deleteRecursively()) {
-                        logD("$it delete file was called")
+                        logD("${it.absoluteFile} delete file was called")
                     } else {
-                        logE("$it there is no file")
+                        logE("${it.absoluteFile} there is no file")
                     }
                 }
             }
