@@ -38,3 +38,4 @@ google-services.json
 *.jks
 *.keystore
 .coverage/
+exclude/
