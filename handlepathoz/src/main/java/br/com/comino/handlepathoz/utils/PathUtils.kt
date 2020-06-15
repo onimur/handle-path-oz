@@ -1,12 +1,12 @@
 /*
  *
- *  * Created by Murillo Comino on 15/06/20 16:48
+ *  * Created by Murillo Comino on 15/06/20 17:32
  *  * Github: github.com/MurilloComino
  *  * StackOverFlow: pt.stackoverflow.com/users/128573
  *  * Email: murillo_comino@hotmail.com
  *  *
  *  * Copyright (c) 2020.
- *  * Last modified 15/06/20 16:16
+ *  * Last modified 15/06/20 17:31
  *
  */
 
@@ -20,6 +20,10 @@ import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
 import androidx.loader.content.CursorLoader
+import br.com.comino.handlepathoz.errors.EmptyGooglePhotosException
+import br.com.comino.handlepathoz.errors.HandlePathOzUnknownException
+import br.com.comino.handlepathoz.errors.UnknownDocumentsProviderException
+import br.com.comino.handlepathoz.errors.UnknownFilePathException
 import br.com.comino.handlepathoz.utils.Constants.PathUri.COLUMN_DATA
 import br.com.comino.handlepathoz.utils.Constants.PathUri.COLUMN_DISPLAY_NAME
 import br.com.comino.handlepathoz.utils.Constants.PathUri.FOLDER_DOWNLOAD
@@ -46,39 +50,36 @@ object PathUtils {
                     uri.isRawDownloadsDocument -> rawDownloadsDocument(context, uri)
                     uri.isDownloadsDocument -> downloadsDocument(context, uri)
                     uri.isMediaDocument -> mediaDocument(context, uri)
-                    else -> ""
+                    else -> throw UnknownDocumentsProviderException()
                 }
             }
             // MediaStore (and general)
             uri.isMediaStore -> {
                 val path = getPathFromColumn(context, uri, COLUMN_DATA)
                 return if (uri.isGooglePhotosUri) googlePhotosUri(uri)
-                    ?: TODO("Throw Exception to GooglePhotos")
+                    ?: throw EmptyGooglePhotosException(path)
                 else {
                     anotherFileProvider(path)
                 }
             }
-            uri.isFile -> uri.path ?: TODO("Throw Exception Files Path")
+            uri.isFile -> uri.path ?: throw UnknownFilePathException(uri.toString())
 
-            else -> TODO("Throw Unknown Exception")
+            else -> throw HandlePathOzUnknownException(uri.toString())
 
         }
     }
 
     internal fun getPathBelowKitKat(context: Context, uri: Uri): String {
         val projection = arrayOf<String?>(COLUMN_DATA)
-        try {
-            val loader = CursorLoader(context, uri, projection, null, null, null)
-            loader.loadInBackground()?.use {
-                if (it.moveToFirst()) {
-                    val index = it.getColumnIndexOrThrow(COLUMN_DATA)
-                    return it.getString(index)
-                }
+        var path = ""
+        val loader = CursorLoader(context, uri, projection, null, null, null)
+        loader.loadInBackground()?.use {
+            if (it.moveToFirst()) {
+                val index = it.getColumnIndexOrThrow(COLUMN_DATA)
+                path = it.getString(index)
             }
-        } catch (e: Exception) {
-            //TODO handle error
         }
-        return ""
+        return path
     }
 
     /**
