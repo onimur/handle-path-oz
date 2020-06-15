@@ -1,12 +1,12 @@
 /*
  *
- *  * Created by Murillo Comino on 13/06/20 23:29
+ *  * Created by Murillo Comino on 15/06/20 20:06
  *  * Github: github.com/MurilloComino
  *  * StackOverFlow: pt.stackoverflow.com/users/128573
  *  * Email: murillo_comino@hotmail.com
  *  *
  *  * Copyright (c) 2020.
- *  * Last modified 13/06/20 21:06
+ *  * Last modified 15/06/20 19:07
  *
  */
 
@@ -41,6 +41,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), HandlePathOzList
         const val REQUEST_OPEN_GALLERY = 1111
     }
 
+    private var listUri = emptyList<Uri>()
     private lateinit var buttonOpen: Button
     private lateinit var rvOriginal: RecyclerView
     private lateinit var rvReal: RecyclerView
@@ -197,7 +198,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), HandlePathOzList
         if (requestCode == REQUEST_OPEN_GALLERY) {
             if (resultCode == Activity.RESULT_OK) {
                 //This extension retrieves the path of all selected files without treatment.
-                val listUri = data.getListUri()
+                listUri = data.getListUri()
                 //Update the adapter
                 originalAdapter.updateListChanged(listUri)
 
@@ -244,5 +245,10 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), HandlePathOzList
         tr?.let {
             Toast.makeText(this, "${it.message}", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    //This method is Optional
+    override fun onLoading(currentUri: Int) {
+        progressLoading.currentLoad = "${currentUri}/${listUri.size}"
     }
 }

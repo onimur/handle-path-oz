@@ -1,12 +1,12 @@
 /*
  *
- *  * Created by Murillo Comino on 13/06/20 23:29
+ *  * Created by Murillo Comino on 15/06/20 20:06
  *  * Github: github.com/MurilloComino
  *  * StackOverFlow: pt.stackoverflow.com/users/128573
  *  * Email: murillo_comino@hotmail.com
  *  *
  *  * Copyright (c) 2020.
- *  * Last modified 13/06/20 21:06
+ *  * Last modified 15/06/20 19:08
  *
  */
 
@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements HandlePathOzListe
     private static final int REQUEST_PERMISSION = 123;
     private static final int REQUEST_OPEN_GALLERY = 1111;
 
+    private List<Uri> listUri;
     private Button buttonOpen;
     private RecyclerView rvOriginal;
     private RecyclerView rvReal;
@@ -191,7 +192,7 @@ public class MainActivity extends AppCompatActivity implements HandlePathOzListe
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_OPEN_GALLERY && resultCode == RESULT_OK) {
             //This extension retrieves the path of all selected files without treatment.
-            List<Uri> listUri = getListUri(data);
+            listUri = getListUri(data);
             //Update the adapter
             originalAdapter.updateListChanged(listUri);
 
@@ -242,6 +243,11 @@ public class MainActivity extends AppCompatActivity implements HandlePathOzListe
         if (tr != null) {
             Toast.makeText(this, tr.getMessage(), Toast.LENGTH_SHORT).show();
         }
+    }
 
+    //This method is Optional
+    @Override
+    public void onLoading(int currentUri) {
+        progressLoading.setCurrentLoad(currentUri + "/" + listUri.size());
     }
 }

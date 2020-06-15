@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   ~ /*
-  ~  * Created by Murillo Comino on 13/06/20 23:29
+  ~  * Created by Murillo Comino on 15/06/20 20:06
   ~  * Github: github.com/MurilloComino
   ~  * StackOverFlow: pt.stackoverflow.com/users/128573
   ~  * Email: murillo_comino@hotmail.com
   ~  *
   ~  * Copyright (c) 2020.
-  ~  * Last modified 13/06/20 22:43
+  ~  * Last modified 15/06/20 18:03
   ~  */
   -->
 
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@drawable/round_progressbar"
@@ -20,17 +21,36 @@
     android:padding="20dp">
 
     <ProgressBar
+        android:id="@+id/progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:text="@string/validating"
         android:id="@+id/tv_progress_dialog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:paddingTop="15dp"
+        android:text="@string/validating"
         android:textColor="#1E1E1E"
-        android:textSize="16sp" />
-</LinearLayout>
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/progress_bar" />
+
+
+    <TextView
+        android:id="@+id/tv_list_load"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:paddingTop="5dp"
+        android:textColor="#1E1E1E"
+        android:textSize="13sp"
+        app:layout_constraintEnd_toEndOf="@+id/tv_progress_dialog"
+        app:layout_constraintTop_toBottomOf="@+id/tv_progress_dialog" />
+</androidx.constraintlayout.widget.ConstraintLayout>
