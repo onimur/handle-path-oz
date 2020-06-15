@@ -1,12 +1,12 @@
 /*
  *
- *  * Created by Murillo Comino on 13/06/20 18:25
+ *  * Created by Murillo Comino on 15/06/20 16:48
  *  * Github: github.com/MurilloComino
  *  * StackOverFlow: pt.stackoverflow.com/users/128573
  *  * Email: murillo_comino@hotmail.com
  *  *
  *  * Copyright (c) 2020.
- *  * Last modified 13/06/20 17:47
+ *  * Last modified 15/06/20 16:16
  *
  */
 
@@ -51,10 +51,11 @@ object PathUtils {
             }
             // MediaStore (and general)
             uri.isMediaStore -> {
-                if (uri.isGooglePhotosUri) googlePhotosUri(context, uri)
+                val path = getPathFromColumn(context, uri, COLUMN_DATA)
+                return if (uri.isGooglePhotosUri) googlePhotosUri(uri)
                     ?: TODO("Throw Exception to GooglePhotos")
                 else {
-                    TODO("Throw Exception MediaStore")
+                    anotherFileProvider(path)
                 }
             }
             uri.isFile -> uri.path ?: TODO("Throw Exception Files Path")
@@ -81,26 +82,13 @@ object PathUtils {
     }
 
     /**
-     * Method for googlePhotos
-     *
-     */
-    private fun googlePhotosUri(context: Context, uri: Uri): String? {
-        val path = getPathFromColumn(context, uri, COLUMN_DATA)
-        // Return the remote address
-        return if (path.isNotBlank()) {
-            uri.lastPathSegment ?: path
-        } else {
-            null
-        }
-    }
-
-    /**
      * Method for external document
      *
      */
     @SuppressLint("NewApi")
     @Suppress("DEPRECATION")
     private fun externalStorageDocument(uri: Uri): String {
+        logD("File is External Storage")
         val docId = DocumentsContract.getDocumentId(uri)
         val split: Array<String?> = docId.split(":").toTypedArray()
         val type = split[0]
@@ -122,6 +110,7 @@ object PathUtils {
     @Suppress("DEPRECATION")
     @SuppressLint("NewApi")
     private fun rawDownloadsDocument(context: Context, uri: Uri): String {
+        logD("File is Raw Downloads Document")
         val fileName = getPathFromColumn(context, uri, COLUMN_DISPLAY_NAME)
         val subFolderName = getSubFolders(uri.toString())
         return if (fileName.isNotBlank()) {
@@ -143,6 +132,7 @@ object PathUtils {
     @SuppressLint("NewApi")
     @Suppress("DEPRECATION")
     private fun downloadsDocument(context: Context, uri: Uri): String {
+        logD("File is Downloads Documents")
         val fileName = getPathFromColumn(context, uri, COLUMN_DISPLAY_NAME)
         val subFolderName = getSubFolders(uri.toString())
         if (fileName.isNotBlank()) {
@@ -171,6 +161,7 @@ object PathUtils {
      */
     @SuppressLint("NewApi")
     private fun mediaDocument(context: Context, uri: Uri): String {
+        logD("File is Media Document")
         val docId = DocumentsContract.getDocumentId(uri)
         val split: Array<String?> = docId.split(":").toTypedArray()
         val contentUri: Uri =
@@ -190,5 +181,28 @@ object PathUtils {
             selection,
             selectionArgs
         )
+    }
+
+    /**
+     * Method for googlePhotos
+     *
+     */
+    private fun googlePhotosUri(uri: Uri): String? {
+        // Return the remote address
+        logD("File is Google Photos")
+        return uri.lastPathSegment
+    }
+
+    /**
+     *
+     * Different fileprovider
+     */
+    private fun anotherFileProvider(path: String): String {
+        if (path.isBlank()) {
+            logD("Unknown File Provider")
+        } else {
+            logD("Another File Provider")
+        }
+        return path
     }
 }

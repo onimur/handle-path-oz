@@ -1,12 +1,12 @@
 /*
  *
- *  * Created by Murillo Comino on 13/06/20 16:54
+ *  * Created by Murillo Comino on 15/06/20 16:48
  *  * Github: github.com/MurilloComino
  *  * StackOverFlow: pt.stackoverflow.com/users/128573
  *  * Email: murillo_comino@hotmail.com
  *  *
  *  * Copyright (c) 2020.
- *  * Last modified 13/06/20 16:54
+ *  * Last modified 15/06/20 16:06
  *
  */
 
@@ -14,6 +14,7 @@ package br.com.comino.handlepathoz.utils
 
 import android.content.Context
 import android.net.Uri
+import br.com.comino.handlepathoz.utils.extension.logE
 
 internal object ContentUriUtils {
     /**
@@ -33,19 +34,28 @@ internal object ContentUriUtils {
         selection: String? = null,
         selectionArgs: Array<String?>? = null
     ): String {
+        var path = ""
         val projection = arrayOf<String?>(column)
         try {
             getCursor(context, uri, projection, selection, selectionArgs)
                 ?.use {
                     if (it.moveToFirst()) {
                         val index = it.getColumnIndexOrThrow(column)
-                        return it.getString(index)
+                        path = it.getString(index)
                     }
                 }
         } catch (e: Exception) {
-            //TODO handle error
+            e.message?.let {
+                //Checks whether the exception message does not contain the following string.
+                if (!it.contains("column '$column' does not exist")) {
+                    throw e
+                }
+            }
+            logE("Error on gePathFromColumn: $column - ${e.message}")
+
+        } finally {
+            return path
         }
-        return ""
     }
 
     /**

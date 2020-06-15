@@ -1,12 +1,12 @@
 /*
  *
- *  * Created by Murillo Comino on 13/06/20 22:10
+ *  * Created by Murillo Comino on 15/06/20 16:48
  *  * Github: github.com/MurilloComino
  *  * StackOverFlow: pt.stackoverflow.com/users/128573
  *  * Email: murillo_comino@hotmail.com
  *  *
  *  * Copyright (c) 2020.
- *  * Last modified 13/06/20 21:39
+ *  * Last modified 15/06/20 16:46
  *
  */
 
@@ -89,11 +89,11 @@ class HandlePathOz(
                     uri.isCloudFile -> {
                         Pair(CLOUD_FILE, downloadFile(context, uri, this)).alsoLogD()
                     }
+                    //Third Party App
                     returnedPath.isBlank() -> {
-                        Pair(UNKNOWN_FILE_CHOOSER, "").alsoLogD()
+                        Pair(UNKNOWN_FILE_CHOOSER, downloadFile(context, uri, this)).alsoLogD()
                     }
-                    //TODO() need try catch
-                    //Todo: Add checks for unknown file extensions
+                    //Unknown Provider or unknown mime type
                     uri.isUnknownProvider(returnedPath, context) -> {
                         Pair(UNKNOWN_PROVIDER, downloadFile(context, uri, this)).alsoLogD()
                     }
