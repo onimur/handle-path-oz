@@ -1,12 +1,12 @@
 /*
  *
- *  * Created by Murillo Comino on 09/06/20 22:06
+ *  * Created by Murillo Comino on 15/06/20 20:06
  *  * Github: github.com/MurilloComino
  *  * StackOverFlow: pt.stackoverflow.com/users/128573
  *  * Email: murillo_comino@hotmail.com
  *  *
  *  * Copyright (c) 2020.
- *  * Last modified 09/06/20 20:16
+ *  * Last modified 15/06/20 19:41
  *
  */
 
@@ -29,7 +29,9 @@ import kotlinx.coroutines.withContext
  * @param block function
  */
 internal suspend inline fun <T, V> withContextAll(list: List<T>, crossinline block: (T) -> V) =
-    list.map { withContext(Default) { block.invoke(it) } }
+    list.map { withContext(Default) {
+        block.invoke(it) }
+    }
 
 /**
  * Similar to the previous method.

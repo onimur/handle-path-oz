@@ -1,12 +1,12 @@
 /*
  *
- *  * Created by Murillo Comino on 15/06/20 17:32
+ *  * Created by Murillo Comino on 15/06/20 20:06
  *  * Github: github.com/MurilloComino
  *  * StackOverFlow: pt.stackoverflow.com/users/128573
  *  * Email: murillo_comino@hotmail.com
  *  *
  *  * Copyright (c) 2020.
- *  * Last modified 15/06/20 17:31
+ *  * Last modified 15/06/20 19:20
  *
  */
 
@@ -22,7 +22,6 @@ import android.provider.MediaStore
 import androidx.loader.content.CursorLoader
 import br.com.comino.handlepathoz.errors.EmptyGooglePhotosException
 import br.com.comino.handlepathoz.errors.HandlePathOzUnknownException
-import br.com.comino.handlepathoz.errors.UnknownDocumentsProviderException
 import br.com.comino.handlepathoz.errors.UnknownFilePathException
 import br.com.comino.handlepathoz.utils.Constants.PathUri.COLUMN_DATA
 import br.com.comino.handlepathoz.utils.Constants.PathUri.COLUMN_DISPLAY_NAME
@@ -50,7 +49,10 @@ object PathUtils {
                     uri.isRawDownloadsDocument -> rawDownloadsDocument(context, uri)
                     uri.isDownloadsDocument -> downloadsDocument(context, uri)
                     uri.isMediaDocument -> mediaDocument(context, uri)
-                    else -> throw UnknownDocumentsProviderException()
+                    else -> {
+                        logD("Another Document Provider: ${uri.authority}")
+                        return ""
+                    }
                 }
             }
             // MediaStore (and general)

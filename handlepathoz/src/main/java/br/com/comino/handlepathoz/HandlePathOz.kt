@@ -1,12 +1,12 @@
 /*
  *
- *  * Created by Murillo Comino on 15/06/20 16:48
+ *  * Created by Murillo Comino on 15/06/20 20:06
  *  * Github: github.com/MurilloComino
  *  * StackOverFlow: pt.stackoverflow.com/users/128573
  *  * Email: murillo_comino@hotmail.com
  *  *
  *  * Copyright (c) 2020.
- *  * Last modified 15/06/20 16:46
+ *  * Last modified 15/06/20 19:41
  *
  */
 
@@ -51,9 +51,11 @@ class HandlePathOz(
             try {
                 logD("Launch Job")
                 val time = measureTimeMillis {
-                    listUri.forEach {
-                        val path = getPathAsync(it).await()
+                    listener.onLoading(0)
+                    listUri.forEachIndexed { index, uri ->
+                        val path = getPathAsync(uri).await()
                         list.add(path)
+                        listener.onLoading(index + 1)
                     }
                 }
                 logD("Total task time: $time ms")
@@ -81,8 +83,9 @@ class HandlePathOz(
      * @param uri
      */
     private suspend fun getPathAsync(uri: Uri) = withContext(IO) {
-        async {
-            if (isKitKat) {
+        if (isKitKat) {
+            async {
+
                 val returnedPath = getPathAboveKitKat(context, uri)
                 when {
                     //Cloud
@@ -102,9 +105,9 @@ class HandlePathOz(
                         Pair(LOCAL_PROVIDER, returnedPath).alsoLogD()
                     }
                 }
-            } else {
-                Pair(BELOW_KITKAT_FILE, getPathBelowKitKat(context, uri)).alsoLogD()
             }
+        } else {
+            async { Pair(BELOW_KITKAT_FILE, getPathBelowKitKat(context, uri)).alsoLogD() }
         }
     }
 

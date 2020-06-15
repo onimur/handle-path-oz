@@ -1,12 +1,12 @@
 /*
  *
- *  * Created by Murillo Comino on 11/06/20 19:56
+ *  * Created by Murillo Comino on 15/06/20 20:06
  *  * Github: github.com/MurilloComino
  *  * StackOverFlow: pt.stackoverflow.com/users/128573
  *  * Email: murillo_comino@hotmail.com
  *  *
  *  * Copyright (c) 2020.
- *  * Last modified 11/06/20 19:39
+ *  * Last modified 15/06/20 19:07
  *
  */
 
@@ -26,5 +26,12 @@ interface HandlePathOzListener {
      * and without being canceled.
      */
     fun onRequestHandlePathOz(listPath: List<Pair<Int, String>>, tr: Throwable? = null)
+
+    /**
+     * Optional method to show how many uris have already been verified.
+     *
+     * @param currentUri
+     */
+    fun onLoading(currentUri: Int) {}
 
 }
