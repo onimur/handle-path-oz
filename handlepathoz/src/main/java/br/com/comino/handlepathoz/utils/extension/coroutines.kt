@@ -10,11 +10,8 @@
 
 package br.com.comino.handlepathoz.utils.extension
 
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.Default
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.async
-import kotlinx.coroutines.withContext
 
 /**
  * Create a list objects from an object list.

@@ -13,6 +13,7 @@ package br.com.comino.handlepathoz
 import android.content.Context
 import android.net.Uri
 import android.os.Build
+import androidx.lifecycle.Lifecycle
 import br.com.comino.handlepathoz.utils.Constants.HandlePathOzConts.BELOW_KITKAT_FILE
 import br.com.comino.handlepathoz.utils.Constants.HandlePathOzConts.CLOUD_FILE
 import br.com.comino.handlepathoz.utils.Constants.HandlePathOzConts.LOCAL_PROVIDER
@@ -20,6 +21,7 @@ import br.com.comino.handlepathoz.utils.Constants.HandlePathOzConts.UNKNOWN_FILE
 import br.com.comino.handlepathoz.utils.Constants.HandlePathOzConts.UNKNOWN_PROVIDER
 import br.com.comino.handlepathoz.utils.FileUtils.deleteTemporaryFiles
 import br.com.comino.handlepathoz.utils.FileUtils.downloadFile
+import br.com.comino.handlepathoz.utils.FileUtils.getFullPathTemp
 import br.com.comino.handlepathoz.utils.PathUtils.getPathAboveKitKat
 import br.com.comino.handlepathoz.utils.PathUtils.getPathBelowKitKat
 import br.com.comino.handlepathoz.utils.extension.*
@@ -47,12 +49,11 @@ class HandlePathOz(
         var error: Throwable? = null
         coroutineScope.launch {
             try {
+                listener.onLoading(0)
                 logD("Launch Job")
                 val time = measureTimeMillis {
-                    listener.onLoading(0)
                     listUri.forEachIndexed { index, uri ->
-                        val path = getPathAsync(uri).await()
-                        list.add(path)
+                        list.add(getPathAsync(uri).await())
                         listener.onLoading(index + 1)
                     }
                 }
@@ -81,22 +82,32 @@ class HandlePathOz(
      * @param uri
      */
     private suspend fun getPathAsync(uri: Uri) = withContext(IO) {
+        val contentResolver = context.contentResolver
+        val pathTempFile = getFullPathTemp(context, uri)
         if (isKitKat) {
             async {
-
                 val returnedPath = getPathAboveKitKat(context, uri)
                 when {
                     //Cloud
                     uri.isCloudFile -> {
-                        Pair(CLOUD_FILE, downloadFile(context, uri, this)).alsoLogD()
+                        Pair(
+                            CLOUD_FILE,
+                            downloadFile(contentResolver, pathTempFile, uri, this)
+                        ).alsoLogD()
                     }
                     //Third Party App
                     returnedPath.isBlank() -> {
-                        Pair(UNKNOWN_FILE_CHOOSER, downloadFile(context, uri, this)).alsoLogD()
+                        Pair(
+                            UNKNOWN_FILE_CHOOSER,
+                            downloadFile(contentResolver, pathTempFile, uri, this)
+                        ).alsoLogD()
                     }
                     //Unknown Provider or unknown mime type
-                    uri.isUnknownProvider(returnedPath, context) -> {
-                        Pair(UNKNOWN_PROVIDER, downloadFile(context, uri, this)).alsoLogD()
+                    uri.isUnknownProvider(returnedPath, contentResolver) -> {
+                        Pair(
+                            UNKNOWN_PROVIDER,
+                            downloadFile(contentResolver, pathTempFile, uri, this)
+                        ).alsoLogD()
                     }
                     //LocalFile
                     else -> {
@@ -124,4 +135,5 @@ class HandlePathOz(
     fun deleteTemporaryFiles() {
         deleteTemporaryFiles(context)
     }
+
 }

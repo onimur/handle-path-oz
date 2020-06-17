@@ -11,6 +11,7 @@
 package br.com.comino.handlepathoz.utils
 
 import android.annotation.SuppressLint
+import android.content.ContentResolver
 import android.content.ContentUris
 import android.content.Context
 import android.net.Uri
@@ -39,14 +40,15 @@ object PathUtils {
     @SuppressLint("NewApi")
     @Suppress("DEPRECATION")
     internal fun getPathAboveKitKat(context: Context, uri: Uri): String {
+        val contentResolver = context.contentResolver
         //Document Provider
         return when {
             DocumentsContract.isDocumentUri(context, uri) -> {
                 when {
                     uri.isExternalStorageDocument -> externalStorageDocument(uri)
-                    uri.isRawDownloadsDocument -> rawDownloadsDocument(context, uri)
-                    uri.isDownloadsDocument -> downloadsDocument(context, uri)
-                    uri.isMediaDocument -> mediaDocument(context, uri)
+                    uri.isRawDownloadsDocument -> rawDownloadsDocument(contentResolver, uri)
+                    uri.isDownloadsDocument -> downloadsDocument(contentResolver, uri)
+                    uri.isMediaDocument -> mediaDocument(contentResolver, uri)
                     else -> {
                         logD("Another Document Provider: ${uri.authority}")
                         return ""
@@ -55,7 +57,7 @@ object PathUtils {
             }
             // MediaStore (and general)
             uri.isMediaStore -> {
-                val path = getPathFromColumn(context, uri, COLUMN_DATA)
+                val path = getPathFromColumn(contentResolver, uri, COLUMN_DATA)
                 return if (uri.isGooglePhotosUri) googlePhotosUri(uri)
                     ?: throw EmptyGooglePhotosException(path)
                 else {
@@ -110,9 +112,9 @@ object PathUtils {
      */
     @Suppress("DEPRECATION")
     @SuppressLint("NewApi")
-    private fun rawDownloadsDocument(context: Context, uri: Uri): String {
+    private fun rawDownloadsDocument(contentResolver: ContentResolver, uri: Uri): String {
         logD("File is Raw Downloads Document")
-        val fileName = getPathFromColumn(context, uri, COLUMN_DISPLAY_NAME)
+        val fileName = getPathFromColumn(contentResolver, uri, COLUMN_DISPLAY_NAME)
         val subFolderName = getSubFolders(uri.toString())
         return if (fileName.isNotBlank()) {
             "${Environment.getExternalStorageDirectory()}/$FOLDER_DOWNLOAD/$subFolderName$fileName"
@@ -122,7 +124,7 @@ object PathUtils {
                 Uri.parse("content://downloads/public_downloads"),
                 id.toLong()
             )
-            getPathFromColumn(context, contentUri, COLUMN_DATA)
+            getPathFromColumn(contentResolver, contentUri, COLUMN_DATA)
         }
     }
 
@@ -132,9 +134,9 @@ object PathUtils {
      */
     @SuppressLint("NewApi")
     @Suppress("DEPRECATION")
-    private fun downloadsDocument(context: Context, uri: Uri): String {
+    private fun downloadsDocument(contentResolver: ContentResolver, uri: Uri): String {
         logD("File is Downloads Documents")
-        val fileName = getPathFromColumn(context, uri, COLUMN_DISPLAY_NAME)
+        val fileName = getPathFromColumn(contentResolver, uri, COLUMN_DISPLAY_NAME)
         val subFolderName = getSubFolders(uri.toString())
         if (fileName.isNotBlank()) {
             return "${Environment.getExternalStorageDirectory()}/$FOLDER_DOWNLOAD/$subFolderName$fileName"
@@ -153,7 +155,7 @@ object PathUtils {
             Uri.parse("content://downloads/public_downloads"),
             id.toLong()
         )
-        return getPathFromColumn(context, contentUri, COLUMN_DATA)
+        return getPathFromColumn(contentResolver, contentUri, COLUMN_DATA)
     }
 
     /**
@@ -161,7 +163,7 @@ object PathUtils {
      *
      */
     @SuppressLint("NewApi")
-    private fun mediaDocument(context: Context, uri: Uri): String {
+    private fun mediaDocument(contentResolver: ContentResolver, uri: Uri): String {
         logD("File is Media Document")
         val docId = DocumentsContract.getDocumentId(uri)
         val split: Array<String?> = docId.split(":").toTypedArray()
@@ -176,7 +178,7 @@ object PathUtils {
         val selection = "_id=?"
         val selectionArgs = arrayOf(split[1])
         return getPathFromColumn(
-            context,
+            contentResolver,
             contentUri,
             COLUMN_DATA,
             selection,

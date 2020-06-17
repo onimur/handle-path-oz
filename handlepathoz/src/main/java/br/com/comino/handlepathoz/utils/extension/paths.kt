@@ -12,7 +12,6 @@ package br.com.comino.handlepathoz.utils.extension
 
 import android.content.ClipData
 import android.content.ContentResolver
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.webkit.MimeTypeMap
@@ -90,12 +89,15 @@ private val Uri.isOneDrive
 internal val Uri.isCloudFile
     get() = (isOneDrive or isGoogleDrive or isDropBox)
 
-internal fun Uri.isUnknownProvider(returnedPath: String, context: Context): Boolean {
+internal fun Uri.isUnknownProvider(
+    returnedPath: String,
+    contentResolver: ContentResolver
+): Boolean {
     val mime = MimeTypeMap.getSingleton()
     val subStringExtension =
         returnedPath.substring(returnedPath.lastIndexOf(".") + 1)
     val extensionFromMime =
-        mime.getExtensionFromMimeType(context.contentResolver.getType(this))
+        mime.getExtensionFromMimeType(contentResolver.getType(this))
     return scheme.let { subStringExtension != extensionFromMime && it == ContentResolver.SCHEME_CONTENT }
 }
 

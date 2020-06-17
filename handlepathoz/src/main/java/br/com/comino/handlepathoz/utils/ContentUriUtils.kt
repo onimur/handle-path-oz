@@ -10,7 +10,7 @@
 
 package br.com.comino.handlepathoz.utils
 
-import android.content.Context
+import android.content.ContentResolver
 import android.net.Uri
 import br.com.comino.handlepathoz.utils.extension.logE
 
@@ -26,7 +26,7 @@ internal object ContentUriUtils {
      * @return Value of the column, which is typically a file path or null.
      */
     fun getPathFromColumn(
-        context: Context,
+        contentResolver: ContentResolver,
         uri: Uri,
         column: String,
         selection: String? = null,
@@ -35,7 +35,7 @@ internal object ContentUriUtils {
         var path = ""
         val projection = arrayOf<String?>(column)
         try {
-            getCursor(context, uri, projection, selection, selectionArgs)
+            getCursor(contentResolver, uri, projection, selection, selectionArgs)
                 ?.use {
                     if (it.moveToFirst()) {
                         val index = it.getColumnIndexOrThrow(column)
@@ -61,12 +61,11 @@ internal object ContentUriUtils {
      *
      */
     fun getCursor(
-        context: Context,
+        contentResolver: ContentResolver,
         uri: Uri,
         projection: Array<String?>? = null,
         selection: String? = null,
         selectionArgs: Array<String?>? = null
     ) =
-        context.contentResolver
-            .query(uri, projection, selection, selectionArgs, null)
+        contentResolver.query(uri, projection, selection, selectionArgs, null)
 }

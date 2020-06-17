@@ -10,6 +10,7 @@
 
 package br.com.comino.handlepathoz.utils
 
+import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
 import android.provider.OpenableColumns
@@ -36,28 +37,29 @@ internal object FileUtils {
      * @return new path string
      */
     fun downloadFile(
-        context: Context,
+        contentResolver: ContentResolver,
+        pathFileTemp: String,
         uri: Uri,
         coroutineScope: CoroutineScope
     ): String {
-
-
-        val folder: File? = context.getExternalFilesDir("Temp")
-        val pathPlusName = "${folder.toString()}/${getFileName(context, uri)}"
         if (coroutineScope.isActive) {
-            val file = File(pathPlusName)
-            val outputStream = FileOutputStream(file)
+            val file = File(pathFileTemp)
 
-            context.contentResolver.openInputStream(uri)?.use {
-                copyFile(it, outputStream, file, coroutineScope)
+            val inputStream = contentResolver.openInputStream(uri)
+            inputStream?.use { input ->
+                logD("${input.available()}")
+                FileOutputStream(file).use { output ->
+                    copyFile(input, output, file, coroutineScope)
+                }
             }
-            logD("File and Path copied - $pathPlusName")
+
+            logD("File and Path copied - $pathFileTemp")
         } else {
             logE("Task canceled before completing the download of the last file.")
             throw CancellationException()
         }
 
-        return pathPlusName
+        return pathFileTemp
     }
 
     private fun copyFile(
@@ -84,12 +86,18 @@ internal object FileUtils {
         }
     }
 
+    fun getFullPathTemp(context: Context, uri: Uri): String {
+        val folder: File? = context.getExternalFilesDir("Temp")
+        return "${folder.toString()}/${getFileName(context, uri)}"
+    }
+
+
     private fun getFileName(context: Context, uri: Uri): String? {
         var result: String? = null
 
         uri.scheme?.let {
             if (it == "content") {
-                getCursor(context, uri)?.use { cursor ->
+                getCursor(context.contentResolver, uri)?.use { cursor ->
                     if (cursor.moveToFirst()) {
                         result =
                             cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
