@@ -13,7 +13,6 @@ package br.com.comino.handlepathoz
 import android.content.Context
 import android.net.Uri
 import android.os.Build
-import androidx.lifecycle.Lifecycle
 import br.com.comino.handlepathoz.utils.Constants.HandlePathOzConts.BELOW_KITKAT_FILE
 import br.com.comino.handlepathoz.utils.Constants.HandlePathOzConts.CLOUD_FILE
 import br.com.comino.handlepathoz.utils.Constants.HandlePathOzConts.LOCAL_PROVIDER
@@ -34,6 +33,7 @@ class HandlePathOz(
     private val context: Context,
     private val listener: HandlePathOzListener
 ) {
+    private var isDestroy = false
     private var job: Job = Job()
     private val coroutineScope: CoroutineScope = CoroutineScope(Main + job)
     private val isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
@@ -62,7 +62,9 @@ class HandlePathOz(
                 error = tr
                 logE("$tr - ${tr.message}")
             } finally {
-                listener.onRequestHandlePathOz(list, error)
+                if (!isDestroy){
+                    listener.onRequestHandlePathOz(list, error)
+                }
                 with(job) {
                     logD(
                         "\nJob isNew: $isNew" +
@@ -122,7 +124,7 @@ class HandlePathOz(
 
 
     /**
-     * Cancel the task, if it is active
+     * Cancel the children task, if it is active
      *
      */
     fun cancelTask() {
@@ -131,6 +133,18 @@ class HandlePathOz(
             logD("\nJob isActive: ${job.isActive}\nJob isCancelled: ${job.isCancelled}\nJob isCompleted: ${job.isCompleted}")
         }
     }
+
+    /**
+     *
+     *
+     */
+    fun onDestroy () {
+        if (job.isActive){
+            isDestroy = true
+            job.cancel()
+        }
+    }
+
 
     fun deleteTemporaryFiles() {
         deleteTemporaryFiles(context)

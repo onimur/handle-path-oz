@@ -215,7 +215,7 @@ public class MainActivity extends AppCompatActivity implements HandlePathOzListe
 
     @Override
     public void onDestroy() {
-        handlePathOz.cancelTask();
+        handlePathOz.onDestroy();
         handlePathOz.deleteTemporaryFiles();
         super.onDestroy();
     }

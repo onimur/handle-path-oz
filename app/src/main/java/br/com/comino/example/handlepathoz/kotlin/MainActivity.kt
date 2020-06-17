@@ -222,7 +222,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), HandlePathOzList
 
     override fun onDestroy() {
         with(handlePathOz) {
-            cancelTask()
+            onDestroy()
             deleteTemporaryFiles()
         }
         super.onDestroy()
