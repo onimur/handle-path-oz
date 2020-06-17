@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-  ~ /*
-  ~  * Created by Murillo Comino on 13/06/20 23:29
-  ~  * Github: github.com/MurilloComino
-  ~  * StackOverFlow: pt.stackoverflow.com/users/128573
-  ~  * Email: murillo_comino@hotmail.com
-  ~  *
-  ~  * Copyright (c) 2020.
-  ~  * Last modified 13/06/20 23:25
-  ~  */
+  ~ Created by Murillo Comino on 17/06/20 13:18
+  ~ Github: github.com/onimur
+  ~ StackOverFlow: pt.stackoverflow.com/users/128573
+  ~ Email: murillo_comino@hotmail.com
+  ~
+  ~  Copyright (c) 2020.
+  ~  Last modified 13/06/20 23:29
   -->
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"

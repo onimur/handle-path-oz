@@ -1,3 +1,13 @@
+/*
+ * Created by Murillo Comino on 17/06/20 13:18
+ * Github: github.com/onimur
+ * StackOverFlow: pt.stackoverflow.com/users/128573
+ * Email: murillo_comino@hotmail.com
+ *
+ *  Copyright (c) 2020.
+ *  Last modified 03/06/20 22:33
+ */
+
 rootProject.name='Handle Path Oz'
 include ':app'
 include ':handlepathoz'

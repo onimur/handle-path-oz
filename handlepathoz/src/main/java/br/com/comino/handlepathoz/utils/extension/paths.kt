@@ -1,13 +1,11 @@
 /*
+ * Created by Murillo Comino on 17/06/20 13:18
+ * Github: github.com/onimur
+ * StackOverFlow: pt.stackoverflow.com/users/128573
+ * Email: murillo_comino@hotmail.com
  *
- *  * Created by Murillo Comino on 13/06/20 17:42
- *  * Github: github.com/MurilloComino
- *  * StackOverFlow: pt.stackoverflow.com/users/128573
- *  * Email: murillo_comino@hotmail.com
- *  *
- *  * Copyright (c) 2020.
- *  * Last modified 13/06/20 17:17
- *
+ *  Copyright (c) 2020.
+ *  Last modified 16/06/20 12:30
  */
 
 package br.com.comino.handlepathoz.utils.extension
