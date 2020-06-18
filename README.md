@@ -1,9 +1,10 @@
 # Handle Path Oz
 
 Android Library to handle multiple Uri(paths) received through Intents.
+![](gitresources/logo_git.png)
 
 ## Example
-You can download the sample application [here](link repository).
+You can download the sample application [here](app/build/outputs/apk/release/HandlePathOZ.apk).
 
 ## Main Features
 <details>
