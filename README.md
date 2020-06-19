@@ -5,10 +5,12 @@ Android Library to handle multiple Uri(paths) received through Intents.
 
 ![](gitresources/logo_git.png)
 
-## :iphone: Sample Application
+
 
 <details>
-  <summary markdown="span">Download .apk or install by google play...</summary>
+  <summary markdown="span"> :iphone: Sample Application...</summary>
+  
+  ## :iphone: Sample Application
   
 ### :octocat: Download
 You can download the sample application [here](https://github.com/onimur/handle-path-oz/raw/master/app/build/outputs/apk/release/HandlePathOZ.apk).
@@ -22,19 +24,27 @@ You can download the sample application [here](https://github.com/onimur/handle-
   
 </details>
 
-## :revolving_hearts: Support us
 
-## :mag: Main Features
+
 <details>
-  <summary markdown="span">Check here...</summary>
+  <summary markdown="span"> :revolving_hearts: Support us...</summary>
 
-  ```Add features``` 
+  ## :revolving_hearts: Support us
   
 </details>
 
-## :hammer_and_wrench: Config
 <details>
-  <summary markdown="span">Installation and Usage...</summary>
+  <summary markdown="span"> :mag: Main Features...</summary>
+
+  ## :mag: Main Features
+  
+</details>
+
+
+<details>
+  <summary markdown="span">:hammer_and_wrench: Config...</summary>
+  
+  ## :hammer_and_wrench: Config
   
   ### :gear: Installation 
   ```Add to gradle```
@@ -44,9 +54,11 @@ You can download the sample application [here](https://github.com/onimur/handle-
   
 </details>
 
-## :bulb: Getting Start
+
 <details>
-  <summary markdown="span">Initialization and Controller...</summary>
+  <summary markdown="span">:bulb: Getting Start...</summary>
+  
+  ## :bulb: Getting Start
   
   ### :bomb: Initialization
   
@@ -54,26 +66,30 @@ You can download the sample application [here](https://github.com/onimur/handle-
   
 </details>
 
-## :triangular_ruler: Built With
-
 <details>
-  <summary markdown="span">Check Used Tools...</summary>
+  <summary markdown="span">:triangular_ruler: Built With...</summary>
+  
+  ## :triangular_ruler: Built With
   
   * [Android Studio 4.0](https://developer.android.com/studio)
   
 </details>
 
-## 🧩 Contributing
+
 <details>
-  <summary markdown="span">Join us...</summary>
+  <summary markdown="span">🧩 Contributing...</summary>
+  
+  ## 🧩 Contributing
 
   This project is open-source, so feel free to share your ideas and changes to improve the project. 
   
 </details>
 
-## :page_with_curl: License
+
 <details>
-  <summary markdown="span">Apache license 2.0 ...</summary>
+  <summary markdown="span">:page_with_curl: License...</summary>
+  
+  ## :page_with_curl: License
   
 Copyright (C) 2020 HandlePathOz
 
