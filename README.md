@@ -1,52 +1,79 @@
-# Handle Path Oz
+# :books: Handle Path Oz
 
 Android Library to handle multiple Uri(paths) received through Intents.
+
+
 ![](gitresources/logo_git.png)
 
-## Example
+## :iphone: Sample Application
+
+<details>
+  <summary markdown="span">Download .apk or install by google play...</summary>
+  
+### :octocat: Download
 You can download the sample application [here](https://github.com/onimur/handle-path-oz/raw/master/app/build/outputs/apk/release/HandlePathOZ.apk).
 
-## Main Features
-<details>
-  <summary markdown="span">Click to expand</summary>
-
-  ```Add features```
+### :octocat: Install by Google Play 
+<p align="center">
+<a target="_blank" href="">
+<img width="25%" alt="Check HandlePathOz on Google Play" src="https://play.google.com/intl/en_gb/badges/static/images/badges/en_badge_web_generic.png"/>
+</a>
+</p>
   
 </details>
 
-## Getting Started
+## :revolving_hearts: Support us
+
+## :mag: Main Features
 <details>
-  <summary markdown="span">Click to expand</summary>
+  <summary markdown="span">Check here...</summary>
+
+  ```Add features``` 
   
-  ### Installation 
+</details>
+
+## :hammer_and_wrench: Config
+<details>
+  <summary markdown="span">Installation and Usage...</summary>
+  
+  ### :gear: Installation 
   ```Add to gradle```
   
-  ### Usage
+  ### :bar_chart: Usage
   ```Any config```
   
 </details>
 
-## Implementation
+## :bulb: Getting Start
 <details>
-  <summary markdown="span">Click to expand</summary>
+  <summary markdown="span">Initialization and Controller...</summary>
   
-  ```Codes here```
+  ### :bomb: Initialization
+  
+  ### :video_game: Controller
   
 </details>
 
-## Built With
+## :triangular_ruler: Built With
 
 <details>
-  <summary markdown="span">Click to expand</summary>
+  <summary markdown="span">Check Used Tools...</summary>
   
   * [Android Studio 4.0](https://developer.android.com/studio)
   
 </details>
 
-
-## License
+## 🧩 Contributing
 <details>
-  <summary markdown="span">Apache license</summary>
+  <summary markdown="span">Join us...</summary>
+
+  This project is open-source, so feel free to share your ideas and changes to improve the project. 
+  
+</details>
+
+## :page_with_curl: License
+<details>
+  <summary markdown="span">Apache license 2.0 ...</summary>
   
 Copyright (C) 2020 HandlePathOz
 
