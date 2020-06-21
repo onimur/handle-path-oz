@@ -1,11 +1,11 @@
 /*
- * Created by Murillo Comino on 18/06/20 20:56
+ * Created by Murillo Comino on 21/06/20 00:13
  * Github: github.com/onimur
  * StackOverFlow: pt.stackoverflow.com/users/128573
  * Email: murillo_comino@hotmail.com
  *
  *  Copyright (c) 2020.
- *  Last modified 18/06/20 20:44
+ *  Last modified 20/06/20 22:49
  */
 
 package br.com.onimur.handlepathoz.utils
@@ -18,13 +18,10 @@ import br.com.onimur.handlepathoz.utils.Constants.PathUri.FOLDER_DOWNLOAD
 import br.com.onimur.handlepathoz.utils.ContentUriUtils.getCursor
 import br.com.onimur.handlepathoz.utils.extension.logD
 import br.com.onimur.handlepathoz.utils.extension.logE
-import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.isActive
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.ensureActive
 import java.io.File
 import java.io.FileOutputStream
-import java.io.InputStream
-import java.io.OutputStream
 
 internal object FileUtils {
 
@@ -36,55 +33,37 @@ internal object FileUtils {
      * @param uri of the file
      * @return new path string
      */
-    fun downloadFile(
+     fun downloadFile(
         contentResolver: ContentResolver,
-        pathFileTemp: String,
-        uri: Uri,
-        coroutineScope: CoroutineScope
-    ): String {
-        if (coroutineScope.isActive) {
-            val file = File(pathFileTemp)
-
-            val inputStream = contentResolver.openInputStream(uri)
-            inputStream?.use { input ->
-                logD("${input.available()}")
-                FileOutputStream(file).use { output ->
-                    copyFile(input, output, file, coroutineScope)
-                }
-            }
-
-            logD("File and Path copied - $pathFileTemp")
-        } else {
-            logE("Task canceled before completing the download of the last file.")
-            throw CancellationException()
-        }
-
-        return pathFileTemp
-    }
-
-    private fun copyFile(
-        input: InputStream,
-        output: OutputStream,
         file: File,
-        coroutineScope: CoroutineScope
-    ) {
-        val buffer = ByteArray(1024)
-        var read: Int = input.read(buffer)
-        logD("Copying ${file.absoluteFile}")
-        while (read != -1) {
-            if (coroutineScope.isActive) {
-                output.write(buffer, 0, read)
-                read = input.read(buffer)
-            } else {
-                input.close()
-                output.close()
+        uri: Uri,
+        job: Job?
+    ): Boolean {
+            try {
+                val inputStream = contentResolver.openInputStream(uri)
+                inputStream?.use { input ->
+                    logD("${input.available()}")
+                    FileOutputStream(file).use { output ->
+                        job?.ensureActive()
+                        val buffer = ByteArray(1024)
+                        var read: Int = input.read(buffer)
+                        logD("Copying ${file.name}")
+                        while (read != -1) {
+                            job?.ensureActive()
+                            output.write(buffer, 0, read)
+                            read = input.read(buffer)
+                        }
+                    }
+                }
+            } catch (e: Exception) {
                 file.deleteRecursively()
-                logE("Task canceled and file ${file.absoluteFile} deleted")
-                throw CancellationException()
+                logE("Task canceled with exception ${e.message} and file ${file.name} deleted")
+                throw e
             }
-
+            logD("File and Path copied - ${file.name}")
+            return true
         }
-    }
+
 
     fun getFullPathTemp(context: Context, uri: Uri): String {
         val folder: File? = context.getExternalFilesDir("Temp")

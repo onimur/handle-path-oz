@@ -1,11 +1,11 @@
 /*
- * Created by Murillo Comino on 18/06/20 20:56
+ * Created by Murillo Comino on 21/06/20 00:13
  * Github: github.com/onimur
  * StackOverFlow: pt.stackoverflow.com/users/128573
  * Email: murillo_comino@hotmail.com
  *
  *  Copyright (c) 2020.
- *  Last modified 18/06/20 20:44
+ *  Last modified 20/06/20 22:49
  */
 
 package br.com.onimur.handlepathoz
@@ -26,16 +26,14 @@ import br.com.onimur.handlepathoz.utils.PathUtils.getPathBelowKitKat
 import br.com.onimur.handlepathoz.utils.extension.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.flow.*
+import java.io.File
 import kotlin.system.measureTimeMillis
 
-class HandlePathOz(
-    private val context: Context,
-    private val listener: HandlePathOzListener
-) {
-    private var isDestroy = false
-    private var job: Job = Job()
-    private val coroutineScope: CoroutineScope = CoroutineScope(Main + job)
+class HandlePathOz(private val context: Context, private val listener: HandlePathOzListener) {
+
+    private val mainScope = MainScope()
+    private var job: Job? = null
     private val isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
 
     /**
@@ -44,36 +42,43 @@ class HandlePathOz(
      *
      * @param listUri list to handle
      */
+    @FlowPreview
     fun getRealPath(listUri: List<Uri>) {
         val list = mutableListOf<Pair<Int, String>>()
         var error: Throwable? = null
-        coroutineScope.launch {
+        job = mainScope.launch {
             try {
                 listener.onLoading(0)
                 logD("Launch Job")
                 val time = measureTimeMillis {
-                    listUri.forEachIndexed { index, uri ->
-                        list.add(getPathAsync(uri).await())
-                        listener.onLoading(index + 1)
-                    }
+                    listUri.asFlow()
+                        .flatMapMerge(6) { uri ->
+                            flow { emit(getPathAsync(uri)) }
+                                .flowOn(IO)
+                        }.collectIndexed { index, pair ->
+                            list.add(pair)
+                            listener.onLoading(index + 1)
+                        }
                 }
                 logD("Total task time: $time ms")
             } catch (tr: Throwable) {
                 error = tr
                 logE("$tr - ${tr.message}")
             } finally {
-                if (!isDestroy){
+                if (mainScope.isActive) {
+                    //so Activity is active
                     listener.onRequestHandlePathOz(list, error)
                 }
-                with(job) {
-                    logD(
-                        "\nJob isNew: $isNew" +
-                                "\nJob isCompleting: $isCompleting" +
-                                "\nJob isCancelling: $isCancelling" +
-                                "\nJob wasCancelled: $wasCancelled" +
-                                "\nJob wasCompleted: $wasCompleted"
-                    )
-                }
+                logD(
+                    "MainScope isActive: ${mainScope.isActive}" +
+                            "\nThis Scope isActive: ${this.isActive}" +
+                            "\nJob isNew: ${job?.isNew}" +
+                            "\nJob isCompleting: ${job?.isCompleting}" +
+                            "\nJob isCancelling: ${job?.isCancelling}" +
+                            "\nJob wasCancelled: ${job?.wasCancelled}" +
+                            "\nJob wasCompleted: ${job?.wasCompleted}"
+                )
+
             }
         }
     }
@@ -83,42 +88,38 @@ class HandlePathOz(
      *
      * @param uri
      */
-    private suspend fun getPathAsync(uri: Uri) = withContext(IO) {
+    private fun getPathAsync(uri: Uri): Pair<Int, String> {
         val contentResolver = context.contentResolver
         val pathTempFile = getFullPathTemp(context, uri)
-        if (isKitKat) {
-            async {
-                val returnedPath = getPathAboveKitKat(context, uri)
-                when {
-                    //Cloud
-                    uri.isCloudFile -> {
-                        Pair(
-                            CLOUD_FILE,
-                            downloadFile(contentResolver, pathTempFile, uri, this)
-                        ).alsoLogD()
-                    }
-                    //Third Party App
-                    returnedPath.isBlank() -> {
-                        Pair(
-                            UNKNOWN_FILE_CHOOSER,
-                            downloadFile(contentResolver, pathTempFile, uri, this)
-                        ).alsoLogD()
-                    }
-                    //Unknown Provider or unknown mime type
-                    uri.isUnknownProvider(returnedPath, contentResolver) -> {
-                        Pair(
-                            UNKNOWN_PROVIDER,
-                            downloadFile(contentResolver, pathTempFile, uri, this)
-                        ).alsoLogD()
-                    }
-                    //LocalFile
-                    else -> {
-                        Pair(LOCAL_PROVIDER, returnedPath).alsoLogD()
-                    }
+        val file: File?
+        return if (isKitKat) {
+            val returnedPath = getPathAboveKitKat(context, uri)
+            when {
+                //Cloud
+                uri.isCloudFile -> {
+                    file = File(pathTempFile)
+                    downloadFile(contentResolver, file, uri, job)
+                    Pair(CLOUD_FILE, pathTempFile).alsoLogD()
+                }
+                //Third Party App
+                returnedPath.isBlank() -> {
+                    file = File(pathTempFile)
+                    downloadFile(contentResolver, file, uri, job)
+                    Pair(UNKNOWN_FILE_CHOOSER, pathTempFile).alsoLogD()
+                }
+                //Unknown Provider or unknown mime type
+                uri.isUnknownProvider(returnedPath, contentResolver) -> {
+                    file = File(pathTempFile)
+                    downloadFile(contentResolver, file, uri, job)
+                    Pair(UNKNOWN_PROVIDER, pathTempFile).alsoLogD()
+                }
+                //LocalFile
+                else -> {
+                    Pair(LOCAL_PROVIDER, returnedPath).alsoLogD()
                 }
             }
         } else {
-            async { Pair(BELOW_KITKAT_FILE, getPathBelowKitKat(context, uri)).alsoLogD() }
+            Pair(BELOW_KITKAT_FILE, getPathBelowKitKat(context, uri)).alsoLogD()
         }
     }
 
@@ -128,9 +129,11 @@ class HandlePathOz(
      *
      */
     fun cancelTask() {
-        if (job.isActive) {
-            job.cancelChildren()
-            logD("\nJob isActive: ${job.isActive}\nJob isCancelled: ${job.isCancelled}\nJob isCompleted: ${job.isCompleted}")
+        job?.let {
+            if (it.isActive) {
+                it.cancel()
+                logD("\nJob isActive: ${it.isActive}\nJob isCancelled: ${it.isCancelled}\nJob isCompleted: ${it.isCompleted}")
+            }
         }
     }
 
@@ -138,10 +141,9 @@ class HandlePathOz(
      *
      *
      */
-    fun onDestroy () {
-        if (job.isActive){
-            isDestroy = true
-            job.cancel()
+    fun onDestroy() {
+        if (mainScope.isActive) {
+            mainScope.cancel()
         }
     }
 
