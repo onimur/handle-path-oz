@@ -6,72 +6,57 @@ Android Library to handle multiple Uri(paths) received through Intents.
 ![](gitresources/logo_git.png)
 
 
+## :iphone: Sample Application
 
 <details>
-  <summary markdown="span"> :iphone: Sample Application...</summary>
+  <summary markdown="span"> :octocat: Download Release </summary>
   
-   ## :iphone: Sample Application
-  
-   ### :octocat: Download
   You can download the sample application with the latest release [here](https://github.com/onimur/handle-path-oz/raw/master/app/build/outputs/apk/release/HandlePathOZ.apk).
 
-   ### :octocat: Install by Google Play 
+  </details>
+  
+  <details>
+    <summary markdown="span"> :octocat: Install by Google Play  </summary>
+    
    <p align="left">
    <a target="_blank" href="https://play.google.com/store/apps/details?id=br.com.onimur.sample.handlepathoz">
    <img width="25%" alt="Check HandlePathOz on Google Play" src="https://play.google.com/intl/en_gb/badges/static/images/badges/en_badge_web_generic.png"/>
    </a>
-  </p>
+   </p>
+ 
+   </details>
+    
 
-   ---
-   
-</details>
+## :revolving_hearts: Support us
 
+## :mag: Main Features
+
+## :hammer_and_wrench: Config
 <details>
-  <summary markdown="span"> :revolving_hearts: Support us...</summary>
+  <summary markdown="span">:gear: Installation </summary>
+      
+   ```Add to gradle```
 
-  ## :revolving_hearts: Support us
+  </details>
   
-  ---
-
-</details>
-
-<details>
-  <summary markdown="span"> :mag: Main Features...</summary>
-
-  ## :mag: Main Features
-  
-  ---
-  
-</details>
-
-
-<details>
-  <summary markdown="span">:hammer_and_wrench: Config...</summary>
-  
-  ## :hammer_and_wrench: Config
-  
-  ### :gear: Installation 
-  ```Add to gradle```
-  
-  ### :bar_chart: Usage
+  <details>
+    <summary markdown="span">:bar_chart: Usage </summary>
+    
   ```Any config```
   
-  ---
-  
 </details>
 
 
+## :bulb: Getting Start
 <details>
-  <summary markdown="span">:bulb: Getting Start...</summary>
-  
-  ## :bulb: Getting Start - Kotlin
+  <summary markdown="span">:game_die: Kotlin </summary>
   
   ### :star2: Initialization
   1.1 - In Kotlin for the implementation of the Listener you can implement it within the scope of the class, as shown below, or also as shown in item *1.2*:
  
   ```class MainActivity : AppCompatActivity(), HandlePathOzListener {...}```
   
-  ```Alt+Enter``` to implement the methods, we will discuss the methods later in the topic *Controller*.
+  ```Alt+Enter``` to implement the methods, we will discuss the methods later in the topic **Controller**.
   
   Implement handlePathOz in your onCreate() method, as shown below:
   
@@ -165,10 +150,10 @@ Android Library to handle multiple Uri(paths) received through Intents.
   
   There are two methods for canceling tasks, ```cancelTask()``` and ```onDestroy()```.
   
-  *handlePathOz.cancelTask() ->* Can be called as a button action for canceling or by progressBar (As shown in the demo application).
+  **handlePathOz.cancelTask() ->** Can be called as a button action for canceling or by progressBar (As shown in the demo application).
   In the cancellation of the task by this method, all Uri that was treated will be passed in the onRequestHandlePathOz () method.
   
-  *handlePathOz.onDestroy ->*  It can be called with the Activity or fragment's onDestroy () method. 
+  **handlePathOz.onDestroy ->**  It can be called with the Activity or fragment's onDestroy () method. 
   This method destroys the task and its cancellation does not update anything and cannot be restarted.
   Example of use:
   ```
@@ -184,9 +169,7 @@ Android Library to handle multiple Uri(paths) received through Intents.
 </details>
 
 <details>
-  <summary markdown="span">:bulb: Getting Start...</summary>
-  
-  ## :bulb: Getting Start - Java
+  <summary markdown="span">:game_die: Java</summary>
   
   ### :star2: Initialization
   
@@ -198,34 +181,15 @@ Android Library to handle multiple Uri(paths) received through Intents.
   
 </details>
 
-<details>
-  <summary markdown="span">:triangular_ruler: Built With...</summary>
-  
-  ## :triangular_ruler: Built With
-  
+## :triangular_ruler: Built With
   * [Android Studio 4.0](https://developer.android.com/studio)
   
-  ---
   
-</details>
-
-
-<details>
-  <summary markdown="span">🧩 Contributing...</summary>
-  
-  ## 🧩 Contributing
-
+## 🧩 Contributing
   This project is open-source, so feel free to share your ideas and changes to improve the project. 
   
-  ---
-  
-</details>
 
-
-<details>
-  <summary markdown="span">:page_with_curl: License...</summary>
-  
-  ## :page_with_curl: License
+## :page_with_curl: License
  
     Copyright (c) 2020, HandlePathOz.
 
@@ -242,7 +206,3 @@ Android Library to handle multiple Uri(paths) received through Intents.
     limitations under the License.
 
   * [Apache License 2.0](gitresources/LICENSE.md)
-  
-  ---
-  
-</details>
