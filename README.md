@@ -1,15 +1,16 @@
-# :books: Handle Path Oz
+# 📚 Handle Path Oz
+
+![https://bintray.com/onimur/handle-path-oz/HandlePathOz](https://img.shields.io/bintray/v/onimur/handle-path-oz/HandlePathOz)
 
 Android Library to handle multiple Uri(paths) received through Intents.
-
 
 ![](gitresources/logo_git.png)
 
 
-## :iphone: Sample Application
+## 📱 Sample Application
 
 <details>
-  <summary markdown="span"> :octocat: Download Release </summary>
+  <summary markdown="span"> 🌱 Download Release </summary>
   
   You can download the sample application with the latest release [here](https://github.com/onimur/handle-path-oz/raw/master/app/build/outputs/apk/release/HandlePathOZ.apk).
 
@@ -17,7 +18,7 @@ Android Library to handle multiple Uri(paths) received through Intents.
   </details>
   
   <details>
-    <summary markdown="span"> :octocat: Install by Google Play  </summary>
+    <summary markdown="span"> 🌱 Install by Google Play  </summary>
     
    <p align="left">
    <a href="https://play.google.com/store/apps/details?id=br.com.onimur.sample.handlepathoz" target="_blank">
@@ -28,13 +29,15 @@ Android Library to handle multiple Uri(paths) received through Intents.
    </details>
     
 
-## :revolving_hearts: Support us
+## 💞 Support us
 
-## :hammer_and_wrench: Config
+## 🛠️ Config
 <details>
-  <summary markdown="span">:gear: Installation </summary>
+  <summary markdown="span">⚙️ Installation </summary>
       
-   ```Add to gradle```
+   ```kotlin
+       implementation 'br.com.onimur:handle-path-oz:1.0.1'
+   ```
 
    ---
 
@@ -43,27 +46,32 @@ Android Library to handle multiple Uri(paths) received through Intents.
 
   
   <details>
-    <summary markdown="span">:bar_chart: Usage </summary>
+    <summary markdown="span">📊 Usage </summary>
     
   ```Any config```
   
 </details>
 
 
-## :bulb: Getting Start
+## 💡 Getting Start
 <details>
-  <summary markdown="span">:game_die: Kotlin </summary>
+  <summary markdown="span">🎲 Kotlin </summary>
   
-  ### :star2: Initialization
+  ### 💫 Initialization
   1.1 - In Kotlin for the implementation of the Listener you can implement it within the scope of the class, as shown below, or also as shown in item **1.2**:
  
-  ```class MainActivity : AppCompatActivity(), HandlePathOzListener {...}```
+  ```kotlin
+  class MainActivity : AppCompatActivity(), HandlePathOzListener {
+   //...
+   }
+  ```
   
-  ```Alt+Enter``` to implement the methods, we will discuss the methods later in the topic **Controller**.
+  `Alt+Enter` to implement the methods, we will discuss the methods later in the topic **Controller**.
   
-  Implement handlePathOz in your ```onCreate()``` method, as shown below:
+  Implement handlePathOz in your `onCreate()` method, as shown below:
   
-   ```
+  
+   ```kotlin
     private lateinit var handlePathOz: HandlePathOz
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,9 +85,11 @@ Android Library to handle multiple Uri(paths) received through Intents.
 
   1.2 - You can also implement the Listener when initializing the class, without having to implement it within the scope of the class:
   
-     ```
+   ```kotlin
       private lateinit var handlePathOz: HandlePathOz
-      private val listener = object: HandlePathOzListener{...//implement methods}
+      private val listener = object: HandlePathOzListener{
+      //implement methods
+      }
   
       override fun onCreate(savedInstanceState: Bundle?) {
           super.onCreate(savedInstanceState)
@@ -88,12 +98,12 @@ Android Library to handle multiple Uri(paths) received through Intents.
           handlePathOz = HandlePathOz(this, listener)
           
       }
-  
-     ```
+   ```
+
      
    2 - After selecting the desired files (The sample application has the entire step) in ```onActivityResult``` leave as follows:
   
-  ```
+  ```kotlin
     @FlowPreview
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -116,9 +126,10 @@ Android Library to handle multiple Uri(paths) received through Intents.
     }
    ```
   
-  ### :video_game: Controller
+  ### 🎮 Controller
   We have two methods in the listeners, one of which is optional:
-  ```
+  
+  ```kotlin
       //On Completion (Sucess or Error)
       //If there is a cancellation or error, the entire task that was handled will be returned in the list.
       override fun onRequestHandlePathOz(listPath: List<Pair<Int, String>>, tr: Throwable?) {
@@ -139,19 +150,19 @@ Android Library to handle multiple Uri(paths) received through Intents.
       }
   ```
 
-  ### :cloud: Cloud files and Unknown Providers
+  ### ☁️ Cloud files and Unknown Providers
   
   If the selected file was from Dropbox,Google Drive, OneDrive or an unknown file provider, it will then be copied/created in
   InternalStorage/Android/data/your.package.name/files/Temp/sameFileNameAndExtension
   
   When you want to delete the generated files call:
   
-  ```
-  handlePathOz.deleteTemporaryFiles()
-  ```
+```kotlin
+   handlePathOz.deleteTemporaryFiles()
+```
   
   
-  ### :bomb: Cancel the tasks
+  ### 💣 Cancel the tasks
   
   There are two methods for canceling tasks, ```cancelTask()``` and ```onDestroy()```.
   
@@ -161,7 +172,7 @@ Android Library to handle multiple Uri(paths) received through Intents.
   **handlePathOz.onDestroy() ->**  It can be called with the Activity or fragment's  ```onDestroy()``` method. 
   This method destroys the task and its cancellation does not update anything and cannot be restarted.
   Example of use:
-  ```
+  ```kotlin
     override fun onDestroy() {
         handlePathOz.onDestroy()
         //You can delete the temporary files here as well.
@@ -174,21 +185,21 @@ Android Library to handle multiple Uri(paths) received through Intents.
 </details>
 
 <details>
-  <summary markdown="span">:game_die: Java</summary>
+  <summary markdown="span">🎲 Java</summary>
   
-  ### :star2: Initialization
+  ### 💫 Initialization
   
   
   
-  ### :video_game: Controller
+  ### 🎮 Controller
   
   ---
   
 </details>
 
-## :mag: Main Features
+## 🔍 Main Features
 
-## :triangular_ruler: Built With
+## 📐 Built With
   * [Android Studio 4.0](https://developer.android.com/studio)
   
   
@@ -196,7 +207,7 @@ Android Library to handle multiple Uri(paths) received through Intents.
   This project is open-source, so feel free to share your ideas and changes to improve the project. 
   
 
-## :page_with_curl: License
+## 📃 License
  
     Copyright (c) 2020, HandlePathOz.
 
@@ -212,4 +223,4 @@ Android Library to handle multiple Uri(paths) received through Intents.
     See the License for the specific language governing permissions and
     limitations under the License.
 
-  * [Apache License 2.0](gitresources/LICENSE.md)
+  * [Apache License 2.0](LICENSE.md)
