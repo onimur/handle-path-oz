@@ -20,7 +20,7 @@ Android Library to handle multiple Uri(paths) received through Intents.
     <summary markdown="span"> :octocat: Install by Google Play  </summary>
     
    <p align="left">
-   <a target="_blank" href="https://play.google.com/store/apps/details?id=br.com.onimur.sample.handlepathoz">
+   <a href="https://play.google.com/store/apps/details?id=br.com.onimur.sample.handlepathoz" target="_blank">
    <img width="25%" alt="Check HandlePathOz on Google Play" src="https://play.google.com/intl/en_gb/badges/static/images/badges/en_badge_web_generic.png"/>
    </a>
    </p>
@@ -55,13 +55,13 @@ Android Library to handle multiple Uri(paths) received through Intents.
   <summary markdown="span">:game_die: Kotlin </summary>
   
   ### :star2: Initialization
-  1.1 - In Kotlin for the implementation of the Listener you can implement it within the scope of the class, as shown below, or also as shown in item *1.2*:
+  1.1 - In Kotlin for the implementation of the Listener you can implement it within the scope of the class, as shown below, or also as shown in item **1.2**:
  
   ```class MainActivity : AppCompatActivity(), HandlePathOzListener {...}```
   
   ```Alt+Enter``` to implement the methods, we will discuss the methods later in the topic **Controller**.
   
-  Implement handlePathOz in your onCreate() method, as shown below:
+  Implement handlePathOz in your ```onCreate()``` method, as shown below:
   
    ```
     private lateinit var handlePathOz: HandlePathOz
@@ -118,7 +118,7 @@ Android Library to handle multiple Uri(paths) received through Intents.
    ```
   
   ### :video_game: Controller
-  We have 2 methods in the listeners, 1 of which is optional:
+  We have two methods in the listeners, one of which is optional:
   ```
       //On Completion (Sucess or Error)
       //If there is a cancellation or error, the entire task that was handled will be returned in the list.
@@ -146,7 +146,10 @@ Android Library to handle multiple Uri(paths) received through Intents.
   InternalStorage/Android/data/your.package.name/files/Temp/sameFileNameAndExtension
   
   When you want to delete the generated files call:
-  ```handlePathOz.deleteTemporaryFiles()```
+  
+  ```
+  handlePathOz.deleteTemporaryFiles()
+  ```
   
   
   ### :bomb: Cancel the tasks
@@ -154,9 +157,9 @@ Android Library to handle multiple Uri(paths) received through Intents.
   There are two methods for canceling tasks, ```cancelTask()``` and ```onDestroy()```.
   
   **handlePathOz.cancelTask() ->** Can be called as a button action for canceling or by progressBar (As shown in the demo application).
-  In the cancellation of the task by this method, all Uri that was treated will be passed in the onRequestHandlePathOz () method.
+  In the cancellation of the task by this method, all Uri that was treated will be passed in the ```onRequestHandlePathOz()``` method.
   
-  **handlePathOz.onDestroy ->**  It can be called with the Activity or fragment's onDestroy () method. 
+  **handlePathOz.onDestroy() ->**  It can be called with the Activity or fragment's  ```onDestroy()``` method. 
   This method destroys the task and its cancellation does not update anything and cannot be restarted.
   Example of use:
   ```
