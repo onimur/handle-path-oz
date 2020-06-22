@@ -1,6 +1,13 @@
 # 📚 Handle Path Oz
 
-![https://bintray.com/onimur/handle-path-oz/HandlePathOz](https://img.shields.io/bintray/v/onimur/handle-path-oz/HandlePathOz)
+
+<p align="center">
+    <a href="https://bintray.com/onimur/handle-path-oz/HandlePathOz" title="Bintray"><img src="https://img.shields.io/bintray/v/onimur/handle-path-oz/HandlePathOz?label=Bintray"></a>
+    <a title="API 16+"><img src="https://img.shields.io/badge/API-16%2B-orange"></a>
+    <a href="./LICENSE" title="License"><img src="https://img.shields.io/github/license/onimur/handle-path-oz?label=License"></a>
+    
+    
+</p>
 
 Android Library to handle multiple Uri(paths) received through Intents.
 
@@ -223,4 +230,4 @@ Android Library to handle multiple Uri(paths) received through Intents.
     See the License for the specific language governing permissions and
     limitations under the License.
 
-  * [Apache License 2.0](LICENSE.md)
+  * [Apache License 2.0](LICENSE)
