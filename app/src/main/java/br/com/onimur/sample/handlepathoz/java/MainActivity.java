@@ -1,11 +1,11 @@
 /*
- * Created by Murillo Comino on 18/06/20 20:56
+ * Created by Murillo Comino on 21/06/20 21:04
  * Github: github.com/onimur
  * StackOverFlow: pt.stackoverflow.com/users/128573
  * Email: murillo_comino@hotmail.com
  *
  *  Copyright (c) 2020.
- *  Last modified 18/06/20 20:41
+ *  Last modified 21/06/20 21:03
  */
 
 package br.com.onimur.sample.handlepathoz.java;
@@ -195,7 +195,12 @@ public class MainActivity extends AppCompatActivity implements HandlePathOzListe
             originalAdapter.updateListChanged(listUri);
 
             //set list of the Uri to handle
+            //in concurrency use:
+            // 1                -> for tasks sequentially
+            //greater than 1    -> for the number of tasks you want to perform in parallel.
+            //Nothing           -> for parallel tasks - by default the value is 10
             handlePathOz.getRealPath(listUri);
+            // handlePathOz.getRealPath(listUri, 1)
             //show Progress Loading
             if (!progressLoading.isShowing()) {
                 progressLoading.show();
