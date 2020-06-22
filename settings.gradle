@@ -1,13 +1,13 @@
 /*
- * Created by Murillo Comino on 17/06/20 13:18
+ * Created by Murillo Comino on 22/06/20 17:50
  * Github: github.com/onimur
  * StackOverFlow: pt.stackoverflow.com/users/128573
  * Email: murillo_comino@hotmail.com
  *
  *  Copyright (c) 2020.
- *  Last modified 03/06/20 22:33
+ *  Last modified 22/06/20 16:24
  */
 
 rootProject.name='Handle Path Oz'
 include ':app'
-include ':handlepathoz'
+include ':handle-path-oz'

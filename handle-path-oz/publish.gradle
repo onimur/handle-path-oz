@@ -1,0 +1,52 @@
+/*
+ * Created by Murillo Comino on 22/06/20 17:50
+ * Github: github.com/onimur
+ * StackOverFlow: pt.stackoverflow.com/users/128573
+ * Email: murillo_comino@hotmail.com
+ *
+ *  Copyright (c) 2020.
+ *  Last modified 22/06/20 16:14
+ */
+
+apply plugin: 'com.jfrog.bintray'
+
+group 'br.com.onimur'
+version = libraryVersionName
+
+project.ext {
+    mavGitUrl = 'https://github.com/onimur/handle-path-oz.git'
+    mavProjectName = 'HandlePathOz'
+    mavLibraryLicenses = ["Apache-2.0": 'http://www.apache.org/licenses/LICENSE-2.0.txt']
+    mavLibraryDescription = "\t\n" +
+            "Android Library to handle multiple Uri(paths) received through Intents."
+    mavPublishToMavenLocal = true
+    mavSiteUrl = 'https://github.com/onimur/handle-path-oz'
+}
+
+def properties = new Properties()
+properties.load(project.rootProject.file('bintray.keystore').newDataInputStream())
+
+bintray {
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+    publications = ['mavenPublish']
+    configurations = ['archives']
+    override = true
+    pkg {
+        repo = 'handle-path-oz'
+        name = 'HandlePathOz'
+        description = "Android Library to handle multiple Uri(paths) received through Intents."
+        publicDownloadNumbers = true
+        licenses = ['Apache-2.0']
+        publish = true
+        vcsUrl = 'https://github.com/onimur/handle-path-oz.git'
+        version {
+            name = this.version
+            desc = "Version ${this.version}"
+            released = new Date()
+            vcsTag = this.version
+        }
+    }
+}
+
+apply from: 'https://raw.githubusercontent.com/sky-uk/gradle-maven-plugin/master/gradle-mavenizer.gradle'

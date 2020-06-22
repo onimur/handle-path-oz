@@ -1,13 +1,12 @@
 /*
- * Created by Murillo Comino on 17/06/20 13:21
+ * Created by Murillo Comino on 22/06/20 17:50
  * Github: github.com/onimur
  * StackOverFlow: pt.stackoverflow.com/users/128573
  * Email: murillo_comino@hotmail.com
  *
  *  Copyright (c) 2020.
- *  Last modified 17/06/20 13:21
+ *  Last modified 22/06/20 17:33
  */
-
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
@@ -15,11 +14,12 @@ buildscript {
     repositories {
         google()
         jcenter()
-        
+
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:4.0.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -30,10 +30,22 @@ allprojects {
     repositories {
         google()
         jcenter()
-        
     }
+}
+
+ext {
+    libraryVersionName = LIBRARY_VERSION_NAME
+    libraryVersionCode = LIBRARY_VERSION_CODE as int
 }
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+task uploadLibrary(){
+    dependsOn 'clean'
+    dependsOn ':handle-path-oz:publish'
+    dependsOn ':handle-path-oz:bintrayUpload'
+    tasks.findByPath(':handle-path-oz:publish').mustRunAfter 'clean'
+    tasks.findByPath(':handle-path-oz:bintrayUpload').mustRunAfter ':handle-path-oz:publish'
 }
