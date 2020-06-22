@@ -13,6 +13,7 @@ Android Library to handle multiple Uri(paths) received through Intents.
   
   You can download the sample application with the latest release [here](https://github.com/onimur/handle-path-oz/raw/master/app/build/outputs/apk/release/HandlePathOZ.apk).
 
+   ---
   </details>
   
   <details>
@@ -29,15 +30,17 @@ Android Library to handle multiple Uri(paths) received through Intents.
 
 ## :revolving_hearts: Support us
 
-## :mag: Main Features
-
 ## :hammer_and_wrench: Config
 <details>
   <summary markdown="span">:gear: Installation </summary>
       
    ```Add to gradle```
 
+   ---
+
   </details>
+  
+
   
   <details>
     <summary markdown="span">:bar_chart: Usage </summary>
@@ -180,6 +183,8 @@ Android Library to handle multiple Uri(paths) received through Intents.
   ---
   
 </details>
+
+## :mag: Main Features
 
 ## :triangular_ruler: Built With
   * [Android Studio 4.0](https://developer.android.com/studio)
