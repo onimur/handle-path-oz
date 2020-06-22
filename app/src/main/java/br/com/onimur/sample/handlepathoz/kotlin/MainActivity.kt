@@ -1,11 +1,11 @@
 /*
- * Created by Murillo Comino on 21/06/20 21:04
+ * Created by Murillo Comino on 21/06/20 22:29
  * Github: github.com/onimur
  * StackOverFlow: pt.stackoverflow.com/users/128573
  * Email: murillo_comino@hotmail.com
  *
  *  Copyright (c) 2020.
- *  Last modified 21/06/20 21:03
+ *  Last modified 21/06/20 21:56
  */
 
 package br.com.onimur.sample.handlepathoz.kotlin
@@ -195,24 +195,22 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), HandlePathOzList
     @FlowPreview
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_OPEN_GALLERY) {
-            if (resultCode == Activity.RESULT_OK) {
-                //This extension retrieves the path of all selected files without treatment.
-                listUri = data.getListUri()
-                //Update the adapter
-                originalAdapter.updateListChanged(listUri)
+        if ((requestCode == REQUEST_OPEN_GALLERY) and (resultCode == Activity.RESULT_OK)) {
+            //This extension retrieves the path of all selected files without treatment.
+            listUri = data.getListUri()
+            //Update the adapter
+            originalAdapter.updateListChanged(listUri)
 
-                //set list of the Uri to handle
-                //in concurrency use:
-                // 1                -> for tasks sequentially
-                //greater than 1    -> for the number of tasks you want to perform in parallel.
-                //Nothing           -> for parallel tasks - by default the value is 10
-                handlePathOz.getRealPath(listUri)
-                // handlePathOz.getRealPath(listUri, 1)
-                //show Progress Loading
-                if (!progressLoading.isShowing) {
-                    progressLoading.show()
-                }
+            //set list of the Uri to handle
+            //in concurrency use:
+            // 1                -> for tasks sequentially
+            //greater than 1    -> for the number of tasks you want to perform in parallel.
+            //Nothing           -> for parallel tasks - by default the value is 10
+            handlePathOz.getRealPath(listUri)
+            // handlePathOz.getRealPath(listUri, 1)
+            //show Progress Loading
+            if (!progressLoading.isShowing) {
+                progressLoading.show()
             }
         }
     }
