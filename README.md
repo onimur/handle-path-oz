@@ -73,7 +73,6 @@ Android Library to handle multiple Uri(paths) received through Intents.
         handlePathOz = HandlePathOz(this, this)
         
     }
-
    ```
 
   1.2 - You can also implement the Listener when initializing the class, without having to implement it within the scope of the class:
