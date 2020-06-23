@@ -1,11 +1,11 @@
 /*
- * Created by Murillo Comino on 22/06/20 17:50
+ * Created by Murillo Comino on 23/06/20 10:54
  * Github: github.com/onimur
  * StackOverFlow: pt.stackoverflow.com/users/128573
  * Email: murillo_comino@hotmail.com
  *
  *  Copyright (c) 2020.
- *  Last modified 22/06/20 17:33
+ *  Last modified 23/06/20 10:39
  */
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
@@ -40,12 +40,4 @@ ext {
 
 task clean(type: Delete) {
     delete rootProject.buildDir
-}
-
-task uploadLibrary(){
-    dependsOn 'clean'
-    dependsOn ':handle-path-oz:publish'
-    dependsOn ':handle-path-oz:bintrayUpload'
-    tasks.findByPath(':handle-path-oz:publish').mustRunAfter 'clean'
-    tasks.findByPath(':handle-path-oz:bintrayUpload').mustRunAfter ':handle-path-oz:publish'
 }

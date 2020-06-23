@@ -1,11 +1,11 @@
 /*
- * Created by Murillo Comino on 22/06/20 17:50
+ * Created by Murillo Comino on 23/06/20 10:54
  * Github: github.com/onimur
  * StackOverFlow: pt.stackoverflow.com/users/128573
  * Email: murillo_comino@hotmail.com
  *
  *  Copyright (c) 2020.
- *  Last modified 22/06/20 16:14
+ *  Last modified 23/06/20 10:37
  */
 
 apply plugin: 'com.jfrog.bintray'
@@ -23,12 +23,9 @@ project.ext {
     mavSiteUrl = 'https://github.com/onimur/handle-path-oz'
 }
 
-def properties = new Properties()
-properties.load(project.rootProject.file('bintray.keystore').newDataInputStream())
-
 bintray {
-    user = properties.getProperty("bintray.user")
-    key = properties.getProperty("bintray.apikey")
+    user = System.getenv("BINTRAY_USER")
+    key = System.getenv("BINTRAY_KEY")
     publications = ['mavenPublish']
     configurations = ['archives']
     override = true
