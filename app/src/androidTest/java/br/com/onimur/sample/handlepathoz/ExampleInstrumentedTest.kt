@@ -1,11 +1,11 @@
 /*
- * Created by Murillo Comino on 18/06/20 20:56
+ * Created by Murillo Comino on 23/06/20 11:08
  * Github: github.com/onimur
  * StackOverFlow: pt.stackoverflow.com/users/128573
  * Email: murillo_comino@hotmail.com
  *
  *  Copyright (c) 2020.
- *  Last modified 18/06/20 20:41
+ *  Last modified 23/06/20 11:07
  */
 
 package br.com.onimur.sample.handlepathoz
@@ -27,6 +27,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("br.com.comino.example.handlepathoz", appContext.packageName)
+        assertEquals("br.com.onimur.sample.handlepathoz", appContext.packageName)
     }
 }

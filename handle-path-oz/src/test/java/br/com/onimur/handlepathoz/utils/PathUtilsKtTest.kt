@@ -1,16 +1,16 @@
 /*
- * Created by Murillo Comino on 22/06/20 17:50
+ * Created by Murillo Comino on 23/06/20 11:08
  * Github: github.com/onimur
  * StackOverFlow: pt.stackoverflow.com/users/128573
  * Email: murillo_comino@hotmail.com
  *
  *  Copyright (c) 2020.
- *  Last modified 18/06/20 20:56
+ *  Last modified 23/06/20 11:03
  */
 
 package br.com.onimur.handlepathoz.utils
 
-import br.com.comino.handlepathoz.utils.PathUtils.getSubFolders
+import br.com.onimur.handlepathoz.utils.FileUtils.getSubFolders
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.core.Is.`is`
 import org.junit.Test
