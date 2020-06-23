@@ -1,22 +1,30 @@
 /*
- * Created by Murillo Comino on 22/06/20 17:50
+ * Created by Murillo Comino on 23/06/20 16:55
  * Github: github.com/onimur
  * StackOverFlow: pt.stackoverflow.com/users/128573
  * Email: murillo_comino@hotmail.com
  *
  *  Copyright (c) 2020.
- *  Last modified 21/06/20 20:55
+ *  Last modified 23/06/20 16:55
  */
 
 package br.com.onimur.handlepathoz
 
 import android.content.Context
 import android.net.Uri
-import android.os.Build
-import br.com.onimur.handlepathoz.utils.Constants
-import br.com.onimur.handlepathoz.utils.FileUtils
+import android.os.Build.VERSION.SDK_INT
+import android.os.Build.VERSION_CODES.KITKAT
+import br.com.onimur.handlepathoz.model.PairPath
+import br.com.onimur.handlepathoz.utils.Constants.HandlePathOzConts.BELOW_KITKAT_FILE
+import br.com.onimur.handlepathoz.utils.Constants.HandlePathOzConts.CLOUD_FILE
+import br.com.onimur.handlepathoz.utils.Constants.HandlePathOzConts.LOCAL_PROVIDER
+import br.com.onimur.handlepathoz.utils.Constants.HandlePathOzConts.UNKNOWN_FILE_CHOOSER
+import br.com.onimur.handlepathoz.utils.Constants.HandlePathOzConts.UNKNOWN_PROVIDER
 import br.com.onimur.handlepathoz.utils.FileUtils.deleteTemporaryFiles
-import br.com.onimur.handlepathoz.utils.PathUtils
+import br.com.onimur.handlepathoz.utils.FileUtils.downloadFile
+import br.com.onimur.handlepathoz.utils.FileUtils.getFullPathTemp
+import br.com.onimur.handlepathoz.utils.PathUtils.getPathAboveKitKat
+import br.com.onimur.handlepathoz.utils.PathUtils.getPathBelowKitKat
 import br.com.onimur.handlepathoz.utils.extension.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -29,12 +37,11 @@ internal class HandlePathOzUtils(
 ) {
     private val mainScope = MainScope()
     private var job: Job? = null
-    private val isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
-
+    private val isKitKat = SDK_INT >= KITKAT
 
     @FlowPreview
     fun getRealPath(listUri: List<Uri>, concurrency: Int) {
-        val list = mutableListOf<Pair<Int, String>>()
+        val list = mutableListOf<PairPath>()
         var error: Throwable? = null
         job = mainScope.launch {
             try {
@@ -72,40 +79,40 @@ internal class HandlePathOzUtils(
         }
     }
 
-    private fun getPath(uri: Uri): Pair<Int, String> {
+    private fun getPath(uri: Uri): PairPath {
         val contentResolver = context.contentResolver
-        val pathTempFile = FileUtils.getFullPathTemp(context, uri)
+        val pathTempFile = getFullPathTemp(context, uri)
         val file: File?
         return if (isKitKat) {
-            val returnedPath = PathUtils.getPathAboveKitKat(context, uri)
+            val returnedPath = getPathAboveKitKat(context, uri)
             when {
                 //Cloud
                 uri.isCloudFile -> {
                     file = File(pathTempFile)
-                    FileUtils.downloadFile(contentResolver, file, uri, job)
-                    Pair(Constants.HandlePathOzConts.CLOUD_FILE, pathTempFile).alsoLogD()
+                    downloadFile(contentResolver, file, uri, job)
+                    PairPath(CLOUD_FILE, pathTempFile).alsoLogD()
                 }
                 //Third Party App
                 returnedPath.isBlank() -> {
                     file = File(pathTempFile)
-                    FileUtils.downloadFile(contentResolver, file, uri, job)
-                    Pair(Constants.HandlePathOzConts.UNKNOWN_FILE_CHOOSER, pathTempFile).alsoLogD()
+                    downloadFile(contentResolver, file, uri, job)
+                    PairPath(UNKNOWN_FILE_CHOOSER, pathTempFile).alsoLogD()
                 }
                 //Unknown Provider or unknown mime type
                 uri.isUnknownProvider(returnedPath, contentResolver) -> {
                     file = File(pathTempFile)
-                    FileUtils.downloadFile(contentResolver, file, uri, job)
-                    Pair(Constants.HandlePathOzConts.UNKNOWN_PROVIDER, pathTempFile).alsoLogD()
+                    downloadFile(contentResolver, file, uri, job)
+                    PairPath(UNKNOWN_PROVIDER, pathTempFile).alsoLogD()
                 }
                 //LocalFile
                 else -> {
-                    Pair(Constants.HandlePathOzConts.LOCAL_PROVIDER, returnedPath).alsoLogD()
+                    PairPath(LOCAL_PROVIDER, returnedPath).alsoLogD()
                 }
             }
         } else {
-            Pair(
-                Constants.HandlePathOzConts.BELOW_KITKAT_FILE,
-                PathUtils.getPathBelowKitKat(context, uri)
+            PairPath(
+                BELOW_KITKAT_FILE,
+                getPathBelowKitKat(context, uri)
             ).alsoLogD()
         }
     }

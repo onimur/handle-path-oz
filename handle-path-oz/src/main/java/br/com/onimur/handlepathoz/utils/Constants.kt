@@ -1,11 +1,11 @@
 /*
- * Created by Murillo Comino on 22/06/20 17:50
+ * Created by Murillo Comino on 23/06/20 16:55
  * Github: github.com/onimur
  * StackOverFlow: pt.stackoverflow.com/users/128573
  * Email: murillo_comino@hotmail.com
  *
  *  Copyright (c) 2020.
- *  Last modified 18/06/20 20:56
+ *  Last modified 23/06/20 16:48
  */
 
 package br.com.onimur.handlepathoz.utils
@@ -44,11 +44,11 @@ object Constants {
     }
 
     object HandlePathOzConts {
-        const val BELOW_KITKAT_FILE = -1
-        const val CLOUD_FILE = 1
-        const val UNKNOWN_PROVIDER = 2
-        const val LOCAL_PROVIDER = 3
-        const val UNKNOWN_FILE_CHOOSER = 4
+        const val BELOW_KITKAT_FILE = "belowKitkatFile"
+        const val CLOUD_FILE = "cloudFile"
+        const val UNKNOWN_PROVIDER = "unknownProvider"
+        const val UNKNOWN_FILE_CHOOSER = "unknownFileChooser"
+        const val LOCAL_PROVIDER = "localProvider"
     }
 }
 
