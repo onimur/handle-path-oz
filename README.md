@@ -5,13 +5,14 @@
     <a href="https://bintray.com/onimur/handle-path-oz/HandlePathOz" title="Bintray"><img src="https://img.shields.io/bintray/v/onimur/handle-path-oz/HandlePathOz?label=Bintray"></a>
     <a title="API 16+"><img src="https://img.shields.io/badge/API-16%2B-orange"></a>
     <a href="./LICENSE" title="License"><img src="https://img.shields.io/github/license/onimur/handle-path-oz?label=License"></a>
-    
+    <a href="https://app.circleci.com/pipelines/github/onimur/handle-path-oz" title="onimur"><img src="https://circleci.com/gh/onimur/handle-path-oz.svg?style=shield"></a>
+
     
 </p>
 
 Android Library to handle multiple Uri(paths) received through Intents.
 
-![](gitresources/logo_git.png)
+![](.gitresources/logo_git.png)
 
 
 ## 📱 Sample Application
@@ -37,29 +38,25 @@ Android Library to handle multiple Uri(paths) received through Intents.
     
 
 ## 💞 Support us
+We are developing this structure in the open source community without financial planning.
+If you like this project and would like to help us, make a donation:
+
+   <p align="center">
+   <a href="https://www.patreon.com/onimur" target="_blank">
+   <img width="30%" alt="Check my Patreon" src="./.gitresources/support-patreon.png"/>
+   </a>
+   <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=YUTBBKXR2XCPJ" target="_blank">
+   <img width="30%" alt="Donate with Paypal" src=".gitresources/support-paypal.png"/>
+   </a>
+   </p>
 
 ## 🛠️ Config
-<details>
-  <summary markdown="span">⚙️ Installation </summary>
+  In build.gradle(Module: app) within dependencies, implement:
       
-   ```kotlin
+```kotlin
        implementation 'br.com.onimur:handle-path-oz:1.0.1'
-   ```
-
-   ---
-
-  </details>
+```
   
-
-  
-  <details>
-    <summary markdown="span">📊 Usage </summary>
-    
-  ```Any config```
-  
-</details>
-
-
 ## 💡 Getting Start
 <details>
   <summary markdown="span">🎲 Kotlin </summary>
@@ -67,18 +64,18 @@ Android Library to handle multiple Uri(paths) received through Intents.
   ### 💫 Initialization
   1.1 - In Kotlin for the implementation of the Listener you can implement it within the scope of the class, as shown below, or also as shown in item **1.2**:
  
-  ```kotlin
+```kotlin
   class MainActivity : AppCompatActivity(), HandlePathOzListener {
    //...
    }
-  ```
+```
   
   `Alt+Enter` to implement the methods, we will discuss the methods later in the topic **Controller**.
   
   Implement handlePathOz in your `onCreate()` method, as shown below:
   
   
-   ```kotlin
+```kotlin
     private lateinit var handlePathOz: HandlePathOz
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -88,11 +85,11 @@ Android Library to handle multiple Uri(paths) received through Intents.
         handlePathOz = HandlePathOz(this, this)
         
     }
-   ```
+```
 
   1.2 - You can also implement the Listener when initializing the class, without having to implement it within the scope of the class:
   
-   ```kotlin
+```kotlin
       private lateinit var handlePathOz: HandlePathOz
       private val listener = object: HandlePathOzListener{
       //implement methods
@@ -105,13 +102,12 @@ Android Library to handle multiple Uri(paths) received through Intents.
           handlePathOz = HandlePathOz(this, listener)
           
       }
-   ```
+```
 
      
    2 - After selecting the desired files (The sample application has the entire step) in ```onActivityResult``` leave as follows:
   
-  ```kotlin
-    @FlowPreview
+```kotlin
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if ((requestCode == REQUEST_OPEN_GALLERY) and (resultCode == Activity.RESULT_OK)) {
@@ -131,18 +127,18 @@ Android Library to handle multiple Uri(paths) received through Intents.
             //show Progress Loading
         }
     }
-   ```
+```
   
   ### 🎮 Controller
   We have two methods in the listeners, one of which is optional:
   
-  ```kotlin
+```kotlin
       //On Completion (Sucess or Error)
       //If there is a cancellation or error, the entire task that was handled will be returned in the list.
-      override fun onRequestHandlePathOz(listPath: List<Pair<Int, String>>, tr: Throwable?) {
+      override fun onRequestHandlePathOz(listPath: List<PairPath>, tr: Throwable?) {
           //Hide Progress
           //Update the recyclerview with the list
-          yourAdapter.updateListChanged(listPath.map { uri -> Uri.parse(uri.second) })
+          yourAdapter.updateListChanged(listPath.map { uri -> Uri.parse(uri.path) })
   
           //Handle any Exception (Optional)
           tr?.let {
@@ -155,7 +151,7 @@ Android Library to handle multiple Uri(paths) received through Intents.
           //Update UI with the current Uri
           //progressLoading.setText = "${currentUri}/${listUri.size}"
       }
-  ```
+```
 
   ### ☁️ Cloud files and Unknown Providers
   
@@ -179,13 +175,13 @@ Android Library to handle multiple Uri(paths) received through Intents.
   **handlePathOz.onDestroy() ->**  It can be called with the Activity or fragment's  ```onDestroy()``` method. 
   This method destroys the task and its cancellation does not update anything and cannot be restarted.
   Example of use:
-  ```kotlin
+```kotlin
     override fun onDestroy() {
         handlePathOz.onDestroy()
         //You can delete the temporary files here as well.
         super.onDestroy()
     }
-  ```
+```
   
   ---
   
@@ -195,24 +191,146 @@ Android Library to handle multiple Uri(paths) received through Intents.
   <summary markdown="span">🎲 Java</summary>
   
   ### 💫 Initialization
+  The implementation of the Listener you can implement it within the scope of the class, as shown below:
   
+```java
+     public class MainActivity extends AppCompatActivity implements HandlePathOzListener {
+      //
+      }
+```
+
+  `Alt+Enter` to implement the methods, we will discuss the methods later in the topic **Controller**.
+  
+  Implement handlePathOz in your `onCreate()` method, as shown below:
+  
+```java
+
+    private HandlePathOz handlePathOz;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        //Initialize HandlePathOz
+        //context, listener
+        handlePathOz = HandlePathOz(this, this)
+
+    }
+
+```
+
+After selecting the desired files (The sample application has the entire step) in ```onActivityResult``` leave as follows:
+  
+```java
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_OPEN_GALLERY && resultCode == RESULT_OK) {
+            //This extension retrieves the path of all selected files without treatment.
+            listUri = getListUri(data);
+
+            //with the list you can update some recyclerview and switch to the method that handles Uri's.
+
+
+            //set list of the Uri to handle
+            //in concurrency use:
+            // 1                -> for tasks sequentially
+            //greater than 1    -> for the number of tasks you want to perform in parallel.
+            //Nothing           -> for parallel tasks - by default the value is 10
+            handlePathOz.getRealPath(listUri);
+            // handlePathOz.getRealPath(listUri, 1)
+
+            //show Progress Loading
+        }
+    }
+
+```
   
   
   ### 🎮 Controller
+  
+    We have two methods in the listeners, one of which is optional:
+    
+```java
+        //On Completion (Sucess or Error)
+        //If there is a cancellation or error, the entire task that was handled will be returned in the list.
+       @Override
+       public void onRequestHandlePathOz(@NonNull List<PairPath> listPath, Throwable tr) {
+            //Hide Progress
+            //Update the recyclerview with the list
+            //Update the adapter
+            List<Uri> listUri = new ArrayList<>();
+            for (int i = 0; i < list.size(); i++) {
+                Uri uri = Uri.parse(list.get(i).getPath());
+                listUri.add(uri);
+            }
+            yourAdapter.updateListChanged(listUri);
+    
+            //Handle Exception (Optional)
+            if (throwable != null) {
+                Toast.makeText(this, throwable.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+       }
+
+       //This method is Optional
+       @Override
+       public void onLoading(int currentUri) {
+           //Update UI with the current Uri
+           //progressLoading.setText(currentUri + "/" + listUri.size());
+       }
+
+```
+
+ ### ☁️ Cloud files and Unknown Providers
+  
+  If the selected file was from Dropbox,Google Drive, OneDrive or an unknown file provider, it will then be copied/created in
+  InternalStorage/Android/data/your.package.name/files/Temp/sameFileNameAndExtension
+  
+  When you want to delete the generated files call:
+  
+```java
+   handlePathOz.deleteTemporaryFiles()
+```
+  
+  
+  ### 💣 Cancel the tasks
+  
+  There are two methods for canceling tasks, ```cancelTask()``` and ```onDestroy()```.
+  
+  **handlePathOz.cancelTask() ->** Can be called as a button action for canceling or by progressBar (As shown in the demo application).
+  In the cancellation of the task by this method, all Uri that was treated will be passed in the ```onRequestHandlePathOz()``` method.
+  
+  **handlePathOz.onDestroy() ->**  It can be called with the Activity or fragment's  ```onDestroy()``` method. 
+  This method destroys the task and its cancellation does not update anything and cannot be restarted.
+  Example of use:
+  
+```java
+
+    @Override
+    public void onDestroy() {
+        handlePathOz.onDestroy();
+        //You can delete the temporary files here as well.
+        super.onDestroy();
+    }
+```
   
   ---
   
 </details>
 
 ## 🔍 Main Features
+- [Kotlin Coroutines/Flow](https://kotlinlang.org/docs/reference/coroutines-overview.html) 
+- Parse Uri
+- Multiple tasks in parallel
 
 ## 📐 Built With
   * [Android Studio 4.0](https://developer.android.com/studio)
   
   
 ## 🧩 Contributing
-  This project is open-source, so feel free to share your ideas and changes to improve the project. 
-  
+  This project is open-source, so feel free to fork, or to share your ideas and changes to improve the project. 
+ 
 
 ## 📃 License
  

@@ -39,4 +39,4 @@ google-services.json
 *.p12
 *.keystore
 .coverage/
-exclude/
+.exclude/
