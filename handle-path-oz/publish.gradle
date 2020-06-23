@@ -1,11 +1,11 @@
 /*
- * Created by Murillo Comino on 23/06/20 10:54
+ * Created by Murillo Comino on 23/06/20 10:56
  * Github: github.com/onimur
  * StackOverFlow: pt.stackoverflow.com/users/128573
  * Email: murillo_comino@hotmail.com
  *
  *  Copyright (c) 2020.
- *  Last modified 23/06/20 10:37
+ *  Last modified 23/06/20 10:56
  */
 
 apply plugin: 'com.jfrog.bintray'
@@ -25,7 +25,7 @@ project.ext {
 
 bintray {
     user = System.getenv("BINTRAY_USER")
-    key = System.getenv("BINTRAY_KEY")
+    key = System.getenv("BINTRAY_API_KEY")
     publications = ['mavenPublish']
     configurations = ['archives']
     override = true
