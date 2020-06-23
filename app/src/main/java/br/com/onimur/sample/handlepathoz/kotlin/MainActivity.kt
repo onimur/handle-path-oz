@@ -1,11 +1,11 @@
 /*
- * Created by Murillo Comino on 21/06/20 22:29
+ * Created by Murillo Comino on 23/06/20 17:11
  * Github: github.com/onimur
  * StackOverFlow: pt.stackoverflow.com/users/128573
  * Email: murillo_comino@hotmail.com
  *
  *  Copyright (c) 2020.
- *  Last modified 21/06/20 21:56
+ *  Last modified 23/06/20 16:55
  */
 
 package br.com.onimur.sample.handlepathoz.kotlin
@@ -30,6 +30,7 @@ import androidx.recyclerview.widget.RecyclerView
 import br.com.comino.sample.handlepathoz.R
 import br.com.onimur.handlepathoz.HandlePathOz
 import br.com.onimur.handlepathoz.HandlePathOzListener
+import br.com.onimur.handlepathoz.model.PairPath
 import br.com.onimur.handlepathoz.utils.extension.getListUri
 import kotlinx.coroutines.FlowPreview
 
@@ -235,14 +236,14 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), HandlePathOzList
 
 
     /////////////////////////////     LISTENER HANDLE PATH OZ    ///////////////////////////////////
-    override fun onRequestHandlePathOz(listPath: List<Pair<Int, String>>, tr: Throwable?) {
+    override fun onRequestHandlePathOz(listPath: List<PairPath>, tr: Throwable?) {
         //Hide Progress
         if (progressLoading.isShowing or progressCancelling.isShowing) {
             progressLoading.dismiss()
             progressCancelling.dismiss()
         }
         //Update the adapter
-        realAdapter.updateListChanged(listPath.map { uri -> Uri.parse(uri.second) })
+        realAdapter.updateListChanged(listPath.map { uri -> Uri.parse(uri.path) })
 
         //Handle Exception (Optional)
         tr?.let {

@@ -1,11 +1,11 @@
 /*
- * Created by Murillo Comino on 21/06/20 21:04
+ * Created by Murillo Comino on 23/06/20 17:11
  * Github: github.com/onimur
  * StackOverFlow: pt.stackoverflow.com/users/128573
  * Email: murillo_comino@hotmail.com
  *
  *  Copyright (c) 2020.
- *  Last modified 21/06/20 21:03
+ *  Last modified 23/06/20 16:55
  */
 
 package br.com.onimur.sample.handlepathoz.java;
@@ -35,9 +35,9 @@ import java.util.List;
 import br.com.comino.sample.handlepathoz.R;
 import br.com.onimur.handlepathoz.HandlePathOz;
 import br.com.onimur.handlepathoz.HandlePathOzListener;
+import br.com.onimur.handlepathoz.model.PairPath;
 import br.com.onimur.sample.handlepathoz.kotlin.ListUriAdapter;
 import br.com.onimur.sample.handlepathoz.kotlin.ProgressDialog;
-import kotlin.Pair;
 
 import static android.content.Intent.ACTION_PICK;
 import static android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
@@ -227,7 +227,7 @@ public class MainActivity extends AppCompatActivity implements HandlePathOzListe
 
     /////////////////////////////     LISTENER HANDLE PATH OZ    ///////////////////////////////////
     @Override
-    public void onRequestHandlePathOz(@NotNull List<Pair<Integer, String>> listPath, @Nullable Throwable tr) {
+    public void onRequestHandlePathOz(@NotNull List<PairPath> listPath, @Nullable Throwable tr) {
         //Hide Progress
         if (progressLoading.isShowing() || progressCancelling.isShowing()) {
             progressLoading.dismiss();
@@ -237,7 +237,7 @@ public class MainActivity extends AppCompatActivity implements HandlePathOzListe
         //Update the adapter
         List<Uri> listUri = new ArrayList<>();
         for (int i = 0; i < listPath.size(); i++) {
-            Uri uri = Uri.parse(listPath.get(i).getSecond());
+            Uri uri = Uri.parse(listPath.get(i).getPath());
             listUri.add(uri);
         }
         realAdapter.updateListChanged(listUri);
