@@ -1,19 +1,20 @@
 /*
- * Created by Murillo Comino on 23/06/20 16:55
+ * Created by Murillo Comino on 23/06/20 16:56
  * Github: github.com/onimur
  * StackOverFlow: pt.stackoverflow.com/users/128573
  * Email: murillo_comino@hotmail.com
  *
  *  Copyright (c) 2020.
- *  Last modified 23/06/20 16:55
+ *  Last modified 23/06/20 16:56
  */
 
-package br.com.onimur.handlepathoz
+package br.com.onimur.handlepathoz.utils
 
 import android.content.Context
 import android.net.Uri
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES.KITKAT
+import br.com.onimur.handlepathoz.HandlePathOzListener
 import br.com.onimur.handlepathoz.model.PairPath
 import br.com.onimur.handlepathoz.utils.Constants.HandlePathOzConts.BELOW_KITKAT_FILE
 import br.com.onimur.handlepathoz.utils.Constants.HandlePathOzConts.CLOUD_FILE

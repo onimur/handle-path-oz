@@ -1,21 +1,23 @@
 /*
- * Created by Murillo Comino on 22/06/20 17:50
+ * Created by Murillo Comino on 23/06/20 16:56
  * Github: github.com/onimur
  * StackOverFlow: pt.stackoverflow.com/users/128573
  * Email: murillo_comino@hotmail.com
  *
  *  Copyright (c) 2020.
- *  Last modified 21/06/20 20:55
+ *  Last modified 23/06/20 16:56
  */
 
 package br.com.onimur.handlepathoz
 
 import android.content.Context
 import android.net.Uri
+import br.com.onimur.handlepathoz.utils.HandlePathOzUtils
 import kotlinx.coroutines.FlowPreview
 
 class HandlePathOz(context: Context, listener: HandlePathOzListener) {
-    private val handlePathOzUtils = HandlePathOzUtils(context, listener)
+    private val handlePathOzUtils =
+        HandlePathOzUtils(context, listener)
 
     /**
      *
