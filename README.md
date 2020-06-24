@@ -1,81 +1,130 @@
 # 📚 Handle Path Oz
 
-
 <p align="center">
-    <a href="https://bintray.com/onimur/handle-path-oz/HandlePathOz" title="Bintray"><img src="https://img.shields.io/bintray/v/onimur/handle-path-oz/HandlePathOz?label=Bintray"></a>
-    <a title="API 16+"><img src="https://img.shields.io/badge/API-16%2B-orange"></a>
-    <a href="./LICENSE" title="License"><img src="https://img.shields.io/github/license/onimur/handle-path-oz?label=License"></a>
-    <a href="https://app.circleci.com/pipelines/github/onimur/handle-path-oz" title="onimur"><img src="https://circleci.com/gh/onimur/handle-path-oz.svg?style=shield"></a>
-
-    
+    <a href="https://bintray.com/onimur/handle-path-oz/HandlePathOz/_latestVersion" title="Bintray"><img src="https://img.shields.io/bintray/v/onimur/handle-path-oz/HandlePathOz?label=bintray"></a>
+    <a title="API 16+"><img src="https://img.shields.io/badge/API-16%2B-orange?logo=android&logoColor=white"></a>
+    <a href="https://raw.githubusercontent.com/onimur/handle-path-oz/master/LICENSE" title="License"><img src="https://img.shields.io/github/license/onimur/handle-path-oz?label=License&logo=Apache&logoColor=white"></a>
+    <a href="https://app.circleci.com/pipelines/github/onimur/handle-path-oz" title="onimur"><img src="https://img.shields.io/circleci/build/github/onimur/handle-path-oz?label=circleci&logo=CircleCI&logoColor=white"></a>
+    <a href="https://play.google.com/store/apps/details?id=br.com.onimur.sample.handlepathoz" title="HandlePathOz"><img src="https://img.shields.io/badge/GooglePlay-SampleApp-yellow?logo=google%20play&logoColor=white"></a>
 </p>
 
 Android Library to handle multiple Uri(paths) received through Intents.
 
-![](.gitresources/logo_git.png)
-
-
-## 📱 Sample Application
-
-<details>
-  <summary markdown="span"> 🌱 Download Release </summary>
-  
-  You can download the sample application with the latest release [here](https://github.com/onimur/handle-path-oz/raw/master/app/build/outputs/apk/release/HandlePathOZ.apk).
-
-   ---
-  </details>
-  
-  <details>
-    <summary markdown="span"> 🌱 Install by Google Play  </summary>
-    
-   <p align="left">
-   <a href="https://play.google.com/store/apps/details?id=br.com.onimur.sample.handlepathoz" target="_blank">
-   <img width="25%" alt="Check HandlePathOz on Google Play" src="https://play.google.com/intl/en_gb/badges/static/images/badges/en_badge_web_generic.png"/>
-   </a>
-   </p>
- 
-   </details>
-    
+[](https://raw.githubusercontent.com/onimur/handle-path-oz/master/.gitresources/logo_git.png)
 
 ## 💞 Support us
+
 We are developing this structure in the open source community without financial planning.
 If you like this project and would like to help us, make a donation:
 
-   <p align="center">
-   <a href="https://www.patreon.com/onimur" target="_blank">
-   <img width="30%" alt="Check my Patreon" src="./.gitresources/support-patreon.png"/>
-   </a>
-   <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=YUTBBKXR2XCPJ" target="_blank">
-   <img width="30%" alt="Donate with Paypal" src=".gitresources/support-paypal.png"/>
-   </a>
-   </p>
+<p align="center">
+<a href="https://www.patreon.com/onimur" target="_blank">
+<img width="30%" alt="Check my Patreon" src="https://raw.githubusercontent.com/onimur/handle-path-oz/master/.gitresources/support-patreon.png"/>
+</a>
+<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=YUTBBKXR2XCPJ" target="_blank">
+<img width="30%" alt="Donate with Paypal" src="https://raw.githubusercontent.com/onimur/handle-path-oz/master/.gitresources/support-paypal.png"/>
+</a>
+</p>
+
+## 📝 Content
+
+- [Sample application](https://github.com/onimur/handle-path-oz#-sample-application)
+    - [Download release](https://github.com/onimur/handle-path-oz#-download-release)
+    - [Install by GooglePlay](https://github.com/onimur/handle-path-oz#-install-by-googleplay)
+- [Config](https://github.com/onimur/handle-path-oz#-config)
+    - [Gradle](https://github.com/onimur/handle-path-oz#-gradle)
+    - [Maven](https://github.com/onimur/handle-path-oz#-maven)
+    - [Ivy](https://github.com/onimur/handle-path-oz#-ivy)
+- [Getting start](https://github.com/onimur/handle-path-oz#-getting-start)
+    - [Kotlin](https://github.com/onimur/handle-path-oz#-kotlin)
+        - [Initialization](https://github.com/onimur/handle-path-oz#-initialization)
+        - [Controller](https://github.com/onimur/handle-path-oz#-controller)
+        - [Cloud files and Unknown Providers](https://github.com/onimur/handle-path-oz#-cloud-files-and-unknown-providers)
+        - [Cancel the tasks](https://github.com/onimur/handle-path-oz#-cancel-the-tasks)
+    - [Java](https://github.com/onimur/handle-path-oz#-java)
+        - [Initialization](https://github.com/onimur/handle-path-oz#-initialization-1)
+        - [Controller](https://github.com/onimur/handle-path-oz#-controller-1)
+        - [Cloud files and Unknown Providers](https://github.com/onimur/handle-path-oz#-cloud-files-and-unknown-providers-1)
+        - [Cancel the tasks](https://github.com/onimur/handle-path-oz#-cancel-the-tasks-1)
+- [Main features](https://github.com/onimur/handle-path-oz#-main-features)
+- [Built with](https://github.com/onimur/handle-path-oz#-built-with)
+- [Contributing](https://github.com/onimur/handle-path-oz#-contributing)
+- [License](https://github.com/onimur/handle-path-oz#-license)
+
+## 📱 Sample application
+
+### 🌱 Download release
+  
+You can download the sample application with the latest release [here](https://github.com/onimur/handle-path-oz/raw/master/app/build/outputs/apk/release/HandlePathOZ.apk).
+
+### 🌱 Install by GooglePlay 
+
+Check the Sample App on GooglePlay
+
+<p align="left">
+<a href="https://play.google.com/store/apps/details?id=br.com.onimur.sample.handlepathoz" target="_blank">
+<img width="25%" alt="Check HandlePathOz on Google Play" src="https://play.google.com/intl/en_gb/badges/static/images/badges/en_badge_web_generic.png"/>
+</a>
+</p>
 
 ## 🛠️ Config
-  In build.gradle(Module: app) within dependencies, implement:
+
+First check the latest [version](https://bintray.com/onimur/handle-path-oz/HandlePathOz/_latestVersion).
+
+### Gradle
+
+In build.gradle(Module:app) within dependencies, implement:
       
 ```kotlin
-       implementation 'br.com.onimur:handle-path-oz:1.0.1'
+
+       implementation 'br.com.onimur:handle-path-oz:1.0.3'
+
 ```
+
+### Maven
+
+```
+
+<dependency>
+  <groupId>br.com.onimur</groupId>
+  <artifactId>handle-path-oz</artifactId>
+  <version>1.0.3</version>
+  <type>pom</type>
+</dependency>
+
+```
+
+### Ivy
+
+```
+
+<dependency org='br.com.onimur' name='handle-path-oz' rev='1.0.3'>
+  <artifact name='handle-path-oz' ext='pom' ></artifact>
+</dependency>
+
+```
+
+## 💡 Getting start
+
+### 🎲 Kotlin
   
-## 💡 Getting Start
-<details>
-  <summary markdown="span">🎲 Kotlin </summary>
-  
-  ### 💫 Initialization
-  1.1 - In Kotlin for the implementation of the Listener you can implement it within the scope of the class, as shown below, or also as shown in item **1.2**:
+#### 💫 Initialization
+
+1.1 - In Kotlin for the implementation of the Listener you can implement it within the scope of the class, as shown below, or also as shown in item **1.2**:
  
 ```kotlin
+
   class MainActivity : AppCompatActivity(), HandlePathOzListener {
    //...
    }
+
 ```
   
-  `Alt+Enter` to implement the methods, we will discuss the methods later in the topic **Controller**.
-  
-  Implement handlePathOz in your `onCreate()` method, as shown below:
-  
+`Alt+Enter` to implement the methods, we will discuss the methods later in the topic **Controller**.
+Implement handlePathOz in your `onCreate()` method, as shown below:
   
 ```kotlin
+
     private lateinit var handlePathOz: HandlePathOz
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -83,13 +132,14 @@ If you like this project and would like to help us, make a donation:
         //Initialize HandlePathOz
         //context, listener
         handlePathOz = HandlePathOz(this, this)
-        
     }
+
 ```
 
-  1.2 - You can also implement the Listener when initializing the class, without having to implement it within the scope of the class:
+1.2 - You can also implement the Listener when initializing the class, without having to implement it within the scope of the class:
   
 ```kotlin
+
       private lateinit var handlePathOz: HandlePathOz
       private val listener = object: HandlePathOzListener{
       //implement methods
@@ -100,14 +150,14 @@ If you like this project and would like to help us, make a donation:
           //Initialize HandlePathOz
           //context, listener
           handlePathOz = HandlePathOz(this, listener)
-          
       }
-```
 
+```
      
-   2 - After selecting the desired files (The sample application has the entire step) in ```onActivityResult``` leave as follows:
+2 - After selecting the desired files (The sample application has the entire step) in ```onActivityResult``` leave as follows:
   
 ```kotlin
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if ((requestCode == REQUEST_OPEN_GALLERY) and (resultCode == Activity.RESULT_OK)) {
@@ -127,12 +177,15 @@ If you like this project and would like to help us, make a donation:
             //show Progress Loading
         }
     }
+
 ```
   
-  ### 🎮 Controller
-  We have two methods in the listeners, one of which is optional:
+#### 🎮 Controller
+
+We have two methods in the listeners, one of which is optional:
   
 ```kotlin
+
       //On Completion (Sucess or Error)
       //If there is a cancellation or error, the entire task that was handled will be returned in the list.
       override fun onRequestHandlePathOz(listPath: List<PairPath>, tr: Throwable?) {
@@ -151,57 +204,60 @@ If you like this project and would like to help us, make a donation:
           //Update UI with the current Uri
           //progressLoading.setText = "${currentUri}/${listUri.size}"
       }
+
 ```
 
-  ### ☁️ Cloud files and Unknown Providers
+ #### ☁️ Cloud files and Unknown Providers
   
-  If the selected file was from Dropbox,Google Drive, OneDrive or an unknown file provider, it will then be copied/created in
-  InternalStorage/Android/data/your.package.name/files/Temp/sameFileNameAndExtension
-  
-  When you want to delete the generated files call:
+If the selected file was from Dropbox,Google Drive, OneDrive or an unknown file provider, it will then be copied/created in
+InternalStorage/Android/data/your.package.name/files/Temp/sameFileNameAndExtension
+When you want to delete the generated files call:
   
 ```kotlin
+
    handlePathOz.deleteTemporaryFiles()
+
 ```
   
+#### 💣 Cancel the tasks
   
-  ### 💣 Cancel the tasks
+There are two methods for canceling tasks, ```cancelTask()``` and ```onDestroy()```.
   
-  There are two methods for canceling tasks, ```cancelTask()``` and ```onDestroy()```.
+**handlePathOz.cancelTask() ->** Can be called as a button action for canceling or by progressBar (As shown in the demo application).
+In the cancellation of the task by this method, all Uri that was treated will be passed in the ```onRequestHandlePathOz()``` method.
   
-  **handlePathOz.cancelTask() ->** Can be called as a button action for canceling or by progressBar (As shown in the demo application).
-  In the cancellation of the task by this method, all Uri that was treated will be passed in the ```onRequestHandlePathOz()``` method.
+**handlePathOz.onDestroy() ->**  It can be called with the Activity or fragment's  ```onDestroy()``` method. 
+This method destroys the task and its cancellation does not update anything and cannot be restarted.
+Example of use:
   
-  **handlePathOz.onDestroy() ->**  It can be called with the Activity or fragment's  ```onDestroy()``` method. 
-  This method destroys the task and its cancellation does not update anything and cannot be restarted.
-  Example of use:
 ```kotlin
+
     override fun onDestroy() {
         handlePathOz.onDestroy()
         //You can delete the temporary files here as well.
         super.onDestroy()
     }
-```
-  
-  ---
-  
-</details>
 
-<details>
-  <summary markdown="span">🎲 Java</summary>
+```
+
+---
+
+### 🎲 Java
   
-  ### 💫 Initialization
-  The implementation of the Listener you can implement it within the scope of the class, as shown below:
+#### 💫 Initialization
+
+The implementation of the Listener you can implement it within the scope of the class, as shown below:
   
 ```java
+
      public class MainActivity extends AppCompatActivity implements HandlePathOzListener {
       //
       }
+
 ```
 
-  `Alt+Enter` to implement the methods, we will discuss the methods later in the topic **Controller**.
-  
-  Implement handlePathOz in your `onCreate()` method, as shown below:
+`Alt+Enter` to implement the methods, we will discuss the methods later in the topic **Controller**.
+Implement handlePathOz in your `onCreate()` method, as shown below:
   
 ```java
 
@@ -215,7 +271,6 @@ If you like this project and would like to help us, make a donation:
         //Initialize HandlePathOz
         //context, listener
         handlePathOz = HandlePathOz(this, this)
-
     }
 
 ```
@@ -223,6 +278,7 @@ If you like this project and would like to help us, make a donation:
 After selecting the desired files (The sample application has the entire step) in ```onActivityResult``` leave as follows:
   
 ```java
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -247,12 +303,12 @@ After selecting the desired files (The sample application has the entire step) i
 
 ```
   
+#### 🎮 Controller
   
-  ### 🎮 Controller
-  
-    We have two methods in the listeners, one of which is optional:
+We have two methods in the listeners, one of which is optional:
     
 ```java
+
         //On Completion (Sucess or Error)
         //If there is a cancellation or error, the entire task that was handled will be returned in the list.
        @Override
@@ -282,28 +338,28 @@ After selecting the desired files (The sample application has the entire step) i
 
 ```
 
- ### ☁️ Cloud files and Unknown Providers
+#### ☁️ Cloud files and Unknown Providers
   
-  If the selected file was from Dropbox,Google Drive, OneDrive or an unknown file provider, it will then be copied/created in
-  InternalStorage/Android/data/your.package.name/files/Temp/sameFileNameAndExtension
-  
-  When you want to delete the generated files call:
+If the selected file was from Dropbox,Google Drive, OneDrive or an unknown file provider, it will then be copied/created in
+InternalStorage/Android/data/your.package.name/files/Temp/sameFileNameAndExtension
+When you want to delete the generated files call:
   
 ```java
+
    handlePathOz.deleteTemporaryFiles()
+
 ```
   
+#### 💣 Cancel the tasks
   
-  ### 💣 Cancel the tasks
+There are two methods for canceling tasks, ```cancelTask()``` and ```onDestroy()```.
   
-  There are two methods for canceling tasks, ```cancelTask()``` and ```onDestroy()```.
+**handlePathOz.cancelTask() ->** Can be called as a button action for canceling or by progressBar (As shown in the demo application).
+In the cancellation of the task by this method, all Uri that was treated will be passed in the ```onRequestHandlePathOz()``` method.
   
-  **handlePathOz.cancelTask() ->** Can be called as a button action for canceling or by progressBar (As shown in the demo application).
-  In the cancellation of the task by this method, all Uri that was treated will be passed in the ```onRequestHandlePathOz()``` method.
-  
-  **handlePathOz.onDestroy() ->**  It can be called with the Activity or fragment's  ```onDestroy()``` method. 
-  This method destroys the task and its cancellation does not update anything and cannot be restarted.
-  Example of use:
+**handlePathOz.onDestroy() ->**  It can be called with the Activity or fragment's  ```onDestroy()``` method. 
+This method destroys the task and its cancellation does not update anything and cannot be restarted.
+Example of use:
   
 ```java
 
@@ -313,27 +369,25 @@ After selecting the desired files (The sample application has the entire step) i
         //You can delete the temporary files here as well.
         super.onDestroy();
     }
+
 ```
   
-  ---
-  
-</details>
+## 🔍 Main features
 
-## 🔍 Main Features
 - [Kotlin Coroutines/Flow](https://kotlinlang.org/docs/reference/coroutines-overview.html) 
 - Parse Uri
 - Multiple tasks in parallel
 
-## 📐 Built With
+## 📐 Built with
+
   * [Android Studio 4.0](https://developer.android.com/studio)
   
-  
 ## 🧩 Contributing
-  This project is open-source, so feel free to fork, or to share your ideas and changes to improve the project. 
- 
+
+This project is open-source, so feel free to fork, or to share your ideas and changes to improve the project. 
 
 ## 📃 License
- 
+
     Copyright (c) 2020, HandlePathOz.
 
     Licensed under the Apache License, Version 2.0 (the "License");
@@ -348,4 +402,4 @@ After selecting the desired files (The sample application has the entire step) i
     See the License for the specific language governing permissions and
     limitations under the License.
 
-  * [Apache License 2.0](LICENSE)
+  * [Apache License 2.0](https://raw.githubusercontent.com/onimur/handle-path-oz/master/LICENSE)
