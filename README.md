@@ -22,7 +22,7 @@ Android Library to handle multiple Uri(paths) received through Intents.
 
 <p align="center">
     <a title="HandlePathOz">
-        <img width="30%" src="https://raw.githubusercontent.com/onimur/handle-path-oz/master/.gitresources/logo_git.png">
+        <img width="75%" src="https://raw.githubusercontent.com/onimur/handle-path-oz/master/.gitresources/logo_git.png">
     </a>
 </p>
 
