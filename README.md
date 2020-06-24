@@ -1,16 +1,30 @@
 # 📚 Handle Path Oz
 
 <p align="center">
-    <a href="https://bintray.com/onimur/handle-path-oz/HandlePathOz/_latestVersion" title="Bintray"><img src="https://img.shields.io/bintray/v/onimur/handle-path-oz/HandlePathOz?label=bintray"></a>
-    <a title="API 16+"><img src="https://img.shields.io/badge/API-16%2B-orange?logo=android&logoColor=white"></a>
-    <a href="https://raw.githubusercontent.com/onimur/handle-path-oz/master/LICENSE" title="License"><img src="https://img.shields.io/github/license/onimur/handle-path-oz?label=License&logo=Apache&logoColor=white"></a>
-    <a href="https://app.circleci.com/pipelines/github/onimur/handle-path-oz" title="onimur"><img src="https://img.shields.io/circleci/build/github/onimur/handle-path-oz?label=circleci&logo=CircleCI&logoColor=white"></a>
-    <a href="https://play.google.com/store/apps/details?id=br.com.onimur.sample.handlepathoz" title="HandlePathOz"><img src="https://img.shields.io/badge/GooglePlay-SampleApp-yellow?logo=google%20play&logoColor=white"></a>
+    <a href="https://bintray.com/onimur/handle-path-oz/HandlePathOz/_latestVersion" title="Bintray">
+        <img src="https://img.shields.io/bintray/v/onimur/handle-path-oz/HandlePathOz?label=bintray">
+    </a>
+    <a title="API 16+">
+        <img src="https://img.shields.io/badge/API-16%2B-orange?logo=android&logoColor=white">
+    </a>
+    <a href="https://raw.githubusercontent.com/onimur/handle-path-oz/master/LICENSE" title="License">
+        <img src="https://img.shields.io/github/license/onimur/handle-path-oz?label=License&logo=Apache&logoColor=white">
+    </a>
+    <a href="https://app.circleci.com/pipelines/github/onimur/handle-path-oz" title="onimur">
+        <img src="https://img.shields.io/circleci/build/github/onimur/handle-path-oz?label=circleci&logo=CircleCI&logoColor=white">
+    </a>
+    <a href="https://play.google.com/store/apps/details?id=br.com.onimur.sample.handlepathoz" title="HandlePathOz">
+        <img src="https://img.shields.io/badge/GooglePlay-SampleApp-yellow?logo=google%20play&logoColor=white">
+    </a>
 </p>
 
 Android Library to handle multiple Uri(paths) received through Intents.
 
-[](https://raw.githubusercontent.com/onimur/handle-path-oz/master/.gitresources/logo_git.png)
+<p align="center">
+    <a title="HandlePathOz">
+        <img width="30%" src="https://raw.githubusercontent.com/onimur/handle-path-oz/master/.gitresources/logo_git.png">
+    </a>
+</p>
 
 ## 💞 Support us
 
@@ -18,34 +32,21 @@ We are developing this structure in the open source community without financial 
 If you like this project and would like to help us, make a donation:
 
 <p align="center">
-<a href="https://www.patreon.com/onimur" target="_blank">
-<img width="30%" alt="Check my Patreon" src="https://raw.githubusercontent.com/onimur/handle-path-oz/master/.gitresources/support-patreon.png"/>
-</a>
-<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=YUTBBKXR2XCPJ" target="_blank">
-<img width="30%" alt="Donate with Paypal" src="https://raw.githubusercontent.com/onimur/handle-path-oz/master/.gitresources/support-paypal.png"/>
-</a>
+    <a href="https://www.patreon.com/onimur" target="_blank">
+        <img width="30%" alt="Check my Patreon" src="https://raw.githubusercontent.com/onimur/handle-path-oz/master/.gitresources/support-patreon.png"/>
+    </a>
+    <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=YUTBBKXR2XCPJ" target="_blank">
+        <img width="30%" alt="Donate with Paypal" src="https://raw.githubusercontent.com/onimur/handle-path-oz/master/.gitresources/support-paypal.png"/>
+    </a>
 </p>
 
 ## 📝 Content
 
 - [Sample application](https://github.com/onimur/handle-path-oz#-sample-application)
-    - [Download release](https://github.com/onimur/handle-path-oz#-download-release)
-    - [Install by GooglePlay](https://github.com/onimur/handle-path-oz#-install-by-googleplay)
-- [Config](https://github.com/onimur/handle-path-oz#-config)
-    - [Gradle](https://github.com/onimur/handle-path-oz#-gradle)
-    - [Maven](https://github.com/onimur/handle-path-oz#-maven)
-    - [Ivy](https://github.com/onimur/handle-path-oz#-ivy)
+- [Config](https://github.com/onimur/handle-path-oz#%EF%B8%8F-config)
 - [Getting start](https://github.com/onimur/handle-path-oz#-getting-start)
     - [Kotlin](https://github.com/onimur/handle-path-oz#-kotlin)
-        - [Initialization](https://github.com/onimur/handle-path-oz#-initialization)
-        - [Controller](https://github.com/onimur/handle-path-oz#-controller)
-        - [Cloud files and Unknown Providers](https://github.com/onimur/handle-path-oz#-cloud-files-and-unknown-providers)
-        - [Cancel the tasks](https://github.com/onimur/handle-path-oz#-cancel-the-tasks)
     - [Java](https://github.com/onimur/handle-path-oz#-java)
-        - [Initialization](https://github.com/onimur/handle-path-oz#-initialization-1)
-        - [Controller](https://github.com/onimur/handle-path-oz#-controller-1)
-        - [Cloud files and Unknown Providers](https://github.com/onimur/handle-path-oz#-cloud-files-and-unknown-providers-1)
-        - [Cancel the tasks](https://github.com/onimur/handle-path-oz#-cancel-the-tasks-1)
 - [Main features](https://github.com/onimur/handle-path-oz#-main-features)
 - [Built with](https://github.com/onimur/handle-path-oz#-built-with)
 - [Contributing](https://github.com/onimur/handle-path-oz#-contributing)
@@ -62,9 +63,9 @@ You can download the sample application with the latest release [here](https://g
 Check the Sample App on GooglePlay
 
 <p align="left">
-<a href="https://play.google.com/store/apps/details?id=br.com.onimur.sample.handlepathoz" target="_blank">
-<img width="25%" alt="Check HandlePathOz on Google Play" src="https://play.google.com/intl/en_gb/badges/static/images/badges/en_badge_web_generic.png"/>
-</a>
+    <a href="https://play.google.com/store/apps/details?id=br.com.onimur.sample.handlepathoz" target="_blank">
+        <img width="25%" alt="Check HandlePathOz on Google Play" src="https://play.google.com/intl/en_gb/badges/static/images/badges/en_badge_web_generic.png"/>
+    </a>
 </p>
 
 ## 🛠️ Config
