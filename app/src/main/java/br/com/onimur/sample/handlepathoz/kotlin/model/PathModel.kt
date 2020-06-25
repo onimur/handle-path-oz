@@ -1,11 +1,11 @@
 /*
- * Created by Murillo Comino on 24/06/20 21:13
+ * Created by Murillo Comino on 24/06/20 21:16
  * Github: github.com/onimur
  * StackOverFlow: pt.stackoverflow.com/users/128573
  * Email: murillo_comino@hotmail.com
  *
  *  Copyright (c) 2020.
- *  Last modified 24/06/20 21:01
+ *  Last modified 24/06/20 21:14
  */
 
 package br.com.onimur.sample.handlepathoz.kotlin.model
