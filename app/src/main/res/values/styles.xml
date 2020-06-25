@@ -1,21 +1,20 @@
 <!--
-  ~ Created by Murillo Comino on 17/06/20 13:18
+  ~ Created by Murillo Comino on 24/06/20 21:13
   ~ Github: github.com/onimur
   ~ StackOverFlow: pt.stackoverflow.com/users/128573
   ~ Email: murillo_comino@hotmail.com
   ~
   ~  Copyright (c) 2020.
-  ~  Last modified 03/06/20 18:50
+  ~  Last modified 24/06/20 19:29
   -->
 
 <resources>
-
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/navy_700</item>
+        <item name="colorPrimaryVariant">@color/navy_900</item>
+        <item name="colorSecondary">@color/green_300</item>
+        <item name="colorSecondaryVariant">@color/green_500</item>
     </style>
-
 </resources>

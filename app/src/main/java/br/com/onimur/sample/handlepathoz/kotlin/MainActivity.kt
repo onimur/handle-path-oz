@@ -1,11 +1,11 @@
 /*
- * Created by Murillo Comino on 23/06/20 17:11
+ * Created by Murillo Comino on 24/06/20 21:13
  * Github: github.com/onimur
  * StackOverFlow: pt.stackoverflow.com/users/128573
  * Email: murillo_comino@hotmail.com
  *
  *  Copyright (c) 2020.
- *  Last modified 23/06/20 16:55
+ *  Last modified 24/06/20 21:01
  */
 
 package br.com.onimur.sample.handlepathoz.kotlin
@@ -32,6 +32,8 @@ import br.com.onimur.handlepathoz.HandlePathOz
 import br.com.onimur.handlepathoz.HandlePathOzListener
 import br.com.onimur.handlepathoz.model.PairPath
 import br.com.onimur.handlepathoz.utils.extension.getListUri
+import br.com.onimur.sample.handlepathoz.kotlin.adapter.RealPathAdapter
+import br.com.onimur.sample.handlepathoz.kotlin.model.PathModel
 import kotlinx.coroutines.FlowPreview
 
 class MainActivity : AppCompatActivity(R.layout.activity_main), HandlePathOzListener {
@@ -45,8 +47,8 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), HandlePathOzList
     private lateinit var buttonOpen: Button
     private lateinit var rvOriginal: RecyclerView
     private lateinit var rvReal: RecyclerView
-    private lateinit var originalAdapter: ListUriAdapter
-    private lateinit var realAdapter: ListUriAdapter
+    private lateinit var originalAdapter: RealPathAdapter
+    private lateinit var realAdapter: RealPathAdapter
     private lateinit var progressLoading: ProgressDialog
     private lateinit var progressCancelling: ProgressDialog
     private lateinit var handlePathOz: HandlePathOz
@@ -85,8 +87,14 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), HandlePathOzList
     }
 
     private fun initAdapter() {
-        originalAdapter = ListUriAdapter(ArrayList())
-        realAdapter = ListUriAdapter(ArrayList())
+        originalAdapter =
+            RealPathAdapter(
+                ArrayList()
+            )
+        realAdapter =
+            RealPathAdapter(
+                ArrayList()
+            )
     }
 
     private fun initProgressBar() {
@@ -200,7 +208,15 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), HandlePathOzList
             //This extension retrieves the path of all selected files without treatment.
             listUri = data.getListUri()
             //Update the adapter
-            originalAdapter.updateListChanged(listUri)
+
+            originalAdapter.updateListChanged(listUri.map {
+                PathModel(
+                    PairPath(
+                        "unknown",
+                        it.path.toString()
+                    )
+                )
+            })
 
             //set list of the Uri to handle
             //in concurrency use:
@@ -243,7 +259,9 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), HandlePathOzList
             progressCancelling.dismiss()
         }
         //Update the adapter
-        realAdapter.updateListChanged(listPath.map { uri -> Uri.parse(uri.path) })
+        realAdapter.updateListChanged(listPath.map { pairPath ->
+            PathModel(pairPath)
+        })
 
         //Handle Exception (Optional)
         tr?.let {

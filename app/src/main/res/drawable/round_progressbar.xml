@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Created by Murillo Comino on 17/06/20 13:18
+  ~ Created by Murillo Comino on 24/06/20 21:13
   ~ Github: github.com/onimur
   ~ StackOverFlow: pt.stackoverflow.com/users/128573
   ~ Email: murillo_comino@hotmail.com
   ~
   ~  Copyright (c) 2020.
-  ~  Last modified 13/06/20 23:29
+  ~  Last modified 24/06/20 19:55
   -->
 
 <shape android:shape="rectangle" xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="@color/colorWhite" />
+    <solid android:color="@color/white" />
     <corners android:radius="12dp"/>
 
 </shape>

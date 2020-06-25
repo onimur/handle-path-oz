@@ -1,11 +1,11 @@
 /*
- * Created by Murillo Comino on 23/06/20 17:11
+ * Created by Murillo Comino on 24/06/20 21:13
  * Github: github.com/onimur
  * StackOverFlow: pt.stackoverflow.com/users/128573
  * Email: murillo_comino@hotmail.com
  *
  *  Copyright (c) 2020.
- *  Last modified 23/06/20 16:55
+ *  Last modified 24/06/20 21:01
  */
 
 package br.com.onimur.sample.handlepathoz.java;
@@ -31,13 +31,15 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import br.com.comino.sample.handlepathoz.R;
 import br.com.onimur.handlepathoz.HandlePathOz;
 import br.com.onimur.handlepathoz.HandlePathOzListener;
 import br.com.onimur.handlepathoz.model.PairPath;
-import br.com.onimur.sample.handlepathoz.kotlin.ListUriAdapter;
+import br.com.onimur.sample.handlepathoz.kotlin.model.PathModel;
 import br.com.onimur.sample.handlepathoz.kotlin.ProgressDialog;
+import br.com.onimur.sample.handlepathoz.kotlin.adapter.RealPathAdapter;
 
 import static android.content.Intent.ACTION_PICK;
 import static android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
@@ -53,8 +55,8 @@ public class MainActivity extends AppCompatActivity implements HandlePathOzListe
     private Button buttonOpen;
     private RecyclerView rvOriginal;
     private RecyclerView rvReal;
-    private ListUriAdapter originalAdapter;
-    private ListUriAdapter realAdapter;
+    private RealPathAdapter originalAdapter;
+    private RealPathAdapter realAdapter;
     private ProgressDialog progressLoading;
     private ProgressDialog progressCancelling;
     private HandlePathOz handlePathOz;
@@ -93,8 +95,8 @@ public class MainActivity extends AppCompatActivity implements HandlePathOzListe
     }
 
     private void initAdapter() {
-        originalAdapter = new ListUriAdapter(new ArrayList<>());
-        realAdapter = new ListUriAdapter(new ArrayList<>());
+        originalAdapter = new RealPathAdapter(new ArrayList<>());
+        realAdapter = new RealPathAdapter(new ArrayList<>());
     }
 
     private void initProgressBar() {
@@ -192,7 +194,14 @@ public class MainActivity extends AppCompatActivity implements HandlePathOzListe
             //This extension retrieves the path of all selected files without treatment.
             listUri = getListUri(data);
             //Update the adapter
-            originalAdapter.updateListChanged(listUri);
+            List<PathModel> listPath = new ArrayList<>();
+            for (int i = 0; i < listUri.size(); i++) {
+                String path = listUri.get(i).getPath();
+                PairPath pairPath = new PairPath("unknown", Objects.requireNonNull(path));
+                PathModel pathModel = new PathModel(pairPath);
+                listPath.add(pathModel);
+            }
+            originalAdapter.updateListChanged(listPath);
 
             //set list of the Uri to handle
             //in concurrency use:
@@ -235,12 +244,13 @@ public class MainActivity extends AppCompatActivity implements HandlePathOzListe
         }
 
         //Update the adapter
-        List<Uri> listUri = new ArrayList<>();
+        List<PathModel> listPathModel = new ArrayList<>();
         for (int i = 0; i < listPath.size(); i++) {
-            Uri uri = Uri.parse(listPath.get(i).getPath());
-            listUri.add(uri);
+            PairPath pairPath = listPath.get(i);
+            PathModel pathModel = new PathModel(pairPath);
+            listPathModel.add(pathModel);
         }
-        realAdapter.updateListChanged(listUri);
+        realAdapter.updateListChanged(listPathModel);
 
         //Handle Exception (Optional)
         if (tr != null) {

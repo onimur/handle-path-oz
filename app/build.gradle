@@ -1,11 +1,11 @@
 /*
- * Created by Murillo Comino on 22/06/20 17:50
+ * Created by Murillo Comino on 24/06/20 21:13
  * Github: github.com/onimur
  * StackOverFlow: pt.stackoverflow.com/users/128573
  * Email: murillo_comino@hotmail.com
  *
  *  Copyright (c) 2020.
- *  Last modified 22/06/20 16:27
+ *  Last modified 24/06/20 19:09
  */
 
 apply plugin: 'com.android.application'
@@ -58,8 +58,12 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.cardview:cardview:1.0.0'
     //Coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.7'
+
+    //Material
+    implementation 'com.google.android.material:material:1.1.0'
 
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
