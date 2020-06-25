@@ -54,6 +54,10 @@ If you like this project and would like to help us, make a donation:
 
 ## 📱 Sample application
 
+<p align="center">
+    <img alt="Sample App" src="https://raw.githubusercontent.com/onimur/handle-path-oz/master/.gitresources/sample.gif"/>
+</p>
+
 ### 🌱 Download release
   
 You can download the sample application with the latest release [here](https://github.com/onimur/handle-path-oz/raw/master/app/build/outputs/apk/release/HandlePathOZ.apk).
