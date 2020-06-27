@@ -1,11 +1,11 @@
 /*
- * Created by Murillo Comino on 27/06/20 16:53
+ * Created by Murillo Comino on 27/06/20 17:01
  * Github: github.com/onimur
  * StackOverFlow: pt.stackoverflow.com/users/128573
  * Email: murillo_comino@hotmail.com
  *
  *  Copyright (c) 2020.
- *  Last modified 27/06/20 16:53
+ *  Last modified 27/06/20 17:00
  */
 
 apply plugin: 'com.jfrog.bintray'
@@ -35,10 +35,10 @@ version = libVersionName
 
 Properties secret = new Properties()
 File secretFile = project.rootProject.file('secret.properties')
+//for circleCi
 if (secretFile.exists()){
     secret.load(secretFile.newDataInputStream())
-} else {
-    secret = null
+
 }
 
 bintray {
