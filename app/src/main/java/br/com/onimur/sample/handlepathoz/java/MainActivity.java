@@ -1,11 +1,11 @@
 /*
- * Created by Murillo Comino on 24/06/20 21:13
+ * Created by Murillo Comino on 27/06/20 17:03
  * Github: github.com/onimur
  * StackOverFlow: pt.stackoverflow.com/users/128573
  * Email: murillo_comino@hotmail.com
  *
  *  Copyright (c) 2020.
- *  Last modified 24/06/20 21:01
+ *  Last modified 27/06/20 17:02
  */
 
 package br.com.onimur.sample.handlepathoz.java;
@@ -37,9 +37,9 @@ import br.com.comino.sample.handlepathoz.R;
 import br.com.onimur.handlepathoz.HandlePathOz;
 import br.com.onimur.handlepathoz.HandlePathOzListener;
 import br.com.onimur.handlepathoz.model.PairPath;
-import br.com.onimur.sample.handlepathoz.kotlin.model.PathModel;
 import br.com.onimur.sample.handlepathoz.kotlin.ProgressDialog;
 import br.com.onimur.sample.handlepathoz.kotlin.adapter.RealPathAdapter;
+import br.com.onimur.sample.handlepathoz.kotlin.model.PathModel;
 
 import static android.content.Intent.ACTION_PICK;
 import static android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI;

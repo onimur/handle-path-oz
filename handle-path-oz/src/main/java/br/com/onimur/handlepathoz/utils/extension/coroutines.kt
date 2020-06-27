@@ -1,17 +1,20 @@
 /*
- * Created by Murillo Comino on 22/06/20 17:50
+ * Created by Murillo Comino on 27/06/20 17:03
  * Github: github.com/onimur
  * StackOverFlow: pt.stackoverflow.com/users/128573
  * Email: murillo_comino@hotmail.com
  *
  *  Copyright (c) 2020.
- *  Last modified 21/06/20 20:02
+ *  Last modified 27/06/20 17:02
  */
 
 package br.com.onimur.handlepathoz.utils.extension
 
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Default
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
+import kotlinx.coroutines.withContext
 
 /**
  * Create a list objects from an object list.
