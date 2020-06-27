@@ -34,9 +34,6 @@ captures/
 .externalNativeBuild
 
 # Person files
-google-services.json
-*.jks
-*.p12
-*.keystore
 .coverage/
 .exclude/
+secret.properties

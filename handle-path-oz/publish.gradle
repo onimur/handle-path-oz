@@ -1,49 +1,82 @@
 /*
- * Created by Murillo Comino on 23/06/20 10:56
+ * Created by Murillo Comino on 27/06/20 16:35
  * Github: github.com/onimur
  * StackOverFlow: pt.stackoverflow.com/users/128573
  * Email: murillo_comino@hotmail.com
  *
  *  Copyright (c) 2020.
- *  Last modified 23/06/20 10:56
+ *  Last modified 27/06/20 16:34
  */
 
 apply plugin: 'com.jfrog.bintray'
 
-group 'br.com.onimur'
-version = libraryVersionName
+Properties libProp = new Properties()
+libProp.load(project.rootProject.file('lib.properties').newDataInputStream())
+
+def libUrl = libProp.getProperty('libUrl')
+def libName = libProp.getProperty('libName')
+def libRepoName = libProp.getProperty('libRepoName')
+def libDesc = libProp.getProperty('libDesc')
+def libDevId = libProp.getProperty('libDevId')
+def libDevName = libProp.getProperty('libDevName')
 
 project.ext {
-    mavGitUrl = 'https://github.com/onimur/handle-path-oz.git'
-    mavProjectName = 'HandlePathOz'
-    mavLibraryLicenses = ["Apache-2.0": 'http://www.apache.org/licenses/LICENSE-2.0.txt']
-    mavLibraryDescription = "\t\n" +
-            "Android Library to handle multiple Uri(paths) received through Intents."
+    mavDevelopers = [(libDevId): (libDevName)]
+    mavSiteUrl = libUrl
+    mavGitUrl = "${libUrl}.git"
+    mavProjectName = libName
     mavPublishToMavenLocal = true
-    mavSiteUrl = 'https://github.com/onimur/handle-path-oz'
+    mavLibraryLicenses = ["Apache-2.0": 'http://www.apache.org/licenses/LICENSE-2.0.txt']
+    mavLibraryDescription = libDesc
 }
 
+group = libProp.getProperty('libGroupId')
+version = libVersionName
+
+Properties secret = new Properties()
+secret.load(project.rootProject.file('secret.properties').newDataInputStream())
+
 bintray {
-    user = System.getenv("BINTRAY_USER")
-    key = System.getenv("BINTRAY_API_KEY")
+
+    user = secret.getOrDefault('bintrayUser', System.getenv('BINTRAY_USER'))
+    key = secret.getOrDefault('bintrayApiKey', System.getenv('BINTRAY_API_KEY'))
     publications = ['mavenPublish']
     configurations = ['archives']
     override = true
     pkg {
-        repo = 'handle-path-oz'
-        name = 'HandlePathOz'
-        description = "Android Library to handle multiple Uri(paths) received through Intents."
+        repo = libRepoName
+        name = libName
+        description = libDesc
         publicDownloadNumbers = true
         licenses = ['Apache-2.0']
         publish = true
-        vcsUrl = 'https://github.com/onimur/handle-path-oz.git'
+        vcsUrl = "${libUrl}.git"
+        websiteUrl = libUrl
+        issueTrackerUrl = "${libUrl}/issues"
+        githubRepo = "$libDevId/$libRepoName" //Optional Github repository
+        githubReleaseNotesFile = 'README.md' //Optional Github readme file
+
         version {
             name = this.version
             desc = "Version ${this.version}"
             released = new Date()
             vcsTag = this.version
+
+            gpg {
+                sign = true
+                passphrase = secret.getOrDefault('gpgPassPhrase', System.getenv('GPG_PASS_PHRASE'))
+            }
+            //Optional configuration for Maven Central sync of the version
+            mavenCentralSync {
+                //[Default: true] Determines whether to sync the version to Maven Central.
+                sync = true
+                user = secret.getOrDefault('ossUserToken', System.getenv('OSS_USER_TOKEN'))
+                password = secret.getOrDefault('ossUserPassword', System.getenv('OSS_USER_PASSWORD'))
+                //Optional property. By default the staging repository is closed and artifacts are released to Maven Central. You can optionally turn this behaviour off (by puting 0 as value) and release the version manually.
+                close = '1'
+            }
         }
     }
 }
-
+//include maven-publish
 apply from: 'https://raw.githubusercontent.com/sky-uk/gradle-maven-plugin/master/gradle-mavenizer.gradle'

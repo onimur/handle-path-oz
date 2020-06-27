@@ -1,11 +1,11 @@
 /*
- * Created by Murillo Comino on 22/06/20 17:50
+ * Created by Murillo Comino on 27/06/20 16:35
  * Github: github.com/onimur
  * StackOverFlow: pt.stackoverflow.com/users/128573
  * Email: murillo_comino@hotmail.com
  *
  *  Copyright (c) 2020.
- *  Last modified 22/06/20 16:21
+ *  Last modified 27/06/20 11:55
  */
 
 apply plugin: 'com.android.library'
@@ -20,8 +20,8 @@ android {
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 29
-        versionCode = libraryVersionCode
-        versionName = libraryVersionName
+        versionCode = libVersionCode
+        versionName = libVersionName
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'

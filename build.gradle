@@ -1,11 +1,11 @@
 /*
- * Created by Murillo Comino on 23/06/20 10:54
+ * Created by Murillo Comino on 27/06/20 16:35
  * Github: github.com/onimur
  * StackOverFlow: pt.stackoverflow.com/users/128573
  * Email: murillo_comino@hotmail.com
  *
  *  Copyright (c) 2020.
- *  Last modified 23/06/20 10:39
+ *  Last modified 27/06/20 15:20
  */
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
@@ -19,7 +19,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:4.0.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -34,8 +34,11 @@ allprojects {
 }
 
 ext {
-    libraryVersionName = LIBRARY_VERSION_NAME
-    libraryVersionCode = LIBRARY_VERSION_CODE as int
+    Properties libProp = new Properties()
+    libProp.load(rootProject.file('lib.properties').newDataInputStream())
+
+    libVersionName = libProp.getProperty('libVersionName')
+    libVersionCode = libProp.getProperty('libVersionCode') as int
 }
 
 task clean(type: Delete) {
