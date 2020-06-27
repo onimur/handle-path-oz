@@ -1,11 +1,11 @@
 /*
- * Created by Murillo Comino on 27/06/20 16:35
+ * Created by Murillo Comino on 27/06/20 16:51
  * Github: github.com/onimur
  * StackOverFlow: pt.stackoverflow.com/users/128573
  * Email: murillo_comino@hotmail.com
  *
  *  Copyright (c) 2020.
- *  Last modified 27/06/20 16:34
+ *  Last modified 27/06/20 16:50
  */
 
 apply plugin: 'com.jfrog.bintray'
@@ -35,6 +35,13 @@ version = libVersionName
 
 Properties secret = new Properties()
 secret.load(project.rootProject.file('secret.properties').newDataInputStream())
+
+File secretFile = project.rootProject.file('secret.properties')
+if (secretFile.exists()){
+    secret.load(secretFile.newDataInputStream())
+} else {
+    secret = null
+}
 
 bintray {
 
