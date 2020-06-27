@@ -1,11 +1,11 @@
 /*
- * Created by Murillo Comino on 27/06/20 16:51
+ * Created by Murillo Comino on 27/06/20 16:53
  * Github: github.com/onimur
  * StackOverFlow: pt.stackoverflow.com/users/128573
  * Email: murillo_comino@hotmail.com
  *
  *  Copyright (c) 2020.
- *  Last modified 27/06/20 16:50
+ *  Last modified 27/06/20 16:53
  */
 
 apply plugin: 'com.jfrog.bintray'
@@ -34,8 +34,6 @@ group = libProp.getProperty('libGroupId')
 version = libVersionName
 
 Properties secret = new Properties()
-secret.load(project.rootProject.file('secret.properties').newDataInputStream())
-
 File secretFile = project.rootProject.file('secret.properties')
 if (secretFile.exists()){
     secret.load(secretFile.newDataInputStream())
@@ -44,7 +42,6 @@ if (secretFile.exists()){
 }
 
 bintray {
-
     user = secret.getOrDefault('bintrayUser', System.getenv('BINTRAY_USER'))
     key = secret.getOrDefault('bintrayApiKey', System.getenv('BINTRAY_API_KEY'))
     publications = ['mavenPublish']
