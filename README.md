@@ -1,13 +1,10 @@
 # 📚 Handle Path Oz
 
 <p align="center">
-    <a href="https://bintray.com/onimur/handle-path-oz/HandlePathOz/_latestVersion" title="Bintray">
-        <img src="https://img.shields.io/bintray/v/onimur/handle-path-oz/HandlePathOz?label=bintray">
-    </a>
-    <a title="API 16+">
+   <a title="API 16+">
         <img src="https://img.shields.io/badge/API-16%2B-orange?logo=android&logoColor=white">
     </a>
-    <a href="https://raw.githubusercontent.com/onimur/handle-path-oz/master/LICENSE" title="License">
+    <a href="./LICENSE" title="License">
         <img src="https://img.shields.io/github/license/onimur/handle-path-oz?label=License&logo=Apache&logoColor=white">
     </a>
     <a href="https://app.circleci.com/pipelines/github/onimur/handle-path-oz" title="onimur">
@@ -18,11 +15,20 @@
     </a>
 </p>
 
+<p align="center">
+    <a href="https://bintray.com/onimur/maven/HandlePathOz/_latestVersion" title="Bintray">
+        <img src="https://img.shields.io/bintray/v/onimur/maven/HandlePathOz?label=bintray">
+    </a>
+    <a href="https://search.maven.org/artifact/com.github.onimur/handle-path-oz" title="Maven Central">
+        <img src="https://img.shields.io/maven-central/v/com.github.onimur/handle-path-oz?color=brightgreen&label=maven%20central&logo=Apache%20Maven">
+    </a>
+</p>
+
 Android Library to handle multiple Uri(paths) received through Intents.
 
 <p align="center">
     <a title="HandlePathOz">
-        <img width="75%" src="https://raw.githubusercontent.com/onimur/handle-path-oz/master/.gitresources/logo_git.png">
+        <img width="75%" src=".gitresources/logo_git.png">
     </a>
 </p>
 
@@ -33,34 +39,34 @@ If you like this project and would like to help us, make a donation:
 
 <p align="center">
     <a href="https://www.patreon.com/onimur" target="_blank">
-        <img width="30%" alt="Check my Patreon" src="https://raw.githubusercontent.com/onimur/handle-path-oz/master/.gitresources/support-patreon.png"/>
+        <img width="30%" alt="Check my Patreon" src=".gitresources/support-patreon.png"/>
     </a>
     <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=YUTBBKXR2XCPJ" target="_blank">
-        <img width="30%" alt="Donate with Paypal" src="https://raw.githubusercontent.com/onimur/handle-path-oz/master/.gitresources/support-paypal.png"/>
+        <img width="30%" alt="Donate with Paypal" src=".gitresources/support-paypal.png"/>
     </a>
 </p>
 
 ## 📝 Content
 
-- [Sample application](https://github.com/onimur/handle-path-oz#-sample-application)
-- [Config](https://github.com/onimur/handle-path-oz#%EF%B8%8F-config)
-- [Getting start](https://github.com/onimur/handle-path-oz#-getting-start)
-    - [Kotlin](https://github.com/onimur/handle-path-oz#-kotlin)
-    - [Java](https://github.com/onimur/handle-path-oz#-java)
-- [Main features](https://github.com/onimur/handle-path-oz#-main-features)
-- [Built with](https://github.com/onimur/handle-path-oz#-built-with)
-- [Contributing](https://github.com/onimur/handle-path-oz#-contributing)
-- [License](https://github.com/onimur/handle-path-oz#-license)
+- [Sample application](#-sample-application)
+- [Config](#%EF%B8%8F-config)
+- [Getting start](#-getting-start)
+    - [Kotlin](#-kotlin)
+    - [Java](#-java)
+- [Main features](#-main-features)
+- [Built with](#-built-with)
+- [Contributing](#-contributing)
+- [License](#-license)
 
 ## 📱 Sample application
 
 <p align="center">
-    <img alt="Sample App" src="https://raw.githubusercontent.com/onimur/handle-path-oz/master/.gitresources/sample.gif"/>
+    <img alt="Sample App" src=".gitresources/sample.gif"/>
 </p>
 
 ### 🌱 Download release
   
-You can download the sample application with the latest release [here](https://github.com/onimur/handle-path-oz/raw/master/app/build/outputs/apk/release/HandlePathOZ.apk).
+You can download the sample application with the latest release [here](app/build/outputs/apk/release/HandlePathOZ.apk).
 
 ### 🌱 Install by GooglePlay 
 
@@ -74,7 +80,7 @@ Check the Sample App on GooglePlay
 
 ## 🛠️ Config
 
-First check the latest [version](https://bintray.com/onimur/handle-path-oz/HandlePathOz/_latestVersion).
+First check the latest [version](https://bintray.com/onimur/maven/HandlePathOz/_latestVersion).
 
 ### Gradle
 
@@ -82,7 +88,7 @@ In build.gradle(Module:app) within dependencies, implement:
       
 ```kotlin
 
-       implementation 'br.com.onimur:handle-path-oz:1.0.3'
+    implementation 'com.github.onimur:handle-path-oz:1.0.3'
 
 ```
 
@@ -90,12 +96,12 @@ In build.gradle(Module:app) within dependencies, implement:
 
 ```
 
-<dependency>
-  <groupId>br.com.onimur</groupId>
-  <artifactId>handle-path-oz</artifactId>
-  <version>1.0.3</version>
-  <type>pom</type>
-</dependency>
+    <dependency>
+      <groupId>com.github.onimur</groupId>
+      <artifactId>handle-path-oz</artifactId>
+      <version>1.0.3</version>
+      <type>pom</type>
+    </dependency>
 
 ```
 
@@ -103,9 +109,9 @@ In build.gradle(Module:app) within dependencies, implement:
 
 ```
 
-<dependency org='br.com.onimur' name='handle-path-oz' rev='1.0.3'>
-  <artifact name='handle-path-oz' ext='pom' ></artifact>
-</dependency>
+    <dependency org='com.github.onimur' name='handle-path-oz' rev='1.0.3'>
+      <artifact name='handle-path-oz' ext='pom' ></artifact>
+    </dependency>
 
 ```
 
@@ -407,4 +413,4 @@ This project is open-source, so feel free to fork, or to share your ideas and ch
     See the License for the specific language governing permissions and
     limitations under the License.
 
-  * [Apache License 2.0](https://raw.githubusercontent.com/onimur/handle-path-oz/master/LICENSE)
+  * [Apache License 2.0](LICENSE)
