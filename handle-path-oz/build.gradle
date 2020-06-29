@@ -1,11 +1,11 @@
 /*
- * Created by Murillo Comino on 27/06/20 16:35
+ * Created by Murillo Comino on 29/06/20 15:51
  * Github: github.com/onimur
  * StackOverFlow: pt.stackoverflow.com/users/128573
  * Email: murillo_comino@hotmail.com
  *
  *  Copyright (c) 2020.
- *  Last modified 27/06/20 11:55
+ *  Last modified 29/06/20 15:45
  */
 
 apply plugin: 'com.android.library'
@@ -43,7 +43,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.loader:loader:1.1.0'
     //Coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.7'
     testImplementation 'junit:junit:4.13'
