@@ -1,17 +1,24 @@
 /*
- * Created by Murillo Comino on 28/06/20 23:06
+ * Created by Murillo Comino on 29/06/20 22:54
  * Github: github.com/onimur
  * StackOverFlow: pt.stackoverflow.com/users/128573
  * Email: murillo_comino@hotmail.com
  *
  *  Copyright (c) 2020.
- *  Last modified 27/06/20 18:41
+ *  Last modified 29/06/20 22:35
  */
 
 apply plugin: 'com.jfrog.bintray'
 
 Properties libProp = new Properties()
 libProp.load(project.rootProject.file('lib.properties').newDataInputStream())
+
+Properties secret = new Properties()
+File secretFile = project.rootProject.file('secret.properties')
+//for circleCi
+if (secretFile.exists()) {
+    secret.load(secretFile.newDataInputStream())
+}
 
 def libUrl = libProp.getProperty('libUrl')
 def libName = libProp.getProperty('libName')
@@ -20,27 +27,26 @@ def libArtifact = libProp.getProperty('libArtifact')
 def libDesc = libProp.getProperty('libDesc')
 def libDevId = libProp.getProperty('libDevId')
 def libDevName = libProp.getProperty('libDevName')
+def libDevEmail = libProp.getProperty('libDevEmail')
+def libGithubPackage = libProp.getProperty('libGithubPackage')
 
 
 project.ext {
-    mavDevelopers = [(libDevId): (libDevName)]
+    mavPluginVersion = "new-package"
+    mavDevelopers = [(libDevId): [libDevName, libDevEmail]]
     mavSiteUrl = libUrl
     mavGitUrl = "${libUrl}.git"
     mavProjectName = libArtifact
-    mavPublishToMavenLocal = true
+    mavGithubPackageUser = libDevId
+    mavGithubPackageToken = secret.getOrDefault('githubPackageToken', System.getenv('GITHUB_PACKAGE_TOKEN'))
+    mavGithubPackageUrl = libGithubPackage
+    mavPublishToGithubPackage = true
     mavLibraryLicenses = ["Apache-2.0": 'http://www.apache.org/licenses/LICENSE-2.0.txt']
     mavLibraryDescription = libDesc
 }
 
 group = libProp.getProperty('libGroupId')
 version = libVersionName
-
-Properties secret = new Properties()
-File secretFile = project.rootProject.file('secret.properties')
-//for circleCi
-if (secretFile.exists()) {
-    secret.load(secretFile.newDataInputStream())
-}
 
 bintray {
     user = secret.getOrDefault('bintrayUser', System.getenv('BINTRAY_USER'))
@@ -84,4 +90,4 @@ bintray {
     }
 }
 //include maven-publish
-apply from: 'https://raw.githubusercontent.com/sky-uk/gradle-maven-plugin/master/gradle-mavenizer.gradle'
+apply from: "https://raw.githubusercontent.com/onimur/gradle-maven-plugin/${project.mavPluginVersion}/gradle-mavenizer.gradle"

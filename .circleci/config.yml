@@ -29,7 +29,7 @@ jobs:
       - store_test_results:
           path: app/build/test-results
 
-#Upload to bintray
+  #Upload to bintray
   deploy:
     working_directory: ~/code
     docker:
@@ -44,8 +44,11 @@ jobs:
           name: chmod permissions
           command: chmod +x ./gradlew
       - run:
-          name: Publish to Bintray
+          name: Publish to Jcenter and Maven Central
           command: ./gradlew build bintrayUpload -PdryRun=false
+      - run:
+          name: Publish to Github Package
+          command: ./gradlew publish
 
 workflows:
   version: 2
