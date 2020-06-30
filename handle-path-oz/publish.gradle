@@ -1,11 +1,11 @@
 /*
- * Created by Murillo Comino on 29/06/20 22:54
+ * Created by Murillo Comino on 30/06/20 16:12
  * Github: github.com/onimur
  * StackOverFlow: pt.stackoverflow.com/users/128573
  * Email: murillo_comino@hotmail.com
  *
  *  Copyright (c) 2020.
- *  Last modified 29/06/20 22:35
+ *  Last modified 30/06/20 16:04
  */
 
 apply plugin: 'com.jfrog.bintray'
@@ -32,7 +32,6 @@ def libGithubPackage = libProp.getProperty('libGithubPackage')
 
 
 project.ext {
-    mavPluginVersion = "new-package"
     mavDevelopers = [(libDevId): [libDevName, libDevEmail]]
     mavSiteUrl = libUrl
     mavGitUrl = "${libUrl}.git"
@@ -40,7 +39,7 @@ project.ext {
     mavGithubPackageUser = libDevId
     mavGithubPackageToken = secret.getOrDefault('githubPackageToken', System.getenv('GITHUB_PACKAGE_TOKEN'))
     mavGithubPackageUrl = libGithubPackage
-    mavPublishToGithubPackage = true
+    mavPublishToGithubPackages = true
     mavLibraryLicenses = ["Apache-2.0": 'http://www.apache.org/licenses/LICENSE-2.0.txt']
     mavLibraryDescription = libDesc
 }
@@ -90,4 +89,4 @@ bintray {
     }
 }
 //include maven-publish
-apply from: "https://raw.githubusercontent.com/onimur/gradle-maven-plugin/${project.mavPluginVersion}/gradle-mavenizer.gradle"
+apply from: 'https://raw.githubusercontent.com/onimur/gradle-maven-plugin/new-package/gradle-mavenizer.gradle'

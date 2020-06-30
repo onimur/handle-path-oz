@@ -54,7 +54,7 @@ jobs:
           paths:
             - dist
 
-  #Upload when git have tag
+  #publish on github releases
   publish-github-release:
     docker:
       - image: cibuilds/github:0.10
@@ -72,8 +72,8 @@ jobs:
           command: |
             ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${CIRCLE_TAG} persisted/dist
 
-  #Upload to bintray
-  publish-to-maven:
+  #Upload to bintray(Jcenter), nexus(Maven Central) and GithubPackages
+  publish-to-library:
     working_directory: ~/code
     docker:
       - image: circleci/android:api-29
@@ -95,17 +95,17 @@ jobs:
 
 workflows:
   version: 2
-  untagged-build: #runs job for all branches.
+  build: #runs job for all branches.
     jobs:
       - prepare
-  tagged-build: # run job for all tags
+  tagged-publish: # run job for all tags
     jobs:
       - prepare:
           filters:  # required since `deploy` has tag filters AND requires `build`
             branches:
-              ignore: /.*/
+              ignore: /.*/ #ignore all branch
             tags:
-              only: /.*/
+              only: /.*/ # for all tags
       - publish-github-release:
           requires:
             - prepare
@@ -114,7 +114,7 @@ workflows:
               ignore: /.*/
             tags:
               only: /^\d+\.\d+\.\d+$/ #for tag 1.2.3
-      - publish-to-maven:
+      - publish-to-library:
           requires:
             - publish-github-release
           filters:
@@ -122,4 +122,3 @@ workflows:
               ignore: /.*/
             tags:
               only: /^\d+\.\d+\.\d+$/ #for tag 1.2.3
-
