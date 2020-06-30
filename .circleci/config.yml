@@ -102,19 +102,20 @@ workflows:
           requires:
             - prepare
           filters:
-            branches:
-              only:
-                - master
-            tags:
-              only:
-                - /^\d+\.\d+\.\d+$/ #for tag 1.2.3
+          branches:
+            ignore:
+              - /.*/
+          tags:
+            only:
+              - /^\d+\.\d+\.\d+$/ #for tag 1.2.3
       - publish-to-maven:
           requires:
             - publish-github-release
           filters:
             branches:
-              only:
-                - master
+              ignore:
+                - /.*/
             tags:
               only:
                 - /^\d+\.\d+\.\d+$/ #for tag 1.2.3
+
