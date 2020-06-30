@@ -1,11 +1,11 @@
 /*
- * Created by Murillo Comino on 30/06/20 16:12
+ * Created by Murillo Comino on 30/06/20 19:34
  * Github: github.com/onimur
  * StackOverFlow: pt.stackoverflow.com/users/128573
  * Email: murillo_comino@hotmail.com
  *
  *  Copyright (c) 2020.
- *  Last modified 30/06/20 16:04
+ *  Last modified 30/06/20 19:33
  */
 
 apply plugin: 'com.jfrog.bintray'
@@ -36,9 +36,9 @@ project.ext {
     mavSiteUrl = libUrl
     mavGitUrl = "${libUrl}.git"
     mavProjectName = libArtifact
-    mavGithubPackageUser = libDevId
-    mavGithubPackageToken = secret.getOrDefault('githubPackageToken', System.getenv('GITHUB_PACKAGE_TOKEN'))
-    mavGithubPackageUrl = libGithubPackage
+    mavGithubPackagesUser = libDevId
+    mavGithubPackagesToken = secret.getOrDefault('githubPackageToken', System.getenv('GITHUB_PACKAGE_TOKEN'))
+    mavGithubPackagesUrl = libGithubPackage
     mavPublishToGithubPackages = true
     mavLibraryLicenses = ["Apache-2.0": 'http://www.apache.org/licenses/LICENSE-2.0.txt']
     mavLibraryDescription = libDesc
