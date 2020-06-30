@@ -75,9 +75,8 @@ jobs:
             -t ${GITHUB_TOKEN} \
             -u ${CIRCLE_PROJECT_USERNAME} \
             -r ${CIRCLE_PROJECT_REPONAME}  \
+            -b " ## Release for ${CIRCLE_PROJECT_REPONAME} <br/> *♻ Updated:* at ${DATE} <br/> *⚠ Version:* ${VERSION} <br/> *🏗️ CircleCI Build:* <${CIRCLE_BUILD_URL}|#${CIRCLE_BUILD_NUM}>" \
             -c ${CIRCLE_SHA1}  \
-            -n "Release for ${CIRCLE_PROJECT_REPONAME}" \
-            -b " *♻ Updated:* at ${DATE} <br/> *⚠ Version:* ${VERSION} <br/> *🏗️ CircleCI Build:* <${CIRCLE_BUILD_URL}|#${CIRCLE_BUILD_NUM}>" \
             -delete ${VERSION} persisted/dist
 
   #Upload to bintray(Jcenter), nexus(Maven Central) and GithubPackages
