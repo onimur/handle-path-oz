@@ -70,13 +70,15 @@ jobs:
       - run:
           name: Publish Release on GitHub
           command: |
-            ghr -t ${GITHUB_TOKEN} \
+            VERSION=${CIRCLE_TAG}
+            ghr \
+            -t ${GITHUB_TOKEN} \
             -u ${CIRCLE_PROJECT_USERNAME} \
-            -r ${CIRCLE_PROJECT_REPONAME} \
+            -r ${CIRCLE_PROJECT_REPONAME}  \
+            -c ${CIRCLE_SHA1}  \
             -n "Release for ${CIRCLE_PROJECT_REPONAME}" \
-            -b " *♻ Updated:* at ${DATE} <br/> *⚠ Version:* ${CIRCLE_TAG} <br/> *🏗️ CircleCI Build:* <${CIRCLE_BUILD_URL}|#${CIRCLE_BUILD_NUM}>" \
-            -c ${CIRCLE_SHA1} \
-            -delete ${CIRCLE_TAG} persisted/dist
+            -b " *♻ Updated:* at ${DATE} <br/> *⚠ Version:* ${VERSION} <br/> *🏗️ CircleCI Build:* <${CIRCLE_BUILD_URL}|#${CIRCLE_BUILD_NUM}>" \
+            -delete ${VERSION} persisted/dist
 
   #Upload to bintray(Jcenter), nexus(Maven Central) and GithubPackages
   publish-to-library:
