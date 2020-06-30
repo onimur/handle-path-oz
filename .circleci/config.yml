@@ -29,8 +29,21 @@ jobs:
       - store_test_results:
           path: app/build/test-results
 
+  #Upload when git have tag
+  publish-github-release:
+    docker:
+      - image: cibuilds/github:0.10
+    steps:
+      - attach_workspace:
+          at: ./artifacts
+      - run:
+          name: Publish Release on GitHub
+          command: |
+            VERSION=$(my-binary --version)
+            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ./artifacts/
+
   #Upload to bintray
-  deploy:
+  publish-to-maven:
     working_directory: ~/code
     docker:
       - image: circleci/android:api-29
@@ -55,20 +68,23 @@ workflows:
   build-and-deploy:
     jobs:
       - prepare
-      - hold:
-          type: approval
+      - publish-github-release:
           requires:
             - prepare
           filters:
             branches:
               only:
                 - master
-                - /release\/.*/ # all branches starting with release/
-      - deploy:
+            tags:
+              only:
+                - /^\d+\.\d+\.\d+$/ #for tag 1.2.3
+      - publish-to-maven:
           requires:
-            - hold
+            - publish-github-release
           filters:
             branches:
               only:
                 - master
-                - /release\/.*/ # all branches starting with release/
+            tags:
+              only:
+                - /^\d+\.\d+\.\d+$/ #for tag 1.2.3
