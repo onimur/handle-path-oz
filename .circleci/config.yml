@@ -95,9 +95,17 @@ jobs:
 
 workflows:
   version: 2
-  build-and-deploy:
+  untagged-build: #runs job for all branches.
     jobs:
       - prepare
+  tagged-build: # run job for all tags
+    jobs:
+      - prepare:
+          filters:  # required since `deploy` has tag filters AND requires `build`
+            branches:
+              ignore: /.*/
+            tags:
+              only: /.*/
       - publish-github-release:
           requires:
             - prepare
