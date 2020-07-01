@@ -4,7 +4,7 @@
    <a title="API 16+">
         <img src="https://img.shields.io/badge/API-16%2B-orange?logo=android&logoColor=white">
     </a>
-    <a href="./LICENSE" title="License">
+    <a href=".github/docs/LICENSE" title="License">
         <img src="https://img.shields.io/github/license/onimur/handle-path-oz?label=License&logo=Apache&logoColor=white">
     </a>
     <a href="https://app.circleci.com/pipelines/github/onimur/handle-path-oz" title="onimur">
@@ -28,7 +28,7 @@ Android Library to handle multiple Uri(paths) received through Intents.
 
 <p align="center">
     <a title="HandlePathOz">
-        <img width="75%" src=".gitresources/logo_git.png">
+        <img width="75%" src=".github/resources/logo_git.png">
     </a>
 </p>
 
@@ -39,13 +39,13 @@ If you like this project and would like to help us, make a donation:
 
 <p align="center">
     <a href="https://www.patreon.com/onimur" target="_blank">
-        <img width="30%" alt="Check my Patreon" src=".gitresources/support-patreon.png"/>
+        <img width="30%" alt="Check my Patreon" src=".github/resources/support-patreon.png"/>
     </a>
     <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=YUTBBKXR2XCPJ" target="_blank">
-        <img width="30%" alt="Donate with Paypal" src=".gitresources/support-paypal.png"/>
+        <img width="30%" alt="Donate with Paypal" src=".github/resources/support-paypal.png"/>
     </a>
     <a href="https://www.buymeacoffee.com/onimur" target="_blank">
-        <img width="30%" alt="Buy me a coffee" src=".gitresources/support-buy-coffee.png"/>
+        <img width="30%" alt="Buy me a coffee" src=".github/resources/support-buy-coffee.png"/>
     </a>
 </p>
 
@@ -64,7 +64,7 @@ If you like this project and would like to help us, make a donation:
 ## 📱 Sample application
 
 <p align="center">
-    <img alt="Sample App" src=".gitresources/sample.gif"/>
+    <img alt="Sample App" src=".github/resources/sample.gif"/>
 </p>
 
 ### 🌱 Download release
@@ -398,7 +398,11 @@ Example of use:
   
 ## 🧩 Contributing
 
-This project is open-source, so feel free to fork, or to share your ideas and changes to improve the project. 
+This project is open-source, so feel free to fork, or to share your ideas and changes to improve the project, check with more details below.
+
+- 💬 [Contributing](.github/docs/CONTRIBUTING.md)
+- 👮🏼 [Code of conduct](.github/docs/CODE_OF_CONDUCT.md)
+- 😷 [Support](.github/docs/SUPPORT.md)
 
 ## 📃 License
 
@@ -416,4 +420,4 @@ This project is open-source, so feel free to fork, or to share your ideas and ch
     See the License for the specific language governing permissions and
     limitations under the License.
 
-  * [Apache License 2.0](LICENSE)
+  * [Apache License 2.0](.github/docs/LICENSE)
