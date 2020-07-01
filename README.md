@@ -400,9 +400,9 @@ Example of use:
 
 This project is open-source, so feel free to fork, or to share your ideas and changes to improve the project, check with more details below.
 
-- 💬 [Contributing](.github/docs/CONTRIBUTING.md)
-- 👮🏼 [Code of conduct](.github/docs/CODE_OF_CONDUCT.md)
-- 😷 [Support](.github/docs/SUPPORT.md)
+- 💬 [Contributing](docs/CONTRIBUTING.md)
+- 👮🏼 [Code of conduct](docs/CODE_OF_CONDUCT.md)
+- 😷 [Support](docs/SUPPORT.md)
 
 ## 📃 License
 
@@ -420,4 +420,4 @@ This project is open-source, so feel free to fork, or to share your ideas and ch
     See the License for the specific language governing permissions and
     limitations under the License.
 
-  * [Apache License 2.0](.github/docs/LICENSE)
+  * [Apache License 2.0](docs/LICENSE)
