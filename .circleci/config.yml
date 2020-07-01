@@ -76,7 +76,7 @@ jobs:
             -t ${GITHUB_TOKEN} \
             -u ${CIRCLE_PROJECT_USERNAME} \
             -r ${CIRCLE_PROJECT_REPONAME}  \
-            -b " ### Release for ${CIRCLE_PROJECT_REPONAME} \n *♻ Updated:* at ${DATE} \n *⚠ Version:* ${VERSION} \n *🏗️ CircleCI Build:* <${CIRCLE_BUILD_URL}|#${CIRCLE_BUILD_NUM}>" \
+            -b " ### 📦 Release for ${CIRCLE_PROJECT_REPONAME} \n *♻ Updated:* at ${DATE} \n *⚠ Version:* ${VERSION} \n *🏗️ CircleCI Build:* [#${CIRCLE_BUILD_NUM}](${CIRCLE_BUILD_URL})>" \
             -c ${CIRCLE_SHA1}  \
             -delete ${VERSION} persisted/dist
 

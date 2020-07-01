@@ -44,6 +44,9 @@ If you like this project and would like to help us, make a donation:
     <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=YUTBBKXR2XCPJ" target="_blank">
         <img width="30%" alt="Donate with Paypal" src=".gitresources/support-paypal.png"/>
     </a>
+    <a href="https://www.buymeacoffee.com/onimur" target="_blank">
+        <img width="30%" alt="Buy me a coffee" src=".gitresources/support-buy-coffee.png"/>
+    </a>
 </p>
 
 ## 📝 Content
