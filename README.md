@@ -4,7 +4,7 @@
    <a title="API 16+">
         <img src="https://img.shields.io/badge/API-16%2B-orange?logo=android&logoColor=white">
     </a>
-    <a href=".github/docs/LICENSE" title="License">
+    <a href="./LICENSE" title="License">
         <img src="https://img.shields.io/github/license/onimur/handle-path-oz?label=License&logo=Apache&logoColor=white">
     </a>
     <a href="https://app.circleci.com/pipelines/github/onimur/handle-path-oz" title="onimur">
@@ -420,4 +420,4 @@ This project is open-source, so feel free to fork, or to share your ideas and ch
     See the License for the specific language governing permissions and
     limitations under the License.
 
-  * [Apache License 2.0](docs/LICENSE)
+  * [Apache License 2.0](./LICENSE)
