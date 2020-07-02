@@ -37,11 +37,11 @@ jobs:
       - run:
           name: Copy apk
           command: |
-            mkdir -p dist
-            cp -r app/build/outputs/apk/release/*.apk dist/${CIRCLE_PROJECT_REPONAME}-release.apk
+            mkdir -p artifacts
+            cp -r app/build/outputs/apk/release/*.apk artifacts/${CIRCLE_PROJECT_REPONAME}-release.apk
       - store_artifacts:
-          path: dist
-          destination: dist
+          path: artifacts
+          destination: artifacts
       # See https://circleci.com/docs/2.0/deployment-integrations/ for deploy examples
 
       # https://circleci.com/docs/2.0/workflows/#using-workspaces-to-share-data-among-jobs
@@ -52,7 +52,7 @@ jobs:
           root: ./
           # Must be relative path from root
           paths:
-            - dist
+            - artifacts
 
   #publish on github releases
   publish-github-release:
@@ -60,25 +60,28 @@ jobs:
       - image: cibuilds/github:0.10
     steps:
       - attach_workspace:
-          at: persisted
+          at: application
       - run:
           name: List Files
           command: |
             apk add tree
             pwd
-            tree persisted
+            tree application
+      - run:
+          name: Release Template
+          command: |
+            DATE=$(date +'%m-%d-%y')
+            printf -v BODY "$(<./docs/RELEASE_TEMPLATE.md)" "${CIRCLE_PROJECT_REPONAME}" "${DATE}" "${CIRCLE_TAG}"
       - run:
           name: Publish Release on GitHub
           command: |
-            VERSION=${CIRCLE_TAG}
-            DATE=$(date +'%m-%d-%y')
             ghr \
             -t ${GITHUB_TOKEN} \
             -u ${CIRCLE_PROJECT_USERNAME} \
             -r ${CIRCLE_PROJECT_REPONAME}  \
-            -b " ### 📦 Release for ${CIRCLE_PROJECT_REPONAME} \n *♻ Updated:* at ${DATE} \n *⚠ Version:* ${VERSION} \n *🏗️ CircleCI Build:* [#${CIRCLE_BUILD_NUM}](${CIRCLE_BUILD_URL})>" \
+            -b "${BODY}" \
             -c ${CIRCLE_SHA1}  \
-            -delete ${VERSION} persisted/dist
+            -delete ${CIRCLE_TAG} application/artifacts
 
   #Upload to bintray(Jcenter), nexus(Maven Central) and GithubPackages
   publish-to-library:
