@@ -17,7 +17,7 @@
 
 <p align="center">
     <a href="https://bintray.com/onimur/maven/HandlePathOz/_latestVersion" title="Bintray">
-        <img src="https://img.shields.io/bintray/v/onimur/maven/HandlePathOz?label=bintray">
+        <img src="https://img.shields.io/bintray/v/onimur/maven/HandlePathOz?label=bintray&logo=JFrog">
     </a>
     <a href="https://search.maven.org/artifact/com.github.onimur/handle-path-oz" title="Maven Central">
         <img src="https://img.shields.io/maven-central/v/com.github.onimur/handle-path-oz?color=brightgreen&label=maven%20central&logo=Apache%20Maven">
@@ -331,8 +331,8 @@ We have two methods in the listeners, one of which is optional:
             //Update the recyclerview with the list
             //Update the adapter
             List<Uri> listUri = new ArrayList<>();
-            for (int i = 0; i < list.size(); i++) {
-                Uri uri = Uri.parse(list.get(i).getPath());
+            for (int i = 0; i < listPath.size(); i++) {
+                Uri uri = Uri.parse(listPath.get(i).getPath());
                 listUri.add(uri);
             }
             yourAdapter.updateListChanged(listUri);
