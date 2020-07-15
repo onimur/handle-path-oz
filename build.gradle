@@ -1,11 +1,11 @@
 /*
- * Created by Murillo Comino on 27/06/20 16:35
+ * Created by Murillo Comino on 15/07/20 18:59
  * Github: github.com/onimur
  * StackOverFlow: pt.stackoverflow.com/users/128573
  * Email: murillo_comino@hotmail.com
  *
  *  Copyright (c) 2020.
- *  Last modified 27/06/20 15:20
+ *  Last modified 15/07/20 18:53
  */
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
@@ -17,7 +17,7 @@ buildscript {
 
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.0.0'
+        classpath 'com.android.tools.build:gradle:4.0.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5'
 
