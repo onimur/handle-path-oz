@@ -1,11 +1,11 @@
 /*
- * Created by Murillo Comino on 30/06/20 19:34
+ * Created by Murillo Comino on 15/07/20 18:31
  * Github: github.com/onimur
  * StackOverFlow: pt.stackoverflow.com/users/128573
  * Email: murillo_comino@hotmail.com
  *
  *  Copyright (c) 2020.
- *  Last modified 30/06/20 19:33
+ *  Last modified 15/07/20 18:27
  */
 
 apply plugin: 'com.jfrog.bintray'
@@ -89,4 +89,4 @@ bintray {
     }
 }
 //include maven-publish
-apply from: 'https://raw.githubusercontent.com/onimur/gradle-maven-plugin/new-package/gradle-mavenizer.gradle'
+apply from: 'https://raw.githubusercontent.com/onimur/gradle-maven-plugin/master/gradle-mavenizer.gradle'
