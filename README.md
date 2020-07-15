@@ -7,7 +7,7 @@
     <a href="./LICENSE" title="License">
         <img src="https://img.shields.io/github/license/onimur/handle-path-oz?label=License&logo=Apache&logoColor=white">
     </a>
-    <a href="https://app.circleci.com/pipelines/github/onimur/handle-path-oz" title="onimur">
+    <a href="https://circleci.com/gh/onimur/handle-path-oz" title="onimur">
         <img src="https://img.shields.io/circleci/build/github/onimur/handle-path-oz?label=circleci&logo=CircleCI&logoColor=white">
     </a>
     <a href="https://play.google.com/store/apps/details?id=br.com.onimur.sample.handlepathoz" title="HandlePathOz">
