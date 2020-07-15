@@ -1,4 +1,8 @@
-version: 2
+version: 2.1
+
+orbs:
+  changelog: onimur/github-changelog-generator@2.0.7
+
 jobs:
   prepare:
     working_directory: ~/code
@@ -50,7 +54,7 @@ jobs:
   #publish on github releases
   publish-github-release:
     docker:
-      - image: cibuilds/github:0.10
+      - image: cibuilds/github:0.13
     steps:
       - attach_workspace:
           at: application
@@ -61,13 +65,10 @@ jobs:
             pwd
             tree application
       - run:
-          name: Release Template
-          command: |
-            DATE=$(date +'%m-%d-%y')
-            printf -v BODY "$(<./docs/RELEASE_TEMPLATE.md)" "${CIRCLE_PROJECT_REPONAME}" "${DATE}" "${CIRCLE_TAG}"
-      - run:
           name: Publish Release on GitHub
           command: |
+            DATE=$(date +'%m-%d-%y')
+            printf -v BODY "$(curl -s 'https://raw.githubusercontent.com/onimur/circleci-github-changelog-generator/master/docs/RELEASE_TEMPLATE.md')" "${CIRCLE_PROJECT_REPONAME}" "${DATE}" "${CIRCLE_TAG}" "${CIRCLE_BUILD_NUM}" "${CIRCLE_BUILD_URL}"
             ghr \
             -t ${GITHUB_TOKEN} \
             -u ${CIRCLE_PROJECT_USERNAME} \
@@ -97,6 +98,12 @@ jobs:
           name: Publish to Github Package
           command: ./gradlew publish
 
+orb_tagged_filters: &orb_tagged_filters
+  branches:
+    ignore: /.*/
+  tags:
+    only: /^\d+\.\d+\.\d+$/ #for tag 1.2.3
+
 workflows:
   version: 2
   build: #runs job for all branches.
@@ -111,18 +118,13 @@ workflows:
             tags:
               only: /.*/ # for all tags
       - publish-github-release:
-          requires:
-            - prepare
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /^\d+\.\d+\.\d+$/ #for tag 1.2.3
+          requires: [prepare]
+          filters: *orb_tagged_filters
       - publish-to-library:
-          requires:
-            - publish-github-release
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /^\d+\.\d+\.\d+$/ #for tag 1.2.3
+          requires: [publish-github-release]
+          filters: *orb_tagged_filters
+      - changelog/changelog-default:
+          context: main-context
+          push-git: true
+          requires: [prepare]
+          filters: *orb_tagged_filters
