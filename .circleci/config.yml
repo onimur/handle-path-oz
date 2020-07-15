@@ -105,7 +105,6 @@ orb_tagged_filters: &orb_tagged_filters
     only: /^\d+\.\d+\.\d+$/ #for tag 1.2.3
 
 workflows:
-  version: 2
   build: #runs job for all branches.
     jobs:
       - prepare
