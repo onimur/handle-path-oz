@@ -68,7 +68,7 @@ jobs:
           name: Publish Release on GitHub
           command: |
             DATE=$(date +'%m-%d-%y')
-            printf -v BODY "$(curl -s 'https://raw.githubusercontent.com/onimur/circleci-github-changelog-generator/master/docs/RELEASE_TEMPLATE.md')" "${CIRCLE_PROJECT_REPONAME}" "${DATE}" "${CIRCLE_TAG}" "${CIRCLE_BUILD_NUM}" "${CIRCLE_BUILD_URL}"
+            printf -v BODY "$(curl -s 'https://raw.githubusercontent.com/onimur/handle-path-oz/master/docs/RELEASE_TEMPLATE.md')" "${CIRCLE_PROJECT_REPONAME}" "${DATE}" "${CIRCLE_TAG}" "${CIRCLE_BUILD_NUM}" "${CIRCLE_BUILD_URL}"
             ghr \
             -t ${GITHUB_TOKEN} \
             -u ${CIRCLE_PROJECT_USERNAME} \
