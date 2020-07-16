@@ -64,6 +64,7 @@ jobs:
             apk add tree
             pwd
             tree application
+            find .
       - run:
           name: Publish Release on GitHub
           command: |
