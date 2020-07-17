@@ -1,9 +1,12 @@
 version: 2.1
 
 orbs:
-  changelog: onimur/github-changelog-generator@2.0.9
+  changelog: onimur/github-changelog-generator@2.1.2
+  mem: circleci/rememborb@0.0.1
+  orb-tools: circleci/orb-tools@9.1.0
 
 jobs:
+  # Prepare build
   prepare:
     working_directory: ~/code
     docker:
@@ -12,6 +15,13 @@ jobs:
       JVM_OPTS: -Xmx3200m
     steps:
       - checkout
+      # Export Env_var
+      - mem/remember:
+          env_var: DATE_FORMAT
+          value: "%d-%m-%y"
+      - mem/remember:
+          env_var: OUTPUT_CHANGELOG
+          value: CHANGELOG.md
       - restore_cache:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum "app/build.gradle" }}
       - run:
@@ -50,14 +60,18 @@ jobs:
           root: ./
           paths:
             - artifacts
-
-  #publish on github releases
+  # Publish on github releases
   publish-github-release:
     docker:
       - image: cibuilds/github:0.13
     steps:
       - attach_workspace:
           at: application
+      # Get Env_Var
+      - mem/recall:
+          env_var: DATE_FORMAT
+      - mem/recall:
+          env_var: OUTPUT_CHANGELOG
       - run:
           name: List Files
           command: |
@@ -68,8 +82,12 @@ jobs:
       - run:
           name: Publish Release on GitHub
           command: |
-            DATE=$(date +'%m-%d-%y')
-            printf -v BODY "$(curl -s 'https://raw.githubusercontent.com/onimur/handle-path-oz/master/docs/RELEASE_TEMPLATE.md')" "${CIRCLE_PROJECT_REPONAME}" "${DATE}" "${CIRCLE_TAG}" "${CIRCLE_BUILD_NUM}" "${CIRCLE_BUILD_URL}"
+            DATE=$(date +${DATE_FORMAT})
+            TAG_WITHOUT_DOT="${CIRCLE_TAG//./}"
+            TITLE="Handle Path Oz"
+            URL_CHANGELOG="https://github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/blob/master/${OUTPUT_CHANGELOG}#${TAG_WITHOUT_DOT}-${DATE}"
+            printf -v BODY "$(curl -s 'https://raw.githubusercontent.com/onimur/handle-path-oz/master/docs/RELEASE_TEMPLATE.md')" \
+            "${TITLE}" "${DATE}" "${CIRCLE_TAG}" "${CIRCLE_BUILD_NUM}" "${CIRCLE_BUILD_URL}" "${OUTPUT_CHANGELOG}" "${URL_CHANGELOG}"
             ghr \
             -t ${GITHUB_TOKEN} \
             -u ${CIRCLE_PROJECT_USERNAME} \
@@ -77,7 +95,6 @@ jobs:
             -b "${BODY}" \
             -c ${CIRCLE_SHA1}  \
             -delete ${CIRCLE_TAG} application/artifacts
-
   #Upload to bintray(Jcenter), nexus(Maven Central) and GithubPackages
   publish-to-library:
     working_directory: ~/code
@@ -98,7 +115,7 @@ jobs:
       - run:
           name: Publish to Github Package
           command: ./gradlew publish
-
+# Filters
 orb_tagged_filters: &orb_tagged_filters
   branches:
     ignore: /.*/
@@ -108,23 +125,36 @@ orb_tagged_filters: &orb_tagged_filters
 workflows:
   build: #runs job for all branches.
     jobs:
-      - prepare
+      - orb-tools/lint
+      - orb-tools/shellcheck:
+          exclude: "SC2002,SC1073,SC1009"
+          requires: [orb-tools/lint]
+      - prepare:
+          requires: [orb-tools/shellcheck]
   tagged-publish: # run job for all tags
     jobs:
+      - orb-tools/lint
+      - orb-tools/shellcheck:
+          # exclude: "SC2002,SC1073,SC1009"
+          requires: [orb-tools/lint]
       - prepare:
-          filters:  # required since `deploy` has tag filters AND requires `build`
-            branches:
-              ignore: /.*/ #ignore all branch
-            tags:
-              only: /.*/ # for all tags
+          filters: *orb_tagged_filters
+          requires: [orb-tools/shellcheck]
       - publish-github-release:
           requires: [prepare]
           filters: *orb_tagged_filters
       - publish-to-library:
           requires: [publish-github-release]
           filters: *orb_tagged_filters
-      - changelog/changelog-default:
+      - changelog/changelog-custom:
           context: main-context
+          steps:
+            - mem/recall:
+                env_var: DATE_FORMAT
+            - mem/recall:
+                env_var: OUTPUT_CHANGELOG
           push-git: true
+          date-format: ${DATE_FORMAT}
+          output: ${OUTPUT_CHANGELOG}
           requires: [prepare]
           filters: *orb_tagged_filters
