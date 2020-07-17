@@ -133,8 +133,10 @@ workflows:
           requires: [orb-tools/shellcheck]
   tagged-publish: # run job for all tags
     jobs:
-      - orb-tools/lint
+      - orb-tools/lint:
+          filters: *orb_tagged_filters
       - orb-tools/shellcheck:
+          filters: *orb_tagged_filters
           # exclude: "SC2002,SC1073,SC1009"
           requires: [orb-tools/lint]
       - prepare:
