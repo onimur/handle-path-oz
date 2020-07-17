@@ -17,7 +17,7 @@
 
 <p align="center">
     <a href="https://bintray.com/onimur/maven/HandlePathOz/_latestVersion" title="Bintray">
-        <img src="https://img.shields.io/bintray/v/onimur/maven/HandlePathOz?label=bintray&logo=JFrog">
+        <img src="https://img.shields.io/bintray/v/onimur/maven/HandlePathOz?label=bintray&logo=JFrog%20Bintray&logoColor=white">
     </a>
     <a href="https://search.maven.org/artifact/com.github.onimur/handle-path-oz" title="Maven Central">
         <img src="https://img.shields.io/maven-central/v/com.github.onimur/handle-path-oz?color=brightgreen&label=maven%20central&logo=Apache%20Maven">
