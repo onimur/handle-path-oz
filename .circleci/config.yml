@@ -95,7 +95,7 @@ jobs:
       - checkout
       - tools/attach-dir:
           paths: artifacts
-          destination: ./artifacts
+          destination: ./
       # Get Env_Var
       - recall_var
       - run:
