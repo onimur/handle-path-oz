@@ -4,7 +4,7 @@ orbs:
   changelog: onimur/github-changelog-generator@2.1.7
   mem: circleci/rememborb@0.0.1
   orb-tools: circleci/orb-tools@9.1.0
-  tools: onimur/common-tools@0.0.1
+  tools: onimur/common-tools@0.0.2
 
 commands:
   remember_var:
@@ -59,6 +59,11 @@ jobs:
           name: chmod permissions
           command: chmod +x ./gradlew
       - run:
+          name: Decode Keystore
+          command: |
+            base64 -d \<<< $ENCODED_KEYSTORE > ${CIRCLE_WORKING_DIRECTORY/#\~/$HOME}/keystore.jks
+            echo 'export KEYSTORE=${CIRCLE_WORKING_DIRECTORY/#\~/$HOME}/keystore.jks' >> $BASH_ENV
+      - run:
           name: Download Dependencies
           command: ./gradlew androidDependencies
       - save_cache:
@@ -79,13 +84,12 @@ jobs:
       - run:
           name: Copy apk
           command: |
-            mkdir -p artifacts
-            cp -r app/build/outputs/apk/release/*.apk artifacts/${CIRCLE_PROJECT_REPONAME}-release.apk
+            cp -r app/build/outputs/apk/release/*.apk app/build/outputs/apk/release/${CIRCLE_PROJECT_REPONAME}-release.apk
       - store_artifacts:
-          path: artifacts
-          destination: artifacts
+          path: app/build/outputs/apk/release/${CIRCLE_PROJECT_REPONAME}-release.apk
+          destination: application
       - tools/persist-dir:
-          paths: artifacts
+          paths: app/build/outputs/apk/release/${CIRCLE_PROJECT_REPONAME}-release.apk
 
   # Publish on github releases
   publish-github-release:
@@ -94,7 +98,7 @@ jobs:
     steps:
       - checkout
       - tools/attach-dir:
-          paths: artifacts
+          paths: ${CIRCLE_PROJECT_REPONAME}-release.apk
           destination: ./
       # Get Env_Var
       - recall_var
@@ -113,7 +117,7 @@ jobs:
             -r ${CIRCLE_PROJECT_REPONAME}  \
             -b "${BODY}" \
             -c ${CIRCLE_SHA1}  \
-            -delete ${CIRCLE_TAG} artifacts
+            -delete ${CIRCLE_TAG} ${CIRCLE_PROJECT_REPONAME}-release.apk
   #Upload to bintray(Jcenter), nexus(Maven Central) and GithubPackages
   publish-to-library:
     working_directory: ~/code
@@ -145,11 +149,13 @@ jobs:
       - tools/git-checkout
       - recall_var
       - tools/attach-dir:
-          paths: lib.properties, ${OUTPUT_CHANGELOG}, artifacts
+          paths: lib.properties, ${OUTPUT_CHANGELOG}
           destination: ./
-      - tools/git-config
+      - tools/attach-dir:
+          paths: ${CIRCLE_PROJECT_REPONAME}-release.apk
+          destination: app/build/outputs/apk/release
       - tools/git-push:
-          paths: lib.properties, ${OUTPUT_CHANGELOG}, artifacts
+          paths: lib.properties, ${OUTPUT_CHANGELOG}, app/build/outputs/apk/release/${CIRCLE_PROJECT_REPONAME}-release.apk
           commit-message: Auto Update Version, Changelog and Apk Release
 # Filters
 orb_tagged_filters: &orb_tagged_filters

@@ -1,11 +1,11 @@
 /*
- * Created by Murillo Comino on 24/07/20 21:21
+ * Created by Murillo Comino on 25/07/20 20:08
  * Github: github.com/onimur
  * StackOverFlow: pt.stackoverflow.com/users/128573
  * Email: murillo_comino@hotmail.com
  *
  *  Copyright (c) 2020.
- *  Last modified 24/07/20 21:20
+ *  Last modified 25/07/20 20:03
  */
 
 apply plugin: 'com.android.application'
@@ -28,11 +28,21 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        release {
+            storeFile file(System.getenv("KEYSTORE") ?: "keystore.jks")
+            storePassword System.getenv("KEYSTORE_PASSWORD")
+            keyAlias System.getenv("KEY_ALIAS")
+            keyPassword System.getenv("KEY_PASSWORD")
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-
+            zipAlignEnabled true
+            signingConfig signingConfigs.release
             android.applicationVariants.all { variant ->
                 variant.outputs.all {
                     outputFileName = "${applicationName}.apk"
