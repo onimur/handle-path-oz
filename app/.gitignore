@@ -1,4 +1,4 @@
 /build
 
 #Release apk not ignore
-!/build/outputs/apk/release/*.apk
+#!/build/outputs/apk/release/*.apk
