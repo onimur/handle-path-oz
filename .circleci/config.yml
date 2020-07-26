@@ -84,12 +84,13 @@ jobs:
       - run:
           name: Copy apk
           command: |
-            cp -r app/build/outputs/apk/release/*.apk app/build/outputs/apk/release/${CIRCLE_PROJECT_REPONAME}-release.apk
+            mkdir -p artifacts
+            cp -r app/build/outputs/apk/release/*.apk artifacts
       - store_artifacts:
-          path: app/build/outputs/apk/release/${CIRCLE_PROJECT_REPONAME}-release.apk
+          path: artifacts
           destination: application
       - tools/persist-dir:
-          paths: app/build/outputs/apk/release/${CIRCLE_PROJECT_REPONAME}-release.apk
+          paths: artifacts
 
   # Publish on github releases
   publish-github-release:
@@ -98,7 +99,7 @@ jobs:
     steps:
       - checkout
       - tools/attach-dir:
-          paths: ${CIRCLE_PROJECT_REPONAME}-release.apk
+          paths: artifacts
           destination: ./
       # Get Env_Var
       - recall_var
@@ -117,7 +118,7 @@ jobs:
             -r ${CIRCLE_PROJECT_REPONAME}  \
             -b "${BODY}" \
             -c ${CIRCLE_SHA1}  \
-            -delete ${CIRCLE_TAG} ${CIRCLE_PROJECT_REPONAME}-release.apk
+            -delete ${CIRCLE_TAG} artifacts
   #Upload to bintray(Jcenter), nexus(Maven Central) and GithubPackages
   publish-to-library:
     working_directory: ~/code
@@ -149,13 +150,10 @@ jobs:
       - tools/git-checkout
       - recall_var
       - tools/attach-dir:
-          paths: lib.properties, ${OUTPUT_CHANGELOG}
+          paths: lib.properties, ${OUTPUT_CHANGELOG}, artifacts
           destination: ./
-      - tools/attach-dir:
-          paths: ${CIRCLE_PROJECT_REPONAME}-release.apk
-          destination: app/build/outputs/apk/release
       - tools/git-push:
-          paths: lib.properties, ${OUTPUT_CHANGELOG}, app/build/outputs/apk/release/${CIRCLE_PROJECT_REPONAME}-release.apk
+          paths: lib.properties, ${OUTPUT_CHANGELOG}, artifacts
           commit-message: Auto Update Version, Changelog and Apk Release
 # Filters
 orb_tagged_filters: &orb_tagged_filters
@@ -181,7 +179,7 @@ workflows:
           filters: *orb_tagged_filters
       - orb-tools/shellcheck:
           filters: *orb_tagged_filters
-          # exclude: "SC2002,SC1073,SC1009"
+          exclude: "SC2002,SC1073,SC1009"
           requires: [orb-tools/lint]
       - versioning:
           filters: *orb_tagged_filters
