@@ -1,18 +1,29 @@
 /*
- * Created by Murillo Comino on 25/07/20 20:08
+ * Created by Murillo Comino on 25/07/20 23:24
  * Github: github.com/onimur
  * StackOverFlow: pt.stackoverflow.com/users/128573
  * Email: murillo_comino@hotmail.com
  *
  *  Copyright (c) 2020.
- *  Last modified 25/07/20 20:03
+ *  Last modified 25/07/20 22:52
  */
 
 apply plugin: 'com.android.application'
+apply plugin: 'com.github.triplet.play'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 def applicationName = "HandlePathOZ"
+
+buildscript {
+
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.github.triplet.gradle:play-publisher:2.8.0'
+    }
+}
 
 android {
     compileSdkVersion 29
@@ -78,4 +89,10 @@ dependencies {
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+}
+
+play {
+    // see: https://github.com/Triple-T/gradle-play-publisher
+    serviceAccountCredentials = file(System.getenv("PUBLISH_GOOGLE") ?: "../.exclude/key/google-play.json")
+    track = "production"
 }

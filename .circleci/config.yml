@@ -7,6 +7,7 @@ orbs:
   tools: onimur/common-tools@0.0.2
 
 commands:
+  # Command - Remember Environment Variables
   remember_var:
     steps:
       - mem/remember:
@@ -15,14 +16,27 @@ commands:
       - mem/remember:
           env_var: OUTPUT_CHANGELOG
           value: CHANGELOG.md
-
+  # Command - Recall Environment Variables
   recall_var:
     steps:
       - mem/recall:
           env_var: DATE_FORMAT
       - mem/recall:
           env_var: OUTPUT_CHANGELOG
+  # Command - Automate the publication of the new version of the simple app for google play.
+  publish-sample-apk-google-play:
+    steps:
+      - run:
+          name: Decode Publish Google Play
+          command: |
+            # Decode secret file from environment variables
+            base64 -d \<<< $ENCODED_PUBLISH_GOOGLE_PLAY > ${CIRCLE_WORKING_DIRECTORY/#\~/$HOME}/google-play.json
+            echo 'export PUBLISH_GOOGLE=${CIRCLE_WORKING_DIRECTORY/#\~/$HOME}/google-play.json' >> $BASH_ENV
+      - run:
+          name: Publish Sample Apk to Google Play
+          command: ./gradlew publishApkRelease
 jobs:
+  # Automate versioning to library and sample app on tagged.
   versioning:
     machine: true
     working_directory: ~/code
@@ -43,7 +57,7 @@ jobs:
             echo "${LIB_PROP}" >| ./lib.properties
       - tools/persist-dir:
           paths: lib.properties
-  # Prepare build
+  # Prepare gradle build, test and release
   prepare:
     working_directory: ~/code
     docker:
@@ -61,6 +75,7 @@ jobs:
       - run:
           name: Decode Keystore
           command: |
+            # Decode Secret keys from environment variables
             base64 -d \<<< $ENCODED_KEYSTORE > ${CIRCLE_WORKING_DIRECTORY/#\~/$HOME}/keystore.jks
             echo 'export KEYSTORE=${CIRCLE_WORKING_DIRECTORY/#\~/$HOME}/keystore.jks' >> $BASH_ENV
       - run:
@@ -142,7 +157,7 @@ jobs:
       - run:
           name: Publish to Github Package
           command: ./gradlew publish
-
+  # Push Changelog, Apk and new version to remote repository.
   push-updates-to-remote-github:
     machine: true
     steps:
@@ -163,7 +178,8 @@ orb_tagged_filters: &orb_tagged_filters
     only: /^\d+\.\d+\.\d+$/ #for tag 1.2.3
 
 workflows:
-  build: #runs job for all branches.
+  # For all branches.
+  build:
     jobs:
       - orb-tools/lint
       - orb-tools/shellcheck:
@@ -173,7 +189,8 @@ workflows:
           pre-steps:
             - checkout
           requires: [orb-tools/shellcheck]
-  tagged-publish: # run job for all tags
+  # for all tags
+  tagged-publish:
     jobs:
       - orb-tools/lint:
           filters: *orb_tagged_filters
@@ -191,6 +208,8 @@ workflows:
             - tools/attach-dir:
                 paths: lib.properties
                 destination: ./
+          post-steps:
+            - publish-sample-apk-google-play
           filters: *orb_tagged_filters
           requires: [versioning]
       - publish-github-release:
