@@ -34,7 +34,7 @@ commands:
             echo 'export PUBLISH_GOOGLE=${CIRCLE_WORKING_DIRECTORY/#\~/$HOME}/google-play.json' >> $BASH_ENV
       - run:
           name: Publish Sample Apk to Google Play
-          command: ./gradlew publishApkRelease
+          command: ./gradlew publishReleaseApk
 jobs:
   # Automate versioning to library and sample app on tagged.
   versioning:

@@ -1,11 +1,11 @@
 /*
- * Created by Murillo Comino on 25/07/20 23:24
+ * Created by Murillo Comino on 26/07/20 00:04
  * Github: github.com/onimur
  * StackOverFlow: pt.stackoverflow.com/users/128573
  * Email: murillo_comino@hotmail.com
  *
  *  Copyright (c) 2020.
- *  Last modified 25/07/20 22:52
+ *  Last modified 25/07/20 23:51
  */
 
 apply plugin: 'com.android.application'
@@ -41,10 +41,17 @@ android {
 
     signingConfigs {
         release {
-            storeFile file(System.getenv("KEYSTORE") ?: "keystore.jks")
-            storePassword System.getenv("KEYSTORE_PASSWORD")
-            keyAlias System.getenv("KEY_ALIAS")
-            keyPassword System.getenv("KEY_PASSWORD")
+            Properties secret = new Properties()
+            File secretFile = project.rootProject.file('secret.properties')
+            //for circleCi
+            if (secretFile.exists()) {
+                secret.load(secretFile.newDataInputStream())
+            }
+
+            storeFile file(System.getenv("KEYSTORE") ?: "../.exclude/key/handlepathoz.jks")
+            storePassword secret.getOrDefault('keystorePassword', System.getenv("KEYSTORE_PASSWORD"))
+            keyAlias secret.getOrDefault('keyAlias', System.getenv("KEY_ALIAS"))
+            keyPassword secret.getOrDefault('keyPassword', System.getenv("KEY_PASSWORD"))
         }
     }
 
@@ -68,6 +75,12 @@ android {
     }
 }
 
+play {
+    // see: https://github.com/Triple-T/gradle-play-publisher
+    serviceAccountCredentials = file(System.getenv("PUBLISH_GOOGLE") ?: "../.exclude/key/google-play.json")
+    track = "production"
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -89,10 +102,4 @@ dependencies {
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-}
-
-play {
-    // see: https://github.com/Triple-T/gradle-play-publisher
-    serviceAccountCredentials = file(System.getenv("PUBLISH_GOOGLE") ?: "../.exclude/key/google-play.json")
-    track = "production"
 }
