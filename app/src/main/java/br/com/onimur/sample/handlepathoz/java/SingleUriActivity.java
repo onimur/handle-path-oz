@@ -1,11 +1,11 @@
 /*
- * Created by Murillo Comino on 27/06/20 17:03
+ * Created by Murillo Comino on 27/07/20 15:18
  * Github: github.com/onimur
  * StackOverFlow: pt.stackoverflow.com/users/128573
  * Email: murillo_comino@hotmail.com
  *
  *  Copyright (c) 2020.
- *  Last modified 27/06/20 17:02
+ *  Last modified 27/07/20 15:16
  */
 
 package br.com.onimur.sample.handlepathoz.java;
@@ -17,46 +17,37 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
 import br.com.comino.sample.handlepathoz.R;
 import br.com.onimur.handlepathoz.HandlePathOz;
 import br.com.onimur.handlepathoz.HandlePathOzListener;
-import br.com.onimur.handlepathoz.model.PairPath;
+import br.com.onimur.handlepathoz.model.PathOz;
 import br.com.onimur.sample.handlepathoz.kotlin.ProgressDialog;
-import br.com.onimur.sample.handlepathoz.kotlin.adapter.RealPathAdapter;
-import br.com.onimur.sample.handlepathoz.kotlin.model.PathModel;
 
 import static android.content.Intent.ACTION_PICK;
 import static android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
 import static android.provider.MediaStore.Video.Media.INTERNAL_CONTENT_URI;
-import static br.com.onimur.handlepathoz.utils.extension.PathsKt.getListUri;
 
-public class MainActivity extends AppCompatActivity implements HandlePathOzListener {
+public class SingleUriActivity extends AppCompatActivity implements HandlePathOzListener.SingleUri {
 
     private static final int REQUEST_PERMISSION = 123;
     private static final int REQUEST_OPEN_GALLERY = 1111;
 
-    private List<Uri> listUri;
     private Button buttonOpen;
-    private RecyclerView rvOriginal;
-    private RecyclerView rvReal;
-    private RealPathAdapter originalAdapter;
-    private RealPathAdapter realAdapter;
+    private TextView tvOriginalPath;
+    private TextView tvOriginalType;
+    private TextView tvRealPath;
+    private TextView tvRealType;
     private ProgressDialog progressLoading;
     private ProgressDialog progressCancelling;
     private HandlePathOz handlePathOz;
@@ -64,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements HandlePathOzListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_single_uri);
 
         init();
         startAction();
@@ -72,15 +63,13 @@ public class MainActivity extends AppCompatActivity implements HandlePathOzListe
 
     private void init() {
         initButton();
-        initRecyclerView();
-        initAdapter();
+        initTextView();
         initProgressBar();
         initHandlePathOz();
     }
 
     private void startAction() {
         startButton();
-        startRecyclerView();
         startProgressBar();
     }
 
@@ -89,14 +78,11 @@ public class MainActivity extends AppCompatActivity implements HandlePathOzListe
         buttonOpen = findViewById(R.id.btn_open);
     }
 
-    private void initRecyclerView() {
-        rvOriginal = findViewById(R.id.lv_original);
-        rvReal = findViewById(R.id.lv_real);
-    }
-
-    private void initAdapter() {
-        originalAdapter = new RealPathAdapter(new ArrayList<>());
-        realAdapter = new RealPathAdapter(new ArrayList<>());
+    private void initTextView() {
+        tvOriginalPath = findViewById(R.id.tv_original_path);
+        tvOriginalType = findViewById(R.id.tv_original_type);
+        tvRealPath = findViewById(R.id.tv_real_path);
+        tvRealType = findViewById(R.id.tv_real_type);
     }
 
     private void initProgressBar() {
@@ -117,21 +103,6 @@ public class MainActivity extends AppCompatActivity implements HandlePathOzListe
     //////////////////////////////////////     START    ////////////////////////////////////////////
     private void startButton() {
         buttonOpen.setOnClickListener(v -> openFile());
-    }
-
-    private void startRecyclerView() {
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
-        rvOriginal.setHasFixedSize(true);
-        // use a linear layout manager
-        rvOriginal.setLayoutManager(new LinearLayoutManager(this));
-        // specify an viewAdapter (see also next example)
-        rvOriginal.setAdapter(originalAdapter);
-        //
-        //
-        rvReal.setHasFixedSize(true);
-        rvReal.setLayoutManager(new LinearLayoutManager(this));
-        rvReal.setAdapter(realAdapter);
     }
 
     private void startProgressBar() {
@@ -159,7 +130,6 @@ public class MainActivity extends AppCompatActivity implements HandlePathOzListe
             intent.setAction(Intent.ACTION_GET_CONTENT);
             intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
             intent.addCategory(Intent.CATEGORY_OPENABLE);
-            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
             intent.putExtra("return-data", true);
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
@@ -191,25 +161,14 @@ public class MainActivity extends AppCompatActivity implements HandlePathOzListe
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_OPEN_GALLERY && resultCode == RESULT_OK) {
-            //This extension retrieves the path of all selected files without treatment.
-            listUri = getListUri(data);
-            //Update the adapter
-            List<PathModel> listPath = new ArrayList<>();
-            for (int i = 0; i < listUri.size(); i++) {
-                String path = listUri.get(i).getPath();
-                PairPath pairPath = new PairPath("unknown", Objects.requireNonNull(path));
-                PathModel pathModel = new PathModel(pairPath);
-                listPath.add(pathModel);
+            Uri uri = data.getData();
+            if (uri != null) {
+                //Update the TextView with Original Path
+                tvOriginalPath.setText(uri.getPath());
+                tvOriginalType.setText("Unknown");
+                //set Uri to handle
+                handlePathOz.getRealPath(uri);
             }
-            originalAdapter.updateListChanged(listPath);
-
-            //set list of the Uri to handle
-            //in concurrency use:
-            // 1                -> for tasks sequentially
-            //greater than 1    -> for the number of tasks you want to perform in parallel.
-            //Nothing           -> for parallel tasks - by default the value is 10
-            handlePathOz.getRealPath(listUri);
-            // handlePathOz.getRealPath(listUri, 1)
             //show Progress Loading
             if (!progressLoading.isShowing()) {
                 progressLoading.show();
@@ -236,31 +195,19 @@ public class MainActivity extends AppCompatActivity implements HandlePathOzListe
 
     /////////////////////////////     LISTENER HANDLE PATH OZ    ///////////////////////////////////
     @Override
-    public void onRequestHandlePathOz(@NotNull List<PairPath> listPath, @Nullable Throwable tr) {
+    public void onRequestHandlePathOz(@NotNull PathOz pathOz, @Nullable Throwable tr) {
         //Hide Progress
         if (progressLoading.isShowing() || progressCancelling.isShowing()) {
             progressLoading.dismiss();
             progressCancelling.dismiss();
         }
-
-        //Update the adapter
-        List<PathModel> listPathModel = new ArrayList<>();
-        for (int i = 0; i < listPath.size(); i++) {
-            PairPath pairPath = listPath.get(i);
-            PathModel pathModel = new PathModel(pairPath);
-            listPathModel.add(pathModel);
-        }
-        realAdapter.updateListChanged(listPathModel);
+        //Update the TextView with Real Path
+        tvRealPath.setText(pathOz.getPath());
+        tvRealType.setText(pathOz.getType());
 
         //Handle Exception (Optional)
         if (tr != null) {
             Toast.makeText(this, tr.getMessage(), Toast.LENGTH_SHORT).show();
         }
-    }
-
-    //This method is Optional
-    @Override
-    public void onLoading(int currentUri) {
-        progressLoading.setCurrentLoad(currentUri + "/" + listUri.size());
     }
 }

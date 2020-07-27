@@ -69,7 +69,7 @@ If you like this project and would like to help us, make a donation:
 
 ### 🌱 Download release
   
-You can download the sample application with the latest release [here](app/build/outputs/apk/release/HandlePathOZ.apk).
+You can download the sample application with the latest release [here](artifacts/HandlePathOZ.apk).
 
 ### 🌱 Install by GooglePlay 
 

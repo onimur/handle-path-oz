@@ -37,3 +37,6 @@ captures/
 .coverage/
 .exclude/
 secret.properties
+
+#Exclude Release Apk
+!artifacts/*.apk
