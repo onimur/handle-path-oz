@@ -1,11 +1,11 @@
 /*
- * Created by Murillo Comino on 24/06/20 21:13
+ * Created by Murillo Comino on 27/07/20 15:18
  * Github: github.com/onimur
  * StackOverFlow: pt.stackoverflow.com/users/128573
  * Email: murillo_comino@hotmail.com
  *
  *  Copyright (c) 2020.
- *  Last modified 24/06/20 21:01
+ *  Last modified 27/07/20 14:36
  */
 
 package br.com.onimur.sample.handlepathoz.kotlin
@@ -15,40 +15,35 @@ import android.app.Activity
 import android.content.Intent
 import android.content.Intent.ACTION_PICK
 import android.content.pm.PackageManager.PERMISSION_GRANTED
-import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI
 import android.provider.MediaStore.Video.Media.INTERNAL_CONTENT_URI
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import br.com.comino.sample.handlepathoz.R
 import br.com.onimur.handlepathoz.HandlePathOz
 import br.com.onimur.handlepathoz.HandlePathOzListener
-import br.com.onimur.handlepathoz.model.PairPath
-import br.com.onimur.handlepathoz.utils.extension.getListUri
-import br.com.onimur.sample.handlepathoz.kotlin.adapter.RealPathAdapter
-import br.com.onimur.sample.handlepathoz.kotlin.model.PathModel
+import br.com.onimur.handlepathoz.model.PathOz
 import kotlinx.coroutines.FlowPreview
 
-class MainActivity : AppCompatActivity(R.layout.activity_main), HandlePathOzListener {
+class SingleUriActivity : AppCompatActivity(R.layout.activity_single_uri),
+    HandlePathOzListener.SingleUri {
 
     companion object {
         const val REQUEST_PERMISSION = 123
         const val REQUEST_OPEN_GALLERY = 1111
     }
 
-    private var listUri = emptyList<Uri>()
     private lateinit var buttonOpen: Button
-    private lateinit var rvOriginal: RecyclerView
-    private lateinit var rvReal: RecyclerView
-    private lateinit var originalAdapter: RealPathAdapter
-    private lateinit var realAdapter: RealPathAdapter
+    private lateinit var tvOriginalPath: TextView
+    private lateinit var tvOriginalType: TextView
+    private lateinit var tvRealPath: TextView
+    private lateinit var tvRealType: TextView
     private lateinit var progressLoading: ProgressDialog
     private lateinit var progressCancelling: ProgressDialog
     private lateinit var handlePathOz: HandlePathOz
@@ -63,16 +58,13 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), HandlePathOzList
 
     private fun init() {
         initButton()
-        initRecyclerView()
-        initAdapter()
+        initTextViews()
         initProgressBar()
         initHandlePathOz()
-
     }
 
     private fun startAction() {
         startButton()
-        startRecyclerView()
         startProgressBar()
     }
 
@@ -81,20 +73,11 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), HandlePathOzList
         buttonOpen = findViewById(R.id.btn_open)
     }
 
-    private fun initRecyclerView() {
-        rvOriginal = findViewById(R.id.lv_original)
-        rvReal = findViewById(R.id.lv_real)
-    }
-
-    private fun initAdapter() {
-        originalAdapter =
-            RealPathAdapter(
-                ArrayList()
-            )
-        realAdapter =
-            RealPathAdapter(
-                ArrayList()
-            )
+    private fun initTextViews() {
+        tvOriginalPath = findViewById(R.id.tv_original_path)
+        tvOriginalType = findViewById(R.id.tv_original_type)
+        tvRealPath = findViewById(R.id.tv_real_path)
+        tvRealType = findViewById(R.id.tv_real_type)
     }
 
     private fun initProgressBar() {
@@ -117,24 +100,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), HandlePathOzList
     //////////////////////////////////////     START    ////////////////////////////////////////////
     private fun startButton() {
         buttonOpen.setOnClickListener { openFile() }
-    }
-
-    private fun startRecyclerView() {
-        rvOriginal.apply {
-            // use this setting to improve performance if you know that changes
-            // in content do not change the layout size of the RecyclerView
-            setHasFixedSize(true)
-            // use a linear layout manager
-            layoutManager = LinearLayoutManager(context)
-            // specify an viewAdapter (see also next example)
-            adapter = originalAdapter
-        }
-
-        rvReal.apply {
-            setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(context)
-            adapter = realAdapter
-        }
     }
 
     private fun startProgressBar() {
@@ -164,7 +129,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), HandlePathOzList
                 action = Intent.ACTION_GET_CONTENT
                 action = Intent.ACTION_OPEN_DOCUMENT
                 addCategory(Intent.CATEGORY_OPENABLE)
-                putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
                 putExtra("return-data", true)
                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             }
@@ -205,30 +169,21 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), HandlePathOzList
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if ((requestCode == REQUEST_OPEN_GALLERY) and (resultCode == Activity.RESULT_OK)) {
-            //This extension retrieves the path of all selected files without treatment.
-            listUri = data.getListUri()
-            //Update the adapter
 
-            originalAdapter.updateListChanged(listUri.map {
-                PathModel(
-                    PairPath(
-                        "unknown",
-                        it.path.toString()
-                    )
-                )
-            })
+            data?.data?.also { it ->
+                //Update TextView with Original path
+                tvOriginalPath.text = it.path
+                tvOriginalType.text = "Unknown"
 
-            //set list of the Uri to handle
-            //in concurrency use:
-            // 1                -> for tasks sequentially
-            //greater than 1    -> for the number of tasks you want to perform in parallel.
-            //Nothing           -> for parallel tasks - by default the value is 10
-            handlePathOz.getRealPath(listUri)
-            // handlePathOz.getRealPath(listUri, 1)
-            //show Progress Loading
-            if (!progressLoading.isShowing) {
-                progressLoading.show()
+                //set uri to handle
+                handlePathOz.getRealPath(it)
+                //show Progress Loading
+                if (!progressLoading.isShowing) {
+                    progressLoading.show()
+                }
             }
+
+
         }
     }
 
@@ -252,25 +207,19 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), HandlePathOzList
 
 
     /////////////////////////////     LISTENER HANDLE PATH OZ    ///////////////////////////////////
-    override fun onRequestHandlePathOz(listPath: List<PairPath>, tr: Throwable?) {
+    override fun onRequestHandlePathOz(pathOz: PathOz, tr: Throwable?) {
         //Hide Progress
         if (progressLoading.isShowing or progressCancelling.isShowing) {
             progressLoading.dismiss()
             progressCancelling.dismiss()
         }
-        //Update the adapter
-        realAdapter.updateListChanged(listPath.map { pairPath ->
-            PathModel(pairPath)
-        })
+        //Update TextView with RealPath
+        tvRealPath.text = pathOz.path
+        tvRealType.text = pathOz.type
 
         //Handle Exception (Optional)
         tr?.let {
             Toast.makeText(this, "${it.message}", Toast.LENGTH_SHORT).show()
         }
-    }
-
-    //This method is Optional
-    override fun onLoading(currentUri: Int) {
-        progressLoading.currentLoad = "${currentUri}/${listUri.size}"
     }
 }
