@@ -1,11 +1,11 @@
 /*
- * Created by Murillo Comino on 23/06/20 16:56
+ * Created by Murillo Comino on 27/07/20 13:46
  * Github: github.com/onimur
  * StackOverFlow: pt.stackoverflow.com/users/128573
  * Email: murillo_comino@hotmail.com
  *
  *  Copyright (c) 2020.
- *  Last modified 23/06/20 16:56
+ *  Last modified 27/07/20 12:14
  */
 
 package br.com.onimur.handlepathoz
@@ -21,6 +21,7 @@ class HandlePathOz(context: Context, listener: HandlePathOzListener) {
 
     /**
      *
+     * Working with multiple uri's
      * Method responsible for handle file path, for previous API of KitKat and later.
      *
      * @param listUri list to handle
@@ -29,13 +30,24 @@ class HandlePathOz(context: Context, listener: HandlePathOzListener) {
      * by default it is 10. If you choose 1 then the task will be sequential.
      */
     @FlowPreview
-    fun getRealPath(listUri: List<Uri>, concurrency: Int) {
-        handlePathOzUtils.getRealPath(listUri, concurrency)
+    fun getListRealPath(listUri: List<Uri>, concurrency: Int) {
+        handlePathOzUtils.getListRealPath(listUri, concurrency)
     }
 
     @FlowPreview
-    fun getRealPath(listUri: List<Uri>) {
-        getRealPath(listUri, 10)
+    fun getListRealPath(listUri: List<Uri>) {
+        getListRealPath(listUri, 10)
+    }
+
+    /**
+     * Working with single uri
+     * Method responsible for handle file path, for previous API of KitKat and later.
+     *
+     * @param uri
+     */
+    @FlowPreview
+    fun getRealPath(uri: Uri) {
+        handlePathOzUtils.getRealPath(uri)
     }
 
     /**

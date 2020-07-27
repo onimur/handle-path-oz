@@ -1,11 +1,11 @@
 /*
- * Created by Murillo Comino on 23/06/20 16:56
+ * Created by Murillo Comino on 27/07/20 13:46
  * Github: github.com/onimur
  * StackOverFlow: pt.stackoverflow.com/users/128573
  * Email: murillo_comino@hotmail.com
  *
  *  Copyright (c) 2020.
- *  Last modified 23/06/20 16:56
+ *  Last modified 27/07/20 13:44
  */
 
 package br.com.onimur.handlepathoz.utils
@@ -15,7 +15,8 @@ import android.net.Uri
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES.KITKAT
 import br.com.onimur.handlepathoz.HandlePathOzListener
-import br.com.onimur.handlepathoz.model.PairPath
+import br.com.onimur.handlepathoz.errors.HandlePathOzListenerException
+import br.com.onimur.handlepathoz.model.PathOz
 import br.com.onimur.handlepathoz.utils.Constants.HandlePathOzConts.BELOW_KITKAT_FILE
 import br.com.onimur.handlepathoz.utils.Constants.HandlePathOzConts.CLOUD_FILE
 import br.com.onimur.handlepathoz.utils.Constants.HandlePathOzConts.LOCAL_PROVIDER
@@ -41,46 +42,87 @@ internal class HandlePathOzUtils(
     private val isKitKat = SDK_INT >= KITKAT
 
     @FlowPreview
-    fun getRealPath(listUri: List<Uri>, concurrency: Int) {
-        val list = mutableListOf<PairPath>()
-        var error: Throwable? = null
-        job = mainScope.launch {
-            try {
-                listener.onLoading(0)
-                logD("Launch Job")
-                val time = measureTimeMillis {
-                    listUri.asFlow()
-                        .flatMapMerge(concurrency) { uri ->
-                            flow { emit(getPath(uri)) }
-                                .flowOn(Dispatchers.IO)
-                        }.collectIndexed { index, pair ->
-                            list.add(pair)
-                            listener.onLoading(index + 1)
-                        }
+    fun getListRealPath(listUri: List<Uri>, concurrency: Int) {
+        if (listener is HandlePathOzListener.MultipleUri) {
+            val list = mutableListOf<PathOz>()
+            var error: Throwable? = null
+            job = mainScope.launch {
+                try {
+                    listener.onLoading(0)
+                    logD("Launch Job")
+                    val time = measureTimeMillis {
+                        listUri.asFlow()
+                            .flatMapMerge(concurrency) { uri ->
+                                flow { emit(getPath(uri)) }
+                                    .flowOn(Dispatchers.IO)
+                            }.collectIndexed { index, pair ->
+                                list.add(pair)
+                                listener.onLoading(index + 1)
+                            }
+                    }
+                    logD("Total task time: $time ms")
+                } catch (tr: Throwable) {
+                    error = tr
+                    logE("$tr - ${tr.message}")
+                } finally {
+                    if (mainScope.isActive) {
+                        //so Activity is active
+                        listener.onRequestHandlePathOz(list, error)
+                    }
+                    logD(
+                        "MainScope isActive: ${mainScope.isActive}" +
+                                "\nThis Scope isActive: ${this.isActive}" +
+                                "\nJob isNew: ${job?.isNew}" +
+                                "\nJob isCompleting: ${job?.isCompleting}" +
+                                "\nJob isCancelling: ${job?.isCancelling}" +
+                                "\nJob wasCancelled: ${job?.wasCancelled}" +
+                                "\nJob wasCompleted: ${job?.wasCompleted}"
+                    )
                 }
-                logD("Total task time: $time ms")
-            } catch (tr: Throwable) {
-                error = tr
-                logE("$tr - ${tr.message}")
-            } finally {
-                if (mainScope.isActive) {
-                    //so Activity is active
-                    listener.onRequestHandlePathOz(list, error)
-                }
-                logD(
-                    "MainScope isActive: ${mainScope.isActive}" +
-                            "\nThis Scope isActive: ${this.isActive}" +
-                            "\nJob isNew: ${job?.isNew}" +
-                            "\nJob isCompleting: ${job?.isCompleting}" +
-                            "\nJob isCancelling: ${job?.isCancelling}" +
-                            "\nJob wasCancelled: ${job?.wasCancelled}" +
-                            "\nJob wasCompleted: ${job?.wasCompleted}"
-                )
             }
+        } else {
+            throw HandlePathOzListenerException("If you are working with single uri, use the interface: HandlePathOzListener.SingleUri")
         }
     }
 
-    private fun getPath(uri: Uri): PairPath {
+    fun getRealPath(uri: Uri) {
+        if (listener is HandlePathOzListener.SingleUri) {
+            var error: Throwable? = null
+            var pathOz = PathOz("", "")
+            job = mainScope.launch {
+                try {
+                    logD("Launch Job")
+                    val time = measureTimeMillis {
+                        pathOz = flow { emit(getPath(uri)) }
+                            .flowOn(Dispatchers.IO)
+                            .single()
+                    }
+                    logD("Total task time: $time ms")
+                } catch (tr: Throwable) {
+                    error = tr
+                    logE("$tr - ${tr.message}")
+                } finally {
+                    if (mainScope.isActive) {
+                        //so Activity is active
+                        listener.onRequestHandlePathOz(pathOz, error)
+                    }
+                    logD(
+                        "MainScope isActive: ${mainScope.isActive}" +
+                                "\nThis Scope isActive: ${this.isActive}" +
+                                "\nJob isNew: ${job?.isNew}" +
+                                "\nJob isCompleting: ${job?.isCompleting}" +
+                                "\nJob isCancelling: ${job?.isCancelling}" +
+                                "\nJob wasCancelled: ${job?.wasCancelled}" +
+                                "\nJob wasCompleted: ${job?.wasCompleted}"
+                    )
+                }
+            }
+        } else {
+            throw HandlePathOzListenerException("If you are working with multiple uri's, use the interface: HandlePathOzListener.MultipleUri")
+        }
+    }
+
+    private fun getPath(uri: Uri): PathOz {
         val contentResolver = context.contentResolver
         val pathTempFile = getFullPathTemp(context, uri)
         val file: File?
@@ -91,27 +133,27 @@ internal class HandlePathOzUtils(
                 uri.isCloudFile -> {
                     file = File(pathTempFile)
                     downloadFile(contentResolver, file, uri, job)
-                    PairPath(CLOUD_FILE, pathTempFile).alsoLogD()
+                    PathOz(CLOUD_FILE, pathTempFile).alsoLogD()
                 }
                 //Third Party App
                 returnedPath.isBlank() -> {
                     file = File(pathTempFile)
                     downloadFile(contentResolver, file, uri, job)
-                    PairPath(UNKNOWN_FILE_CHOOSER, pathTempFile).alsoLogD()
+                    PathOz(UNKNOWN_FILE_CHOOSER, pathTempFile).alsoLogD()
                 }
                 //Unknown Provider or unknown mime type
                 uri.isUnknownProvider(returnedPath, contentResolver) -> {
                     file = File(pathTempFile)
                     downloadFile(contentResolver, file, uri, job)
-                    PairPath(UNKNOWN_PROVIDER, pathTempFile).alsoLogD()
+                    PathOz(UNKNOWN_PROVIDER, pathTempFile).alsoLogD()
                 }
                 //LocalFile
                 else -> {
-                    PairPath(LOCAL_PROVIDER, returnedPath).alsoLogD()
+                    PathOz(LOCAL_PROVIDER, returnedPath).alsoLogD()
                 }
             }
         } else {
-            PairPath(
+            PathOz(
                 BELOW_KITKAT_FILE,
                 getPathBelowKitKat(context, uri)
             ).alsoLogD()
@@ -136,5 +178,4 @@ internal class HandlePathOzUtils(
     fun deleteTemporaryFiles() {
         deleteTemporaryFiles(context)
     }
-
 }
