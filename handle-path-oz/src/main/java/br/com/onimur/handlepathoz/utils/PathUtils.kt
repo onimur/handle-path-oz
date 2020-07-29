@@ -1,11 +1,11 @@
 /*
- * Created by Murillo Comino on 22/06/20 17:50
+ * Created by Murillo Comino on 29/07/20 14:25
  * Github: github.com/onimur
  * StackOverFlow: pt.stackoverflow.com/users/128573
  * Email: murillo_comino@hotmail.com
  *
  *  Copyright (c) 2020.
- *  Last modified 18/06/20 20:56
+ *  Last modified 29/07/20 14:21
  */
 
 package br.com.onimur.handlepathoz.utils
@@ -27,6 +27,7 @@ import br.com.onimur.handlepathoz.utils.Constants.PathUri.COLUMN_DISPLAY_NAME
 import br.com.onimur.handlepathoz.utils.Constants.PathUri.FOLDER_DOWNLOAD
 import br.com.onimur.handlepathoz.utils.ContentUriUtils.getPathFromColumn
 import br.com.onimur.handlepathoz.utils.FileUtils.getSubFolders
+import br.com.onimur.handlepathoz.utils.SDCardUtils.getStorageDirectories
 import br.com.onimur.handlepathoz.utils.extension.*
 import java.io.File
 
@@ -45,7 +46,7 @@ object PathUtils {
         return when {
             DocumentsContract.isDocumentUri(context, uri) -> {
                 when {
-                    uri.isExternalStorageDocument -> externalStorageDocument(uri)
+                    uri.isExternalStorageDocument -> externalStorageDocument(context, uri)
                     uri.isRawDownloadsDocument -> rawDownloadsDocument(contentResolver, uri)
                     uri.isDownloadsDocument -> downloadsDocument(contentResolver, uri)
                     uri.isMediaDocument -> mediaDocument(contentResolver, uri)
@@ -90,19 +91,42 @@ object PathUtils {
      */
     @SuppressLint("NewApi")
     @Suppress("DEPRECATION")
-    private fun externalStorageDocument(uri: Uri): String {
+    private fun externalStorageDocument(context: Context, uri: Uri): String {
         logD("File is External Storage")
         val docId = DocumentsContract.getDocumentId(uri)
-        val split: Array<String?> = docId.split(":").toTypedArray()
+        val split = docId.split(":").toTypedArray()
         val type = split[0]
-        return if ("primary".equals(type, ignoreCase = true)) {
-            if (split.size > 1) {
+        if ("primary".equals(type, ignoreCase = true)) {
+            return if (split.size > 1) {
                 "${Environment.getExternalStorageDirectory()}/${split[1]}"
             } else {
                 "${Environment.getExternalStorageDirectory()}/"
             }
         } else {
-            "storage/${docId.replace(":", "/")}"
+            val path = "storage/${docId.replace(":", "/")}"
+            if (File(path).exists()) {
+                return "/$path"
+            }
+            val availableExternalStorage = getStorageDirectories(context)
+            var root = ""
+            availableExternalStorage.forEach { storage ->
+                root = if (split[1].startsWith("/")) {
+                    "$storage${split[1]}"
+                } else {
+                    "$storage/${split[1]}"
+                }
+            }
+            return if (root.contains(type)) {
+                path
+            } else {
+                if (root.startsWith("/storage/") || root.startsWith("storage/")) {
+                    root
+                } else if (root.startsWith("/")) {
+                    "/storage$root"
+                } else {
+                    "/storage/$root"
+                }
+            }
         }
     }
 

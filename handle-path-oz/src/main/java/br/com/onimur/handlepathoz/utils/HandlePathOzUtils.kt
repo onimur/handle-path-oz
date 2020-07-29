@@ -1,11 +1,11 @@
 /*
- * Created by Murillo Comino on 27/07/20 13:46
+ * Created by Murillo Comino on 29/07/20 14:47
  * Github: github.com/onimur
  * StackOverFlow: pt.stackoverflow.com/users/128573
  * Email: murillo_comino@hotmail.com
  *
  *  Copyright (c) 2020.
- *  Last modified 27/07/20 13:44
+ *  Last modified 29/07/20 14:36
  */
 
 package br.com.onimur.handlepathoz.utils
@@ -17,11 +17,11 @@ import android.os.Build.VERSION_CODES.KITKAT
 import br.com.onimur.handlepathoz.HandlePathOzListener
 import br.com.onimur.handlepathoz.errors.HandlePathOzListenerException
 import br.com.onimur.handlepathoz.model.PathOz
-import br.com.onimur.handlepathoz.utils.Constants.HandlePathOzConts.BELOW_KITKAT_FILE
-import br.com.onimur.handlepathoz.utils.Constants.HandlePathOzConts.CLOUD_FILE
-import br.com.onimur.handlepathoz.utils.Constants.HandlePathOzConts.LOCAL_PROVIDER
-import br.com.onimur.handlepathoz.utils.Constants.HandlePathOzConts.UNKNOWN_FILE_CHOOSER
-import br.com.onimur.handlepathoz.utils.Constants.HandlePathOzConts.UNKNOWN_PROVIDER
+import br.com.onimur.handlepathoz.utils.Constants.HandlePathOz.BELOW_KITKAT_FILE
+import br.com.onimur.handlepathoz.utils.Constants.HandlePathOz.CLOUD_FILE
+import br.com.onimur.handlepathoz.utils.Constants.HandlePathOz.LOCAL_PROVIDER
+import br.com.onimur.handlepathoz.utils.Constants.HandlePathOz.UNKNOWN_FILE_CHOOSER
+import br.com.onimur.handlepathoz.utils.Constants.HandlePathOz.UNKNOWN_PROVIDER
 import br.com.onimur.handlepathoz.utils.FileUtils.deleteTemporaryFiles
 import br.com.onimur.handlepathoz.utils.FileUtils.downloadFile
 import br.com.onimur.handlepathoz.utils.FileUtils.getFullPathTemp
