@@ -35,6 +35,14 @@ commands:
       - run:
           name: Publish Sample Apk to Google Play
           command: ./gradlew publishReleaseApk
+  generate-keystore:
+    steps:
+      - run:
+          name: Decode Keystore
+          command: |
+            # Decode Secret keys from environment variables
+            base64 -d \<<< $ENCODED_KEYSTORE > ${CIRCLE_WORKING_DIRECTORY/#\~/$HOME}/keystore.jks
+            echo 'export KEYSTORE=${CIRCLE_WORKING_DIRECTORY/#\~/$HOME}/keystore.jks' >> $BASH_ENV
 jobs:
   # Automate versioning to library and sample app on tagged.
   versioning:
@@ -72,12 +80,7 @@ jobs:
       - run:
           name: chmod permissions
           command: chmod +x ./gradlew
-      - run:
-          name: Decode Keystore
-          command: |
-            # Decode Secret keys from environment variables
-            base64 -d \<<< $ENCODED_KEYSTORE > ${CIRCLE_WORKING_DIRECTORY/#\~/$HOME}/keystore.jks
-            echo 'export KEYSTORE=${CIRCLE_WORKING_DIRECTORY/#\~/$HOME}/keystore.jks' >> $BASH_ENV
+      - generate-keystore
       - run:
           name: Download Dependencies
           command: ./gradlew androidDependencies
@@ -148,6 +151,7 @@ jobs:
           destination: ./
       - restore_cache:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+      - generate-keystore
       - run:
           name: chmod permissions
           command: chmod +x ./gradlew
