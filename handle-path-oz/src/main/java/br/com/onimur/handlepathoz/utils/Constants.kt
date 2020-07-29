@@ -1,15 +1,16 @@
 /*
- * Created by Murillo Comino on 23/06/20 16:55
+ * Created by Murillo Comino on 29/07/20 13:22
  * Github: github.com/onimur
  * StackOverFlow: pt.stackoverflow.com/users/128573
  * Email: murillo_comino@hotmail.com
  *
  *  Copyright (c) 2020.
- *  Last modified 23/06/20 16:48
+ *  Last modified 29/07/20 12:33
  */
 
 package br.com.onimur.handlepathoz.utils
 
+import android.annotation.SuppressLint
 import android.provider.MediaStore
 
 object Constants {
@@ -41,6 +42,32 @@ object Constants {
         //Deprecated
         //val COLUMN_DATA = MediaStore.MediaColumns.DATA
         const val COLUMN_DATA = "_data"
+    }
+    internal object SDCard {
+        @SuppressLint("SdCardPath")
+        val SDCARD_PATHS = arrayOf(
+            "/storage/sdcard0",
+            "/storage/sdcard1",
+            "/storage/extsdcard",
+            "/storage/sdcard0/external_sdcard",
+            "/mnt/extsdcard",
+            "/mnt/sdcard/external_sd",
+            "/mnt/sdcard/ext_sd",
+            "/mnt/external_sd",
+            "/mnt/media_rw/sdcard1",
+            "/removable/microsd",
+            "/mnt/emmc",
+            "/storage/external_SD",
+            "/storage/ext_sd",
+            "/storage/removable/sdcard1",
+            "/data/sdext",
+            "/data/sdext2",
+            "/data/sdext3",
+            "/data/sdext4",
+            "/sdcard1",
+            "/sdcard2",
+            "/storage/microsd"
+        )
     }
 
     object HandlePathOzConts {
