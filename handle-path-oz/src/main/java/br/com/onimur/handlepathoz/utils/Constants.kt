@@ -1,11 +1,11 @@
 /*
- * Created by Murillo Comino on 29/07/20 14:34
+ * Created by Murillo Comino on 29/07/20 14:47
  * Github: github.com/onimur
  * StackOverFlow: pt.stackoverflow.com/users/128573
  * Email: murillo_comino@hotmail.com
  *
  *  Copyright (c) 2020.
- *  Last modified 29/07/20 14:33
+ *  Last modified 29/07/20 14:46
  */
 
 package br.com.onimur.handlepathoz.utils
@@ -16,14 +16,14 @@ import android.provider.MediaStore
 object Constants {
     internal object PathUri {
         //Local
-        const val PATH_ANDROID = "com.android"
+        private const val PATH_ANDROID = "com.android"
         const val PATH_EXTERNAL_STORAGE = "$PATH_ANDROID.externalstorage.documents"
         const val PATH_DOWNLOAD = "$PATH_ANDROID.providers.downloads.documents"
         const val PATH_MEDIA = "$PATH_ANDROID.providers.media.documents"
         const val PATH_RAW_DOWNLOAD = "$PATH_DOWNLOAD/document/raw"
 
         //Cloud GoogleDrive
-        const val PATH_GOOGLE = "com.google.android"
+        private const val PATH_GOOGLE = "com.google.android"
         const val PATH_GOOGLE_APPS = "$PATH_GOOGLE.apps"
         const val PATH_GOOGLE_PHOTOS = "$PATH_GOOGLE_APPS.photos.content"
 
@@ -70,7 +70,7 @@ object Constants {
         )
     }
 
-    object HandlePathOzConts {
+    object HandlePathOz {
         const val BELOW_KITKAT_FILE = "belowKitkatFile"
         const val CLOUD_FILE = "cloudFile"
         const val UNKNOWN_PROVIDER = "unknownProvider"
