@@ -156,11 +156,15 @@ jobs:
           name: chmod permissions
           command: chmod +x ./gradlew
       - run:
+          name: Build apk
+          command: ./gradlew assembleRelease
+      - run:
           name: Publish to Jcenter and Maven Central
           command: ./gradlew clean build bintrayUpload -PdryRun=false
       - run:
           name: Publish to Github Package
           command: ./gradlew publish
+      - publish-sample-apk-google-play
   # Push Changelog, Apk and new version to remote repository.
   push-updates-to-remote-github:
     machine: true
@@ -212,8 +216,6 @@ workflows:
             - tools/attach-dir:
                 paths: lib.properties
                 destination: ./
-          post-steps:
-            - publish-sample-apk-google-play
           filters: *orb_tagged_filters
           requires: [versioning]
       - publish-github-release:
