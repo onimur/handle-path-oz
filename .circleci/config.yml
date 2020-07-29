@@ -23,18 +23,7 @@ commands:
           env_var: DATE_FORMAT
       - mem/recall:
           env_var: OUTPUT_CHANGELOG
-  # Command - Automate the publication of the new version of the simple app for google play.
-  publish-sample-apk-google-play:
-    steps:
-      - run:
-          name: Decode Publish Google Play
-          command: |
-            # Decode secret file from environment variables
-            base64 -d \<<< $ENCODED_PUBLISH_GOOGLE_PLAY > ${CIRCLE_WORKING_DIRECTORY/#\~/$HOME}/google-play.json
-            echo 'export PUBLISH_GOOGLE=${CIRCLE_WORKING_DIRECTORY/#\~/$HOME}/google-play.json' >> $BASH_ENV
-      - run:
-          name: Publish Sample Apk to Google Play
-          command: ./gradlew publishReleaseApk
+  # Decodes Environment Variables in file
   generate-keystore:
     steps:
       - run:
@@ -43,6 +32,14 @@ commands:
             # Decode Secret keys from environment variables
             base64 -d \<<< $ENCODED_KEYSTORE > ${CIRCLE_WORKING_DIRECTORY/#\~/$HOME}/keystore.jks
             echo 'export KEYSTORE=${CIRCLE_WORKING_DIRECTORY/#\~/$HOME}/keystore.jks' >> $BASH_ENV
+  generate-google-json:
+    steps:
+      - run:
+          name: Decode Publish Google Play
+          command: |
+            # Decode secret file from environment variables
+            base64 -d \<<< $ENCODED_PUBLISH_GOOGLE_PLAY > ${CIRCLE_WORKING_DIRECTORY/#\~/$HOME}/google-play.json
+            echo 'export PUBLISH_GOOGLE=${CIRCLE_WORKING_DIRECTORY/#\~/$HOME}/google-play.json' >> $BASH_ENV
 jobs:
   # Automate versioning to library and sample app on tagged.
   versioning:
@@ -152,6 +149,7 @@ jobs:
       - restore_cache:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
       - generate-keystore
+      - generate-google-json
       - run:
           name: chmod permissions
           command: chmod +x ./gradlew
@@ -161,10 +159,10 @@ jobs:
       - run:
           name: Publish to Jcenter and Maven Central
           command: ./gradlew clean build bintrayUpload -PdryRun=false
+      # Command - Automate the publication of the new version of the simple app for google play.
       - run:
-          name: Publish to Github Package
-          command: ./gradlew publish
-      - publish-sample-apk-google-play
+          name: Publish Sample Apk to Google Play
+          command: ./gradlew publishReleaseApk
   # Push Changelog, Apk and new version to remote repository.
   push-updates-to-remote-github:
     machine: true
@@ -200,16 +198,9 @@ workflows:
   # for all tags
   tagged-publish:
     jobs:
-      - orb-tools/lint:
-          filters: *orb_tagged_filters
-      - orb-tools/shellcheck:
-          filters: *orb_tagged_filters
-          exclude: "SC2002,SC1073,SC1009"
-          requires: [orb-tools/lint]
       - versioning:
           filters: *orb_tagged_filters
           context: main-context
-          requires: [orb-tools/shellcheck]
       - prepare:
           pre-steps:
             - checkout
