@@ -54,8 +54,12 @@ If you like this project and would like to help us, make a donation:
 - [Sample application](#-sample-application)
 - [Config](#%EF%B8%8F-config)
 - [Getting start](#-getting-start)
-    - [Kotlin](#-kotlin)
-    - [Java](#-java)
+    - [Multiple uri](#working-with-multiple-uri)
+        - [Kotlin](#-kotlin)
+        - [Java](#-java)
+    - [Single uri](#working-with-single-uri)
+        - [Kotlin](#-kotlin-1)
+        - [Java](#-java-1)
 - [Main features](#-main-features)
 - [Built with](#-built-with)
 - [Contributing](#-contributing)
@@ -91,7 +95,7 @@ In build.gradle(Module:app) within dependencies, implement:
       
 ```kotlin
 
-    implementation 'com.github.onimur:handle-path-oz:1.0.3'
+    implementation 'com.github.onimur:handle-path-oz:1.0.7'
 
 ```
 
@@ -102,7 +106,7 @@ In build.gradle(Module:app) within dependencies, implement:
     <dependency>
       <groupId>com.github.onimur</groupId>
       <artifactId>handle-path-oz</artifactId>
-      <version>1.0.3</version>
+      <version>1.0.7</version>
       <type>pom</type>
     </dependency>
 
@@ -112,13 +116,17 @@ In build.gradle(Module:app) within dependencies, implement:
 
 ```
 
-    <dependency org='com.github.onimur' name='handle-path-oz' rev='1.0.3'>
+    <dependency org='com.github.onimur' name='handle-path-oz' rev='1.0.7'>
       <artifact name='handle-path-oz' ext='pom' ></artifact>
     </dependency>
 
 ```
 
-## 💡 Getting start
+# 💡 Getting start
+
+## Working with Multiple uri
+
+The next steps are for working with multiple uri as well as for a single uri.
 
 ### 🎲 Kotlin
   
@@ -128,7 +136,7 @@ In build.gradle(Module:app) within dependencies, implement:
  
 ```kotlin
 
-  class MainActivity : AppCompatActivity(), HandlePathOzListener {
+  class MainActivity : AppCompatActivity(), HandlePathOzListener.MultipleUri {
    //...
    }
 
@@ -155,7 +163,7 @@ Implement handlePathOz in your `onCreate()` method, as shown below:
 ```kotlin
 
       private lateinit var handlePathOz: HandlePathOz
-      private val listener = object: HandlePathOzListener{
+      private val listener = object: HandlePathOzListener.MultipleUri{
       //implement methods
       }
   
@@ -185,8 +193,8 @@ Implement handlePathOz in your `onCreate()` method, as shown below:
             // 1                -> for tasks sequentially
             //greater than 1    -> for the number of tasks you want to perform in parallel.
             //Nothing           -> for parallel tasks - by default the value is 10
-            handlePathOz.getRealPath(listUri)
-            // handlePathOz.getRealPath(listUri, 1)
+            handlePathOz.getListRealPath(listUri)
+            // handlePathOz.getListRealPath(listUri, 1)
 
             //show Progress Loading
         }
@@ -202,10 +210,10 @@ We have two methods in the listeners, one of which is optional:
 
       //On Completion (Sucess or Error)
       //If there is a cancellation or error, the entire task that was handled will be returned in the list.
-      override fun onRequestHandlePathOz(listPath: List<PairPath>, tr: Throwable?) {
+      override fun onRequestHandlePathOz(listPathOz: List<PathOz>, tr: Throwable?) {
           //Hide Progress
           //Update the recyclerview with the list
-          yourAdapter.updateListChanged(listPath.map { uri -> Uri.parse(uri.path) })
+          yourAdapter.updateListChanged(listPathOz.map { uri -> Uri.parse(uri.path) })
   
           //Handle any Exception (Optional)
           tr?.let {
@@ -264,7 +272,7 @@ The implementation of the Listener you can implement it within the scope of the 
   
 ```java
 
-     public class MainActivity extends AppCompatActivity implements HandlePathOzListener {
+     public class MainActivity extends AppCompatActivity implements HandlePathOzListener.MultipleUri {
       //
       }
 
@@ -308,8 +316,8 @@ After selecting the desired files (The sample application has the entire step) i
             // 1                -> for tasks sequentially
             //greater than 1    -> for the number of tasks you want to perform in parallel.
             //Nothing           -> for parallel tasks - by default the value is 10
-            handlePathOz.getRealPath(listUri);
-            // handlePathOz.getRealPath(listUri, 1)
+            handlePathOz.getListRealPath(listUri);
+            // handlePathOz.getListRealPath(listUri, 1)
 
             //show Progress Loading
         }
@@ -326,13 +334,13 @@ We have two methods in the listeners, one of which is optional:
         //On Completion (Sucess or Error)
         //If there is a cancellation or error, the entire task that was handled will be returned in the list.
        @Override
-       public void onRequestHandlePathOz(@NonNull List<PairPath> listPath, Throwable tr) {
+       public void onRequestHandlePathOz(@NonNull List<PathOz> listPathOz, Throwable tr) {
             //Hide Progress
             //Update the recyclerview with the list
             //Update the adapter
             List<Uri> listUri = new ArrayList<>();
-            for (int i = 0; i < listPath.size(); i++) {
-                Uri uri = Uri.parse(listPath.get(i).getPath());
+            for (int i = 0; i < listPathOz.size(); i++) {
+                Uri uri = Uri.parse(listPathOz.get(i).getPath());
                 listUri.add(uri);
             }
             yourAdapter.updateListChanged(listUri);
@@ -385,7 +393,239 @@ Example of use:
     }
 
 ```
+## Working with Single uri
+
+The next steps only serve to work with a single uri.
+
+### 🎲 Kotlin
   
+#### 💫 Initialization
+
+1.1 - In Kotlin for the implementation of the Listener you can implement it within the scope of the class, as shown below, or also as shown in item **1.2**:
+ 
+```kotlin
+
+  class MainActivity : AppCompatActivity(), HandlePathOzListener.SingleUri {
+   //...
+   }
+
+```
+  
+`Alt+Enter` to implement the methods, we will discuss the methods later in the topic **Controller**.
+Implement handlePathOz in your `onCreate()` method, as shown below:
+  
+```kotlin
+
+    private lateinit var handlePathOz: HandlePathOz
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        //Initialize HandlePathOz
+        //context, listener
+        handlePathOz = HandlePathOz(this, this)
+    }
+
+```
+
+1.2 - You can also implement the Listener when initializing the class, without having to implement it within the scope of the class:
+  
+```kotlin
+
+      private lateinit var handlePathOz: HandlePathOz
+      private val listener = object: HandlePathOzListener.SingleUri{
+      //implement methods
+      }
+  
+      override fun onCreate(savedInstanceState: Bundle?) {
+          super.onCreate(savedInstanceState)
+          //Initialize HandlePathOz
+          //context, listener
+          handlePathOz = HandlePathOz(this, listener)
+      }
+
+```
+     
+2 - After selecting the desired files (The sample application has the entire step) in ```onActivityResult``` leave as follows:
+  
+```kotlin
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if ((requestCode == REQUEST_OPEN_GALLERY) and (resultCode == Activity.RESULT_OK)) {
+            data?.data?.also { it ->
+                //set uri to handle
+                handlePathOz.getRealPath(it)
+                //show Progress Loading
+            } 
+        }
+    }
+
+```
+  
+#### 🎮 Controller
+
+Override Listeners
+  
+```kotlin
+
+      //On Completion (Sucess or Error)
+      //If there is a cancellation or error.
+      override fun onRequestHandlePathOz(pathOz: PathOz, tr: Throwable?) {
+          //Hide Progress
+
+          //Now you can work with real path:
+          Toast.makeText(this, "The real path is: ${pathOz.path} \n The type is: ${path.type}", Toast.LENGTH_SHORT).show()
+  
+          //Handle any Exception (Optional)
+          tr?.let {
+              Toast.makeText(this, "${it.message}", Toast.LENGTH_SHORT).show()
+          }
+      }
+
+```
+
+ #### ☁️ Cloud files and Unknown Providers
+  
+If the selected file was from Dropbox,Google Drive, OneDrive or an unknown file provider, it will then be copied/created in
+InternalStorage/Android/data/your.package.name/files/Temp/sameFileNameAndExtension
+When you want to delete the generated files call:
+  
+```kotlin
+
+   handlePathOz.deleteTemporaryFiles()
+
+```
+  
+#### 💣 Cancel the tasks
+  
+There are two methods for canceling tasks, ```cancelTask()``` and ```onDestroy()```.
+  
+**handlePathOz.cancelTask() ->** Can be called as a button action for canceling or by progressBar (As shown in the demo application).
+  
+**handlePathOz.onDestroy() ->**  It can be called with the Activity or fragment's  ```onDestroy()``` method. 
+This method destroys the task and its cancellation does not update anything and cannot be restarted.
+Example of use:
+  
+```kotlin
+
+    override fun onDestroy() {
+        handlePathOz.onDestroy()
+        //You can delete the temporary files here as well.
+        super.onDestroy()
+    }
+
+```
+
+---
+
+### 🎲 Java
+  
+#### 💫 Initialization
+
+The implementation of the Listener you can implement it within the scope of the class, as shown below:
+  
+```java
+
+     public class MainActivity extends AppCompatActivity implements HandlePathOzListener.SingleUri {
+      //
+      }
+
+```
+
+`Alt+Enter` to implement the methods, we will discuss the methods later in the topic **Controller**.
+Implement handlePathOz in your `onCreate()` method, as shown below:
+  
+```java
+
+    private HandlePathOz handlePathOz;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        //Initialize HandlePathOz
+        //context, listener
+        handlePathOz = HandlePathOz(this, this)
+    }
+
+```
+
+After selecting the desired files (The sample application has the entire step) in ```onActivityResult``` leave as follows:
+  
+```java
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_OPEN_GALLERY && resultCode == RESULT_OK) {
+            Uri uri = data.getData();
+            if (uri != null) {
+                //set Uri to handle
+                handlePathOz.getRealPath(uri);
+                //show Progress Loading
+            }  
+        }
+    }
+
+```
+  
+#### 🎮 Controller
+  
+We have two methods in the listeners, one of which is optional:
+    
+```java
+
+        //On Completion (Sucess or Error)
+        //If there is a cancellation or error.
+       @Override
+       public void onRequestHandlePathOz(@NonNull PathOz pathOz, Throwable tr) {
+            //Hide Progress
+            
+            //Now you can work with real path:
+            Toast.makeText(this, "The real path is: " + pathOz.getPath + "\n The type is: " + path.getType, Toast.LENGTH_SHORT).show();
+    
+            //Handle Exception (Optional)
+            if (throwable != null) {
+                Toast.makeText(this, throwable.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+       }
+
+```
+
+#### ☁️ Cloud files and Unknown Providers
+  
+If the selected file was from Dropbox,Google Drive, OneDrive or an unknown file provider, it will then be copied/created in
+InternalStorage/Android/data/your.package.name/files/Temp/sameFileNameAndExtension
+When you want to delete the generated files call:
+  
+```java
+
+   handlePathOz.deleteTemporaryFiles()
+
+```
+  
+#### 💣 Cancel the tasks
+  
+There are two methods for canceling tasks, ```cancelTask()``` and ```onDestroy()```.
+  
+**handlePathOz.cancelTask() ->** Can be called as a button action for canceling or by progressBar (As shown in the demo application).
+  
+**handlePathOz.onDestroy() ->**  It can be called with the Activity or fragment's  ```onDestroy()``` method. 
+This method destroys the task and its cancellation does not update anything and cannot be restarted.
+Example of use:
+  
+```java
+
+    @Override
+    public void onDestroy() {
+        handlePathOz.onDestroy();
+        //You can delete the temporary files here as well.
+        super.onDestroy();
+    }
+
+```
+
 ## 🔍 Main features
 
 - [Kotlin Coroutines/Flow](https://kotlinlang.org/docs/reference/coroutines-overview.html) 
