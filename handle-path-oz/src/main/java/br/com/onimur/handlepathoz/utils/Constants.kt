@@ -1,11 +1,11 @@
 /*
- * Created by Murillo Comino on 29/07/20 13:22
+ * Created by Murillo Comino on 29/07/20 14:34
  * Github: github.com/onimur
  * StackOverFlow: pt.stackoverflow.com/users/128573
  * Email: murillo_comino@hotmail.com
  *
  *  Copyright (c) 2020.
- *  Last modified 29/07/20 12:33
+ *  Last modified 29/07/20 14:33
  */
 
 package br.com.onimur.handlepathoz.utils
@@ -31,7 +31,7 @@ object Constants {
         const val PATH_ONEDRIVE = "com.microsoft.skydrive.content"
 
         //Cloud DropBox
-        const val PATH_DROPBOX = "com.dropbox.android"
+        const val PATH_DROPBOX = "com.dropbox."
 
         //Folder
         const val FOLDER_DOWNLOAD = "Download"
