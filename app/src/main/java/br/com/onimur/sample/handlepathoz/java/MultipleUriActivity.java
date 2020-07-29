@@ -1,11 +1,11 @@
 /*
- * Created by Murillo Comino on 27/07/20 15:18
+ * Created by Murillo Comino on 29/07/20 17:45
  * Github: github.com/onimur
  * StackOverFlow: pt.stackoverflow.com/users/128573
  * Email: murillo_comino@hotmail.com
  *
  *  Copyright (c) 2020.
- *  Last modified 27/07/20 13:47
+ *  Last modified 29/07/20 17:08
  */
 
 package br.com.onimur.sample.handlepathoz.java;
@@ -209,7 +209,7 @@ public class MultipleUriActivity extends AppCompatActivity implements HandlePath
             //greater than 1    -> for the number of tasks you want to perform in parallel.
             //Nothing           -> for parallel tasks - by default the value is 10
             handlePathOz.getListRealPath(listUri);
-            // handlePathOz.getRealPath(listUri, 1)
+            // handlePathOz.getListRealPath(listUri, 1)
             //show Progress Loading
             if (!progressLoading.isShowing()) {
                 progressLoading.show();

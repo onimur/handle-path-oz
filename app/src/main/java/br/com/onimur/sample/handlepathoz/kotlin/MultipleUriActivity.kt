@@ -1,11 +1,11 @@
 /*
- * Created by Murillo Comino on 27/07/20 15:18
+ * Created by Murillo Comino on 29/07/20 17:45
  * Github: github.com/onimur
  * StackOverFlow: pt.stackoverflow.com/users/128573
  * Email: murillo_comino@hotmail.com
  *
  *  Copyright (c) 2020.
- *  Last modified 27/07/20 13:47
+ *  Last modified 29/07/20 17:08
  */
 
 package br.com.onimur.sample.handlepathoz.kotlin
@@ -36,7 +36,8 @@ import br.com.onimur.sample.handlepathoz.kotlin.adapter.RealPathAdapter
 import br.com.onimur.sample.handlepathoz.kotlin.model.PathModel
 import kotlinx.coroutines.FlowPreview
 
-class MultipleUriActivity : AppCompatActivity(R.layout.activity_multiple_uri), HandlePathOzListener.MultipleUri {
+class MultipleUriActivity : AppCompatActivity(R.layout.activity_multiple_uri),
+    HandlePathOzListener.MultipleUri {
 
     companion object {
         const val REQUEST_PERMISSION = 123
@@ -87,14 +88,8 @@ class MultipleUriActivity : AppCompatActivity(R.layout.activity_multiple_uri), H
     }
 
     private fun initAdapter() {
-        originalAdapter =
-            RealPathAdapter(
-                ArrayList()
-            )
-        realAdapter =
-            RealPathAdapter(
-                ArrayList()
-            )
+        originalAdapter = RealPathAdapter(ArrayList())
+        realAdapter = RealPathAdapter(ArrayList())
     }
 
     private fun initProgressBar() {
@@ -224,7 +219,7 @@ class MultipleUriActivity : AppCompatActivity(R.layout.activity_multiple_uri), H
             //greater than 1    -> for the number of tasks you want to perform in parallel.
             //Nothing           -> for parallel tasks - by default the value is 10
             handlePathOz.getListRealPath(listUri)
-            // handlePathOz.getRealPath(listUri, 1)
+            // handlePathOz.getListRealPath(listUri, 1)
             //show Progress Loading
             if (!progressLoading.isShowing) {
                 progressLoading.show()
@@ -259,8 +254,8 @@ class MultipleUriActivity : AppCompatActivity(R.layout.activity_multiple_uri), H
             progressCancelling.dismiss()
         }
         //Update the adapter
-        realAdapter.updateListChanged(listPathOz.map { pairPath ->
-            PathModel(pairPath)
+        realAdapter.updateListChanged(listPathOz.map { pathOz ->
+            PathModel(pathOz)
         })
 
         //Handle Exception (Optional)
