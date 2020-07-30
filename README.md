@@ -60,6 +60,7 @@ If you like this project and would like to help us, make a donation:
     - [Single uri](#working-with-single-uri)
         - [Kotlin](#-kotlin-1)
         - [Java](#-java-1)
+- [Projects using this library](#-projects-using-this-library)
 - [Main features](#-main-features)
 - [Built with](#-built-with)
 - [Contributing](#-contributing)
@@ -625,6 +626,12 @@ Example of use:
     }
 
 ```
+
+## 🚀 Projects using this library
+
+Here's a [wikipage list of projects](https://github.com/onimur/handle-path-oz/wiki/Projects-using-HandlePathOz).
+
+If you've used this library, please let me know! Nothing makes me happier than seeing someone else take my work and go wild with it.
 
 ## 🔍 Main features
 
