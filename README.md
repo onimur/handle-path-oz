@@ -28,7 +28,7 @@ Android Library to handle multiple Uri(paths) received through Intents.
 
 <p align="center">
     <a title="HandlePathOz">
-        <img width="75%" src=".github/resources/logo_git.png">
+        <img width="65%" src=".github/resources/logo_git.png">
     </a>
 </p>
 
@@ -39,13 +39,13 @@ If you like this project and would like to help us, make a donation:
 
 <p align="center">
     <a href="https://www.patreon.com/onimur" target="_blank">
-        <img width="30%" alt="Check my Patreon" src=".github/resources/support-patreon.png"/>
+        <img width="25%" alt="Check my Patreon" src=".github/resources/support-patreon.png"/>
     </a>
     <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=YUTBBKXR2XCPJ" target="_blank">
-        <img width="30%" alt="Donate with Paypal" src=".github/resources/support-paypal.png"/>
+        <img width="25%" alt="Donate with Paypal" src=".github/resources/support-paypal.png"/>
     </a>
     <a href="https://www.buymeacoffee.com/onimur" target="_blank">
-        <img width="30%" alt="Buy me a coffee" src=".github/resources/support-buy-coffee.png"/>
+        <img width="25%" alt="Buy me a coffee" src=".github/resources/support-buy-coffee.png"/>
     </a>
 </p>
 
@@ -123,29 +123,29 @@ In build.gradle(Module:app) within dependencies, implement:
 
 ```
 
-# 💡 Getting start
+## 💡 Getting start
 
-## Working with Multiple uri
+### Working with Multiple uri
 
 The next steps are for working with multiple uri as well as for a single uri.
 
-### 🎲 Kotlin
+#### 🎲 Kotlin
   
 You can check in the wikipage, [click here](https://github.com/onimur/handle-path-oz/wiki/Kotlin---Multiple-Uri).
 
-### 🎲 Java
+#### 🎲 Java
 
 You can check in the wikipage, [click here](https://github.com/onimur/handle-path-oz/wiki/Java---Multiple-Uri).
 
-## Working with Single uri
+### Working with Single uri
 
 The next steps only serve to work with a single uri.
 
-### 🎲 Kotlin
+#### 🎲 Kotlin
   
 You can check in the wikipage, [click here](https://github.com/onimur/handle-path-oz/wiki/Kotlin-Single-Uri).
 
-### 🎲 Java
+#### 🎲 Java
   
 You can check in the wikipage, [click here](https://github.com/onimur/handle-path-oz/wiki/Java-Single-Uri).
 
