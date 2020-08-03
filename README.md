@@ -22,9 +22,16 @@
     <a href="https://search.maven.org/artifact/com.github.onimur/handle-path-oz" title="Maven Central">
         <img src="https://img.shields.io/maven-central/v/com.github.onimur/handle-path-oz?color=brightgreen&label=maven%20central&logo=Apache%20Maven">
     </a>
+    <a href="https://jitpack.io/#onimur/handle-path-oz" title="JitPack">
+        <img src="https://jitpack.io/v/onimur/handle-path-oz.svg">
+    </a>
 </p>
 
-Android Library to handle multiple Uri(paths) received through Intents.
+Android library written in Kotlin, but can be used in Java too. Built to handle a single or multiple Uri (paths) received through Intents.
+
+When you retrieve a Uri through an intent, its path is defined in relation to the File Chooser used, which does not represent the actual path of the file, making it impossible to work with it. This library aims to retrieve the real path of any file in a simple way, and then it is possible to use it for its proper purpose.
+
+Compatible with API version from 16.
 
 <p align="center">
     <a title="HandlePathOz">
