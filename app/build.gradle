@@ -1,11 +1,11 @@
 /*
- * Created by Murillo Comino on 29/07/20 14:50
+ * Created by Murillo Comino on 03/08/20 17:00
  * Github: github.com/onimur
  * StackOverFlow: pt.stackoverflow.com/users/128573
  * Email: murillo_comino@hotmail.com
  *
  *  Copyright (c) 2020.
- *  Last modified 27/07/20 11:52
+ *  Last modified 03/08/20 16:57
  */
 
 apply plugin: 'com.android.application'
@@ -43,15 +43,17 @@ android {
         release {
             Properties secret = new Properties()
             File secretFile = project.rootProject.file('secret.properties')
-            //for circleCi
+            // For circleCi
             if (secretFile.exists()) {
                 secret.load(secretFile.newDataInputStream())
             }
-
-            storeFile file(System.getenv("KEYSTORE") ?: "../.exclude/key/handlepathoz.jks")
-            storePassword secret.getOrDefault('keystorePassword', System.getenv("KEYSTORE_PASSWORD"))
-            keyAlias secret.getOrDefault('keyAlias', System.getenv("KEY_ALIAS"))
-            keyPassword secret.getOrDefault('keyPassword', System.getenv("KEY_PASSWORD"))
+            // If not exist the environment variable Jitpack, so signing the sample app
+            if (!System.getenv("JITPACK")) {
+                storeFile file(System.getenv("KEYSTORE") ?: "../.exclude/key/handlepathoz.jks")
+                storePassword secret.getOrDefault('keystorePassword', System.getenv("KEYSTORE_PASSWORD"))
+                keyAlias secret.getOrDefault('keyAlias', System.getenv("KEY_ALIAS"))
+                keyPassword secret.getOrDefault('keyPassword', System.getenv("KEY_PASSWORD"))
+            }
         }
     }
 
