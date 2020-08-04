@@ -17,13 +17,16 @@
 
 <p align="center">
     <a href="https://bintray.com/onimur/maven/HandlePathOz/_latestVersion" title="Bintray">
-        <img src="https://img.shields.io/bintray/v/onimur/maven/HandlePathOz?label=bintray&logo=JFrog%20Bintray&logoColor=white">
+        <img src="https://img.shields.io/bintray/v/onimur/maven/HandlePathOz?label=Bintray&logo=JFrog%20Bintray&logoColor=white">
     </a>
     <a href="https://search.maven.org/artifact/com.github.onimur/handle-path-oz" title="Maven Central">
-        <img src="https://img.shields.io/maven-central/v/com.github.onimur/handle-path-oz?color=brightgreen&label=maven%20central&logo=Apache%20Maven">
+        <img src="https://img.shields.io/maven-central/v/com.github.onimur/handle-path-oz?color=brightgreen&label=Maven%20Central&logo=Apache%20Maven">
     </a>
     <a href="https://jitpack.io/#onimur/handle-path-oz" title="JitPack">
         <img src="https://jitpack.io/v/onimur/handle-path-oz.svg">
+    </a>
+    <a href="https://android-arsenal.com/details/1/8142" title="Android Arsenal">
+        <img src="https://img.shields.io/badge/Android%20Arsenal-HandlePathOz-blueviolet.svg?logo=android&logoColor=white">
     </a>
 </p>
 
@@ -170,7 +173,7 @@ If you've used this library, please let me know! Nothing makes me happier than s
 
 ## 📐 Built with
 
-  * [Android Studio 4.0](https://developer.android.com/studio)
+* [Android Studio 4.0](https://developer.android.com/studio)
   
 ## 🧩 Contributing
 
